@@ -79,8 +79,8 @@ runs:
       run: |
         cargo binstall wkg
         cargo binstall warg-cli
+      shell: bash
     - name: Resolve filename
       run: |
         ls -l ${{ inputs.path }}
-
       shell: bash
