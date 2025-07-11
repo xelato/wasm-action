@@ -1,0 +1,86 @@
+name: 'Wasm publish'
+description: 'Publish a single WebAssembly artefact'
+
+inputs:
+  path:
+    description: "file path, glob syntax supported, however, must resolve to a single file."
+    required: true
+
+  # package options
+  namespace:
+    description: "Target namespace"
+    required: true
+  name:
+    description: "Target name"
+    required: true
+  version:
+    description: "Semver-style version attribute."
+    required: false
+
+  # repository options
+  repository:
+    description: "Repository fully qualified domain name"
+    required: true
+
+  repository-type:
+    description: "Repository type: oci, warg"
+    required: false
+    type: choice
+    options:
+      - oci
+      - warg
+
+  repository-suffix:
+    description: "Repository suffix"
+    required: false
+    default: ''
+
+  # authentication options
+  username:
+    description: "Username for repository login"
+    required: false
+
+  password:
+    description: "Password for repository login"
+    required: false
+
+  # modifiers
+  check-existing:
+    description: "Check whether an existing version already exists in the repository"
+    required: false
+    type: boolean
+    default: true
+
+  fail-on-existing:
+    description: "Whether to fail if an already existing package with the same version is found"
+    required: false
+    type: boolean
+    default: false
+
+  override:
+    description: "Whether to attempt to override an already existing version"
+    required: false
+    type: boolean
+    default: false
+
+outputs:
+  filename:
+    description: "Filename of the input file"
+  filename-sha256:
+    description: "sha256 hash of the input file"
+
+
+runs:
+  using: "composite"
+  steps:
+    - name: Install cargo-binstall
+      uses: cargo-bins/cargo-binstall@main
+    - name: Install dependencies
+      run: |
+        cargo binstall wkg
+        cargo binstall warg-cli
+    - name: Resolve filename
+      run: |
+        ls -l ${{ inputs.path }}
+
+      shell: bash
