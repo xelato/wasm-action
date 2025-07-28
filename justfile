@@ -10,6 +10,6 @@ generate-warg-client:
         openapitools/openapi-generator-cli generate \
         -i /local/openapi/warg.yml \
         -g python-pydantic-v1 \
-        -o /local/_warg-client \
-        --package-name _warg_client \
+        -o /local/warg-openapi \
+        --package-name warg_openapi \
         --http-user-agent xelato-wasm-action \
