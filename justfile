@@ -6,6 +6,7 @@ default:
 
 # generate warg client
 generate-warg-client:
+    rm -rf warg-openapi
     container run --rm -v "${PWD}:/local" \
         openapitools/openapi-generator-cli generate \
         -i /local/openapi/warg.yml \
