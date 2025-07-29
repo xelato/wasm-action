@@ -10,7 +10,7 @@ Method | HTTP request | Description
 
 
 # **fetch_logs**
-> FetchLogsResponse fetch_logs(fetch_logs_request)
+> FetchLogsResponse fetch_logs(fetch_logs_request, warg_registry=warg_registry)
 
 Fetch registry logs
 
@@ -40,10 +40,11 @@ with warg_openapi.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = warg_openapi.FetchApi(api_client)
     fetch_logs_request = warg_openapi.FetchLogsRequest() # FetchLogsRequest | 
+    warg_registry = 'registry.example.com' # str | If present and supported, this registry responds on behalf of the other registry specified in this header value. (optional)
 
     try:
         # Fetch registry logs
-        api_response = api_instance.fetch_logs(fetch_logs_request)
+        api_response = api_instance.fetch_logs(fetch_logs_request, warg_registry=warg_registry)
         print("The response of FetchApi->fetch_logs:\n")
         pprint(api_response)
     except Exception as e:
@@ -57,6 +58,7 @@ with warg_openapi.ApiClient(configuration) as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **fetch_logs_request** | [**FetchLogsRequest**](FetchLogsRequest.md)|  | 
+ **warg_registry** | **str**| If present and supported, this registry responds on behalf of the other registry specified in this header value. | [optional] 
 
 ### Return type
 
@@ -74,14 +76,14 @@ No authorization required
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**200** | The logs were successfully fetched. |  -  |
-**404** | A requested entity was not found. |  -  |
-**0** | An error occurred when processing the request. |  -  |
+**200** | The logs were successfully fetched. |  * Warg-Registry -  <br>  |
+**404** | A requested entity was not found. |  * Warg-Registry -  <br>  |
+**0** | An error occurred when processing the request. |  * Warg-Registry -  <br>  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **fetch_names**
-> FetchPackageNamesResponse fetch_names(fetch_package_names_request)
+> FetchPackageNamesResponse fetch_names(fetch_package_names_request, warg_registry=warg_registry)
 
 Fetch package names
 
@@ -111,10 +113,11 @@ with warg_openapi.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = warg_openapi.FetchApi(api_client)
     fetch_package_names_request = warg_openapi.FetchPackageNamesRequest() # FetchPackageNamesRequest | 
+    warg_registry = 'registry.example.com' # str | If present and supported, this registry responds on behalf of the other registry specified in this header value. (optional)
 
     try:
         # Fetch package names
-        api_response = api_instance.fetch_names(fetch_package_names_request)
+        api_response = api_instance.fetch_names(fetch_package_names_request, warg_registry=warg_registry)
         print("The response of FetchApi->fetch_names:\n")
         pprint(api_response)
     except Exception as e:
@@ -128,6 +131,7 @@ with warg_openapi.ApiClient(configuration) as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **fetch_package_names_request** | [**FetchPackageNamesRequest**](FetchPackageNamesRequest.md)|  | 
+ **warg_registry** | **str**| If present and supported, this registry responds on behalf of the other registry specified in this header value. | [optional] 
 
 ### Return type
 
@@ -145,14 +149,14 @@ No authorization required
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**200** | The package names were successfully fetched. |  -  |
-**404** | A requested entity was not found. |  -  |
-**0** | An error occurred when processing the request. |  -  |
+**200** | The package names were successfully fetched. |  * Warg-Registry -  <br>  |
+**404** | A requested entity was not found. |  * Warg-Registry -  <br>  |
+**0** | An error occurred when processing the request. |  * Warg-Registry -  <br>  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_checkpoint**
-> SignedCheckpoint get_checkpoint()
+> SignedCheckpoint get_checkpoint(warg_registry=warg_registry)
 
 Fetch latest registry checkpoint
 
@@ -179,10 +183,11 @@ configuration = warg_openapi.Configuration(
 with warg_openapi.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = warg_openapi.FetchApi(api_client)
+    warg_registry = 'registry.example.com' # str | If present and supported, this registry responds on behalf of the other registry specified in this header value. (optional)
 
     try:
         # Fetch latest registry checkpoint
-        api_response = api_instance.get_checkpoint()
+        api_response = api_instance.get_checkpoint(warg_registry=warg_registry)
         print("The response of FetchApi->get_checkpoint:\n")
         pprint(api_response)
     except Exception as e:
@@ -192,7 +197,10 @@ with warg_openapi.ApiClient(configuration) as api_client:
 
 
 ### Parameters
-This endpoint does not need any parameter.
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **warg_registry** | **str**| If present and supported, this registry responds on behalf of the other registry specified in this header value. | [optional] 
 
 ### Return type
 
@@ -210,8 +218,8 @@ No authorization required
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**200** | The checkpoint was successfully fetched. |  -  |
-**0** | An error occurred when processing the request. |  -  |
+**200** | The checkpoint was successfully fetched. |  * Warg-Registry -  <br>  |
+**0** | An error occurred when processing the request. |  * Warg-Registry -  <br>  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

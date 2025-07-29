@@ -18,6 +18,9 @@ import warnings
 
 from pydantic import validate_arguments, ValidationError
 
+from typing_extensions import Annotated
+from pydantic import Field, StrictStr
+
 from typing import Optional
 
 from warg_openapi.models.checkpoint_verification_response import CheckpointVerificationResponse
@@ -44,16 +47,18 @@ class MonitorApi:
         self.api_client = api_client
 
     @validate_arguments
-    def verify_checkpoint(self, signed_checkpoint : Optional[SignedCheckpoint] = None, **kwargs) -> CheckpointVerificationResponse:  # noqa: E501
+    def verify_checkpoint(self, warg_registry : Annotated[Optional[StrictStr], Field(description="If present and supported, this registry responds on behalf of the other registry specified in this header value.")] = None, signed_checkpoint : Optional[SignedCheckpoint] = None, **kwargs) -> CheckpointVerificationResponse:  # noqa: E501
         """Verify registry checkpoint  # noqa: E501
 
         Verify checkpoint from the registry. The client must interpret the response body to determine the verification status.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.verify_checkpoint(signed_checkpoint, async_req=True)
+        >>> thread = api.verify_checkpoint(warg_registry, signed_checkpoint, async_req=True)
         >>> result = thread.get()
 
+        :param warg_registry: If present and supported, this registry responds on behalf of the other registry specified in this header value.
+        :type warg_registry: str
         :param signed_checkpoint:
         :type signed_checkpoint: SignedCheckpoint
         :param async_req: Whether to execute the request asynchronously.
@@ -71,19 +76,21 @@ class MonitorApi:
         if '_preload_content' in kwargs:
             message = "Error! Please call the verify_checkpoint_with_http_info method with `_preload_content` instead and obtain raw data from ApiResponse.raw_data"  # noqa: E501
             raise ValueError(message)
-        return self.verify_checkpoint_with_http_info(signed_checkpoint, **kwargs)  # noqa: E501
+        return self.verify_checkpoint_with_http_info(warg_registry, signed_checkpoint, **kwargs)  # noqa: E501
 
     @validate_arguments
-    def verify_checkpoint_with_http_info(self, signed_checkpoint : Optional[SignedCheckpoint] = None, **kwargs) -> ApiResponse:  # noqa: E501
+    def verify_checkpoint_with_http_info(self, warg_registry : Annotated[Optional[StrictStr], Field(description="If present and supported, this registry responds on behalf of the other registry specified in this header value.")] = None, signed_checkpoint : Optional[SignedCheckpoint] = None, **kwargs) -> ApiResponse:  # noqa: E501
         """Verify registry checkpoint  # noqa: E501
 
         Verify checkpoint from the registry. The client must interpret the response body to determine the verification status.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.verify_checkpoint_with_http_info(signed_checkpoint, async_req=True)
+        >>> thread = api.verify_checkpoint_with_http_info(warg_registry, signed_checkpoint, async_req=True)
         >>> result = thread.get()
 
+        :param warg_registry: If present and supported, this registry responds on behalf of the other registry specified in this header value.
+        :type warg_registry: str
         :param signed_checkpoint:
         :type signed_checkpoint: SignedCheckpoint
         :param async_req: Whether to execute the request asynchronously.
@@ -114,6 +121,7 @@ class MonitorApi:
         _params = locals()
 
         _all_params = [
+            'warg_registry',
             'signed_checkpoint'
         ]
         _all_params.extend(
@@ -147,6 +155,9 @@ class MonitorApi:
         _query_params = []
         # process the header parameters
         _header_params = dict(_params.get('_headers', {}))
+        if _params['warg_registry'] is not None:
+            _header_params['Warg-Registry'] = _params['warg_registry']
+
         # process the form parameters
         _form_params = []
         _files = {}

@@ -70,10 +70,11 @@ with warg_openapi.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = warg_openapi.ContentApi(api_client)
     digest = 'digest_example' # str | The content digest.
+    warg_registry = 'registry.example.com' # str | If present and supported, this registry responds on behalf of the other registry specified in this header value. (optional)
 
     try:
         # Get content sources
-        api_response = api_instance.get_content_sources(digest)
+        api_response = api_instance.get_content_sources(digest, warg_registry=warg_registry)
         print("The response of ContentApi->get_content_sources:\n")
         pprint(api_response)
     except ApiException as e:

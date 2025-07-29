@@ -18,6 +18,9 @@ import warnings
 
 from pydantic import validate_arguments, ValidationError
 
+from typing_extensions import Annotated
+from pydantic import Field, StrictStr
+
 from typing import Optional
 
 from warg_openapi.models.prove_consistency_request import ProveConsistencyRequest
@@ -46,16 +49,18 @@ class ProofApi:
         self.api_client = api_client
 
     @validate_arguments
-    def prove_consistency(self, prove_consistency_request : Optional[ProveConsistencyRequest] = None, **kwargs) -> ProveConsistencyResponse:  # noqa: E501
+    def prove_consistency(self, warg_registry : Annotated[Optional[StrictStr], Field(description="If present and supported, this registry responds on behalf of the other registry specified in this header value.")] = None, prove_consistency_request : Optional[ProveConsistencyRequest] = None, **kwargs) -> ProveConsistencyResponse:  # noqa: E501
         """Prove registry checkpoint consistency  # noqa: E501
 
         Proves the consistency of the registry between two specified checkpoints.   # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.prove_consistency(prove_consistency_request, async_req=True)
+        >>> thread = api.prove_consistency(warg_registry, prove_consistency_request, async_req=True)
         >>> result = thread.get()
 
+        :param warg_registry: If present and supported, this registry responds on behalf of the other registry specified in this header value.
+        :type warg_registry: str
         :param prove_consistency_request:
         :type prove_consistency_request: ProveConsistencyRequest
         :param async_req: Whether to execute the request asynchronously.
@@ -73,19 +78,21 @@ class ProofApi:
         if '_preload_content' in kwargs:
             message = "Error! Please call the prove_consistency_with_http_info method with `_preload_content` instead and obtain raw data from ApiResponse.raw_data"  # noqa: E501
             raise ValueError(message)
-        return self.prove_consistency_with_http_info(prove_consistency_request, **kwargs)  # noqa: E501
+        return self.prove_consistency_with_http_info(warg_registry, prove_consistency_request, **kwargs)  # noqa: E501
 
     @validate_arguments
-    def prove_consistency_with_http_info(self, prove_consistency_request : Optional[ProveConsistencyRequest] = None, **kwargs) -> ApiResponse:  # noqa: E501
+    def prove_consistency_with_http_info(self, warg_registry : Annotated[Optional[StrictStr], Field(description="If present and supported, this registry responds on behalf of the other registry specified in this header value.")] = None, prove_consistency_request : Optional[ProveConsistencyRequest] = None, **kwargs) -> ApiResponse:  # noqa: E501
         """Prove registry checkpoint consistency  # noqa: E501
 
         Proves the consistency of the registry between two specified checkpoints.   # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.prove_consistency_with_http_info(prove_consistency_request, async_req=True)
+        >>> thread = api.prove_consistency_with_http_info(warg_registry, prove_consistency_request, async_req=True)
         >>> result = thread.get()
 
+        :param warg_registry: If present and supported, this registry responds on behalf of the other registry specified in this header value.
+        :type warg_registry: str
         :param prove_consistency_request:
         :type prove_consistency_request: ProveConsistencyRequest
         :param async_req: Whether to execute the request asynchronously.
@@ -116,6 +123,7 @@ class ProofApi:
         _params = locals()
 
         _all_params = [
+            'warg_registry',
             'prove_consistency_request'
         ]
         _all_params.extend(
@@ -149,6 +157,9 @@ class ProofApi:
         _query_params = []
         # process the header parameters
         _header_params = dict(_params.get('_headers', {}))
+        if _params['warg_registry'] is not None:
+            _header_params['Warg-Registry'] = _params['warg_registry']
+
         # process the form parameters
         _form_params = []
         _files = {}
@@ -195,16 +206,18 @@ class ProofApi:
             _request_auth=_params.get('_request_auth'))
 
     @validate_arguments
-    def prove_inclusion(self, prove_inclusion_request : Optional[ProveInclusionRequest] = None, **kwargs) -> ProveInclusionResponse:  # noqa: E501
+    def prove_inclusion(self, warg_registry : Annotated[Optional[StrictStr], Field(description="If present and supported, this registry responds on behalf of the other registry specified in this header value.")] = None, prove_inclusion_request : Optional[ProveInclusionRequest] = None, **kwargs) -> ProveInclusionResponse:  # noqa: E501
         """Prove log leaf inclusion  # noqa: E501
 
         Proves that the given log leafs are present in the given registry checkpoint.   # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.prove_inclusion(prove_inclusion_request, async_req=True)
+        >>> thread = api.prove_inclusion(warg_registry, prove_inclusion_request, async_req=True)
         >>> result = thread.get()
 
+        :param warg_registry: If present and supported, this registry responds on behalf of the other registry specified in this header value.
+        :type warg_registry: str
         :param prove_inclusion_request:
         :type prove_inclusion_request: ProveInclusionRequest
         :param async_req: Whether to execute the request asynchronously.
@@ -222,19 +235,21 @@ class ProofApi:
         if '_preload_content' in kwargs:
             message = "Error! Please call the prove_inclusion_with_http_info method with `_preload_content` instead and obtain raw data from ApiResponse.raw_data"  # noqa: E501
             raise ValueError(message)
-        return self.prove_inclusion_with_http_info(prove_inclusion_request, **kwargs)  # noqa: E501
+        return self.prove_inclusion_with_http_info(warg_registry, prove_inclusion_request, **kwargs)  # noqa: E501
 
     @validate_arguments
-    def prove_inclusion_with_http_info(self, prove_inclusion_request : Optional[ProveInclusionRequest] = None, **kwargs) -> ApiResponse:  # noqa: E501
+    def prove_inclusion_with_http_info(self, warg_registry : Annotated[Optional[StrictStr], Field(description="If present and supported, this registry responds on behalf of the other registry specified in this header value.")] = None, prove_inclusion_request : Optional[ProveInclusionRequest] = None, **kwargs) -> ApiResponse:  # noqa: E501
         """Prove log leaf inclusion  # noqa: E501
 
         Proves that the given log leafs are present in the given registry checkpoint.   # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.prove_inclusion_with_http_info(prove_inclusion_request, async_req=True)
+        >>> thread = api.prove_inclusion_with_http_info(warg_registry, prove_inclusion_request, async_req=True)
         >>> result = thread.get()
 
+        :param warg_registry: If present and supported, this registry responds on behalf of the other registry specified in this header value.
+        :type warg_registry: str
         :param prove_inclusion_request:
         :type prove_inclusion_request: ProveInclusionRequest
         :param async_req: Whether to execute the request asynchronously.
@@ -265,6 +280,7 @@ class ProofApi:
         _params = locals()
 
         _all_params = [
+            'warg_registry',
             'prove_inclusion_request'
         ]
         _all_params.extend(
@@ -298,6 +314,9 @@ class ProofApi:
         _query_params = []
         # process the header parameters
         _header_params = dict(_params.get('_headers', {}))
+        if _params['warg_registry'] is not None:
+            _header_params['Warg-Registry'] = _params['warg_registry']
+
         # process the form parameters
         _form_params = []
         _files = {}

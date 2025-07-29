@@ -9,7 +9,7 @@ Method | HTTP request | Description
 
 
 # **get_package_record**
-> PackageRecord get_package_record(log_id, record_id)
+> PackageRecord get_package_record(log_id, record_id, warg_registry=warg_registry)
 
 Get package record status
 
@@ -45,10 +45,11 @@ with warg_openapi.ApiClient(configuration) as api_client:
     api_instance = warg_openapi.PackageApi(api_client)
     log_id = 'log_id_example' # str | The package log identifier.
     record_id = 'record_id_example' # str | The record identifier.
+    warg_registry = 'registry.example.com' # str | If present and supported, this registry responds on behalf of the other registry specified in this header value. (optional)
 
     try:
         # Get package record status
-        api_response = api_instance.get_package_record(log_id, record_id)
+        api_response = api_instance.get_package_record(log_id, record_id, warg_registry=warg_registry)
         print("The response of PackageApi->get_package_record:\n")
         pprint(api_response)
     except Exception as e:
@@ -63,6 +64,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **log_id** | **str**| The package log identifier. | 
  **record_id** | **str**| The record identifier. | 
+ **warg_registry** | **str**| If present and supported, this registry responds on behalf of the other registry specified in this header value. | [optional] 
 
 ### Return type
 
@@ -80,14 +82,14 @@ No authorization required
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**200** | The package record. |  -  |
-**404** | A requested entity was not found. |  -  |
-**0** | An error occurred when processing the request. |  -  |
+**200** | The package record. |  * Warg-Registry -  <br>  |
+**404** | A requested entity was not found. |  * Warg-Registry -  <br>  |
+**0** | An error occurred when processing the request. |  * Warg-Registry -  <br>  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **publish_package_record**
-> PackageRecord publish_package_record(log_id, publish_package_record_request)
+> PackageRecord publish_package_record(log_id, publish_package_record_request, warg_registry=warg_registry)
 
 Publish package record
 
@@ -122,10 +124,11 @@ with warg_openapi.ApiClient(configuration) as api_client:
     api_instance = warg_openapi.PackageApi(api_client)
     log_id = 'log_id_example' # str | The package log identifier.
     publish_package_record_request = warg_openapi.PublishPackageRecordRequest() # PublishPackageRecordRequest | 
+    warg_registry = 'registry.example.com' # str | If present and supported, this registry responds on behalf of the other registry specified in this header value. (optional)
 
     try:
         # Publish package record
-        api_response = api_instance.publish_package_record(log_id, publish_package_record_request)
+        api_response = api_instance.publish_package_record(log_id, publish_package_record_request, warg_registry=warg_registry)
         print("The response of PackageApi->publish_package_record:\n")
         pprint(api_response)
     except Exception as e:
@@ -140,6 +143,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **log_id** | **str**| The package log identifier. | 
  **publish_package_record_request** | [**PublishPackageRecordRequest**](PublishPackageRecordRequest.md)|  | 
+ **warg_registry** | **str**| If present and supported, this registry responds on behalf of the other registry specified in this header value. | [optional] 
 
 ### Return type
 
@@ -157,13 +161,13 @@ No authorization required
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**202** | The package record was accepted. |  -  |
-**401** | Unauthorized rejection from the registry.  |  -  |
-**404** | A requested entity was not found. |  -  |
-**409** | The requested package publish conflicts. |  -  |
-**422** | The package was rejected by the registry.  |  -  |
-**501** | The server does not support publishing package records with explicitly specified content source locations.  |  -  |
-**0** | An error occurred when processing the request. |  -  |
+**202** | The package record was accepted. |  * Warg-Registry -  <br>  |
+**401** | Unauthorized rejection from the registry.  |  * Warg-Registry -  <br>  |
+**404** | A requested entity was not found. |  * Warg-Registry -  <br>  |
+**409** | The requested package publish conflicts. |  * Warg-Registry -  <br>  |
+**422** | The package was rejected by the registry.  |  * Warg-Registry -  <br>  |
+**501** | The server does not support publishing package records with explicitly specified content source locations.  |  * Warg-Registry -  <br>  |
+**0** | An error occurred when processing the request. |  * Warg-Registry -  <br>  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

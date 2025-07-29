@@ -9,7 +9,7 @@ Method | HTTP request | Description
 
 
 # **prove_consistency**
-> ProveConsistencyResponse prove_consistency(prove_consistency_request=prove_consistency_request)
+> ProveConsistencyResponse prove_consistency(warg_registry=warg_registry, prove_consistency_request=prove_consistency_request)
 
 Prove registry checkpoint consistency
 
@@ -38,11 +38,12 @@ configuration = warg_openapi.Configuration(
 with warg_openapi.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = warg_openapi.ProofApi(api_client)
+    warg_registry = 'registry.example.com' # str | If present and supported, this registry responds on behalf of the other registry specified in this header value. (optional)
     prove_consistency_request = warg_openapi.ProveConsistencyRequest() # ProveConsistencyRequest |  (optional)
 
     try:
         # Prove registry checkpoint consistency
-        api_response = api_instance.prove_consistency(prove_consistency_request=prove_consistency_request)
+        api_response = api_instance.prove_consistency(warg_registry=warg_registry, prove_consistency_request=prove_consistency_request)
         print("The response of ProofApi->prove_consistency:\n")
         pprint(api_response)
     except Exception as e:
@@ -55,6 +56,7 @@ with warg_openapi.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
+ **warg_registry** | **str**| If present and supported, this registry responds on behalf of the other registry specified in this header value. | [optional] 
  **prove_consistency_request** | [**ProveConsistencyRequest**](ProveConsistencyRequest.md)|  | [optional] 
 
 ### Return type
@@ -73,15 +75,15 @@ No authorization required
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**200** | The consistency proof was generated successfully. |  -  |
-**404** | A requested entity was not found. |  -  |
-**422** | The proof bundle could not be generated. |  -  |
-**0** | An error occurred when processing the request. |  -  |
+**200** | The consistency proof was generated successfully. |  * Warg-Registry -  <br>  |
+**404** | A requested entity was not found. |  * Warg-Registry -  <br>  |
+**422** | The proof bundle could not be generated. |  * Warg-Registry -  <br>  |
+**0** | An error occurred when processing the request. |  * Warg-Registry -  <br>  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **prove_inclusion**
-> ProveInclusionResponse prove_inclusion(prove_inclusion_request=prove_inclusion_request)
+> ProveInclusionResponse prove_inclusion(warg_registry=warg_registry, prove_inclusion_request=prove_inclusion_request)
 
 Prove log leaf inclusion
 
@@ -110,11 +112,12 @@ configuration = warg_openapi.Configuration(
 with warg_openapi.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = warg_openapi.ProofApi(api_client)
+    warg_registry = 'registry.example.com' # str | If present and supported, this registry responds on behalf of the other registry specified in this header value. (optional)
     prove_inclusion_request = warg_openapi.ProveInclusionRequest() # ProveInclusionRequest |  (optional)
 
     try:
         # Prove log leaf inclusion
-        api_response = api_instance.prove_inclusion(prove_inclusion_request=prove_inclusion_request)
+        api_response = api_instance.prove_inclusion(warg_registry=warg_registry, prove_inclusion_request=prove_inclusion_request)
         print("The response of ProofApi->prove_inclusion:\n")
         pprint(api_response)
     except Exception as e:
@@ -127,6 +130,7 @@ with warg_openapi.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
+ **warg_registry** | **str**| If present and supported, this registry responds on behalf of the other registry specified in this header value. | [optional] 
  **prove_inclusion_request** | [**ProveInclusionRequest**](ProveInclusionRequest.md)|  | [optional] 
 
 ### Return type
@@ -145,10 +149,10 @@ No authorization required
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**200** | The inclusion proof was generated successfully. |  -  |
-**404** | A requested entity was not found. |  -  |
-**422** | The proof bundle could not be generated. |  -  |
-**0** | An error occurred when processing the request. |  -  |
+**200** | The inclusion proof was generated successfully. |  * Warg-Registry -  <br>  |
+**404** | A requested entity was not found. |  * Warg-Registry -  <br>  |
+**422** | The proof bundle could not be generated. |  * Warg-Registry -  <br>  |
+**0** | An error occurred when processing the request. |  * Warg-Registry -  <br>  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

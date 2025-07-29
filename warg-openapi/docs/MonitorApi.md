@@ -8,7 +8,7 @@ Method | HTTP request | Description
 
 
 # **verify_checkpoint**
-> CheckpointVerificationResponse verify_checkpoint(signed_checkpoint=signed_checkpoint)
+> CheckpointVerificationResponse verify_checkpoint(warg_registry=warg_registry, signed_checkpoint=signed_checkpoint)
 
 Verify registry checkpoint
 
@@ -36,11 +36,12 @@ configuration = warg_openapi.Configuration(
 with warg_openapi.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = warg_openapi.MonitorApi(api_client)
+    warg_registry = 'registry.example.com' # str | If present and supported, this registry responds on behalf of the other registry specified in this header value. (optional)
     signed_checkpoint = warg_openapi.SignedCheckpoint() # SignedCheckpoint |  (optional)
 
     try:
         # Verify registry checkpoint
-        api_response = api_instance.verify_checkpoint(signed_checkpoint=signed_checkpoint)
+        api_response = api_instance.verify_checkpoint(warg_registry=warg_registry, signed_checkpoint=signed_checkpoint)
         print("The response of MonitorApi->verify_checkpoint:\n")
         pprint(api_response)
     except Exception as e:
@@ -53,6 +54,7 @@ with warg_openapi.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
+ **warg_registry** | **str**| If present and supported, this registry responds on behalf of the other registry specified in this header value. | [optional] 
  **signed_checkpoint** | [**SignedCheckpoint**](SignedCheckpoint.md)|  | [optional] 
 
 ### Return type
@@ -71,8 +73,8 @@ No authorization required
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**200** | The checkpoint verification request was processed. The client must interpret the response body to determine the verification status. |  -  |
-**0** | An error occurred when processing the request. |  -  |
+**200** | The checkpoint verification request was processed. The client must interpret the response body to determine the verification status. |  * Warg-Registry -  <br>  |
+**0** | An error occurred when processing the request. |  * Warg-Registry -  <br>  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

@@ -19,7 +19,9 @@ import warnings
 from pydantic import validate_arguments, ValidationError
 
 from typing_extensions import Annotated
-from pydantic import Field, constr, validator
+from pydantic import Field, StrictStr, constr, validator
+
+from typing import Optional
 
 from warg_openapi.models.content_sources_response import ContentSourcesResponse
 
@@ -44,18 +46,20 @@ class ContentApi:
         self.api_client = api_client
 
     @validate_arguments
-    def get_content_sources(self, digest : Annotated[constr(strict=True), Field(..., description="The content digest.")], **kwargs) -> ContentSourcesResponse:  # noqa: E501
+    def get_content_sources(self, digest : Annotated[constr(strict=True), Field(..., description="The content digest.")], warg_registry : Annotated[Optional[StrictStr], Field(description="If present and supported, this registry responds on behalf of the other registry specified in this header value.")] = None, **kwargs) -> ContentSourcesResponse:  # noqa: E501
         """Get content sources  # noqa: E501
 
         Gets a content sources for the given digest from the registry.   # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.get_content_sources(digest, async_req=True)
+        >>> thread = api.get_content_sources(digest, warg_registry, async_req=True)
         >>> result = thread.get()
 
         :param digest: The content digest. (required)
         :type digest: str
+        :param warg_registry: If present and supported, this registry responds on behalf of the other registry specified in this header value.
+        :type warg_registry: str
         :param async_req: Whether to execute the request asynchronously.
         :type async_req: bool, optional
         :param _request_timeout: timeout setting for this request.
@@ -71,21 +75,23 @@ class ContentApi:
         if '_preload_content' in kwargs:
             message = "Error! Please call the get_content_sources_with_http_info method with `_preload_content` instead and obtain raw data from ApiResponse.raw_data"  # noqa: E501
             raise ValueError(message)
-        return self.get_content_sources_with_http_info(digest, **kwargs)  # noqa: E501
+        return self.get_content_sources_with_http_info(digest, warg_registry, **kwargs)  # noqa: E501
 
     @validate_arguments
-    def get_content_sources_with_http_info(self, digest : Annotated[constr(strict=True), Field(..., description="The content digest.")], **kwargs) -> ApiResponse:  # noqa: E501
+    def get_content_sources_with_http_info(self, digest : Annotated[constr(strict=True), Field(..., description="The content digest.")], warg_registry : Annotated[Optional[StrictStr], Field(description="If present and supported, this registry responds on behalf of the other registry specified in this header value.")] = None, **kwargs) -> ApiResponse:  # noqa: E501
         """Get content sources  # noqa: E501
 
         Gets a content sources for the given digest from the registry.   # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.get_content_sources_with_http_info(digest, async_req=True)
+        >>> thread = api.get_content_sources_with_http_info(digest, warg_registry, async_req=True)
         >>> result = thread.get()
 
         :param digest: The content digest. (required)
         :type digest: str
+        :param warg_registry: If present and supported, this registry responds on behalf of the other registry specified in this header value.
+        :type warg_registry: str
         :param async_req: Whether to execute the request asynchronously.
         :type async_req: bool, optional
         :param _preload_content: if False, the ApiResponse.data will
@@ -114,7 +120,8 @@ class ContentApi:
         _params = locals()
 
         _all_params = [
-            'digest'
+            'digest',
+            'warg_registry'
         ]
         _all_params.extend(
             [
@@ -150,6 +157,9 @@ class ContentApi:
         _query_params = []
         # process the header parameters
         _header_params = dict(_params.get('_headers', {}))
+        if _params['warg_registry'] is not None:
+            _header_params['Warg-Registry'] = _params['warg_registry']
+
         # process the form parameters
         _form_params = []
         _files = {}

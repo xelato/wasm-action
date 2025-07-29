@@ -18,6 +18,11 @@ import warnings
 
 from pydantic import validate_arguments, ValidationError
 
+from typing_extensions import Annotated
+from pydantic import Field, StrictStr
+
+from typing import Optional
+
 from warg_openapi.models.ledger_sources_response import LedgerSourcesResponse
 
 from warg_openapi.api_client import ApiClient
@@ -41,16 +46,18 @@ class LedgerApi:
         self.api_client = api_client
 
     @validate_arguments
-    def get_ledger_sources(self, **kwargs) -> LedgerSourcesResponse:  # noqa: E501
+    def get_ledger_sources(self, warg_registry : Annotated[Optional[StrictStr], Field(description="If present and supported, this registry responds on behalf of the other registry specified in this header value.")] = None, **kwargs) -> LedgerSourcesResponse:  # noqa: E501
         """Fetch ledger sources  # noqa: E501
 
         Fetch the registry ledger download URL sources.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.get_ledger_sources(async_req=True)
+        >>> thread = api.get_ledger_sources(warg_registry, async_req=True)
         >>> result = thread.get()
 
+        :param warg_registry: If present and supported, this registry responds on behalf of the other registry specified in this header value.
+        :type warg_registry: str
         :param async_req: Whether to execute the request asynchronously.
         :type async_req: bool, optional
         :param _request_timeout: timeout setting for this request.
@@ -66,19 +73,21 @@ class LedgerApi:
         if '_preload_content' in kwargs:
             message = "Error! Please call the get_ledger_sources_with_http_info method with `_preload_content` instead and obtain raw data from ApiResponse.raw_data"  # noqa: E501
             raise ValueError(message)
-        return self.get_ledger_sources_with_http_info(**kwargs)  # noqa: E501
+        return self.get_ledger_sources_with_http_info(warg_registry, **kwargs)  # noqa: E501
 
     @validate_arguments
-    def get_ledger_sources_with_http_info(self, **kwargs) -> ApiResponse:  # noqa: E501
+    def get_ledger_sources_with_http_info(self, warg_registry : Annotated[Optional[StrictStr], Field(description="If present and supported, this registry responds on behalf of the other registry specified in this header value.")] = None, **kwargs) -> ApiResponse:  # noqa: E501
         """Fetch ledger sources  # noqa: E501
 
         Fetch the registry ledger download URL sources.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.get_ledger_sources_with_http_info(async_req=True)
+        >>> thread = api.get_ledger_sources_with_http_info(warg_registry, async_req=True)
         >>> result = thread.get()
 
+        :param warg_registry: If present and supported, this registry responds on behalf of the other registry specified in this header value.
+        :type warg_registry: str
         :param async_req: Whether to execute the request asynchronously.
         :type async_req: bool, optional
         :param _preload_content: if False, the ApiResponse.data will
@@ -107,6 +116,7 @@ class LedgerApi:
         _params = locals()
 
         _all_params = [
+            'warg_registry'
         ]
         _all_params.extend(
             [
@@ -139,6 +149,9 @@ class LedgerApi:
         _query_params = []
         # process the header parameters
         _header_params = dict(_params.get('_headers', {}))
+        if _params['warg_registry'] is not None:
+            _header_params['Warg-Registry'] = _params['warg_registry']
+
         # process the form parameters
         _form_params = []
         _files = {}

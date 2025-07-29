@@ -8,7 +8,7 @@ Method | HTTP request | Description
 
 
 # **get_ledger_sources**
-> LedgerSourcesResponse get_ledger_sources()
+> LedgerSourcesResponse get_ledger_sources(warg_registry=warg_registry)
 
 Fetch ledger sources
 
@@ -35,10 +35,11 @@ configuration = warg_openapi.Configuration(
 with warg_openapi.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = warg_openapi.LedgerApi(api_client)
+    warg_registry = 'registry.example.com' # str | If present and supported, this registry responds on behalf of the other registry specified in this header value. (optional)
 
     try:
         # Fetch ledger sources
-        api_response = api_instance.get_ledger_sources()
+        api_response = api_instance.get_ledger_sources(warg_registry=warg_registry)
         print("The response of LedgerApi->get_ledger_sources:\n")
         pprint(api_response)
     except Exception as e:
@@ -48,7 +49,10 @@ with warg_openapi.ApiClient(configuration) as api_client:
 
 
 ### Parameters
-This endpoint does not need any parameter.
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **warg_registry** | **str**| If present and supported, this registry responds on behalf of the other registry specified in this header value. | [optional] 
 
 ### Return type
 
@@ -66,8 +70,8 @@ No authorization required
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**200** | The ledger sources was successfully fetched. |  -  |
-**0** | An error occurred when processing the request. |  -  |
+**200** | The ledger sources was successfully fetched. |  * Warg-Registry -  <br>  |
+**0** | An error occurred when processing the request. |  * Warg-Registry -  <br>  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

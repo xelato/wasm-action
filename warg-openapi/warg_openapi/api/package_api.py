@@ -19,7 +19,9 @@ import warnings
 from pydantic import validate_arguments, ValidationError
 
 from typing_extensions import Annotated
-from pydantic import Field, constr, validator
+from pydantic import Field, StrictStr, constr, validator
+
+from typing import Optional
 
 from warg_openapi.models.package_record import PackageRecord
 from warg_openapi.models.publish_package_record_request import PublishPackageRecordRequest
@@ -45,20 +47,22 @@ class PackageApi:
         self.api_client = api_client
 
     @validate_arguments
-    def get_package_record(self, log_id : Annotated[constr(strict=True), Field(..., description="The package log identifier.")], record_id : Annotated[constr(strict=True), Field(..., description="The record identifier.")], **kwargs) -> PackageRecord:  # noqa: E501
+    def get_package_record(self, log_id : Annotated[constr(strict=True), Field(..., description="The package log identifier.")], record_id : Annotated[constr(strict=True), Field(..., description="The record identifier.")], warg_registry : Annotated[Optional[StrictStr], Field(description="If present and supported, this registry responds on behalf of the other registry specified in this header value.")] = None, **kwargs) -> PackageRecord:  # noqa: E501
         """Get package record status  # noqa: E501
 
         Gets package record status from the registry.  A package record is in one of the following states:   * `sourcing`: The package record needs content sources.   * `processing`: The package record is being processed.   * `rejected`: The package record was rejected.   * `published`: The package record was published to the log.   # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.get_package_record(log_id, record_id, async_req=True)
+        >>> thread = api.get_package_record(log_id, record_id, warg_registry, async_req=True)
         >>> result = thread.get()
 
         :param log_id: The package log identifier. (required)
         :type log_id: str
         :param record_id: The record identifier. (required)
         :type record_id: str
+        :param warg_registry: If present and supported, this registry responds on behalf of the other registry specified in this header value.
+        :type warg_registry: str
         :param async_req: Whether to execute the request asynchronously.
         :type async_req: bool, optional
         :param _request_timeout: timeout setting for this request.
@@ -74,23 +78,25 @@ class PackageApi:
         if '_preload_content' in kwargs:
             message = "Error! Please call the get_package_record_with_http_info method with `_preload_content` instead and obtain raw data from ApiResponse.raw_data"  # noqa: E501
             raise ValueError(message)
-        return self.get_package_record_with_http_info(log_id, record_id, **kwargs)  # noqa: E501
+        return self.get_package_record_with_http_info(log_id, record_id, warg_registry, **kwargs)  # noqa: E501
 
     @validate_arguments
-    def get_package_record_with_http_info(self, log_id : Annotated[constr(strict=True), Field(..., description="The package log identifier.")], record_id : Annotated[constr(strict=True), Field(..., description="The record identifier.")], **kwargs) -> ApiResponse:  # noqa: E501
+    def get_package_record_with_http_info(self, log_id : Annotated[constr(strict=True), Field(..., description="The package log identifier.")], record_id : Annotated[constr(strict=True), Field(..., description="The record identifier.")], warg_registry : Annotated[Optional[StrictStr], Field(description="If present and supported, this registry responds on behalf of the other registry specified in this header value.")] = None, **kwargs) -> ApiResponse:  # noqa: E501
         """Get package record status  # noqa: E501
 
         Gets package record status from the registry.  A package record is in one of the following states:   * `sourcing`: The package record needs content sources.   * `processing`: The package record is being processed.   * `rejected`: The package record was rejected.   * `published`: The package record was published to the log.   # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.get_package_record_with_http_info(log_id, record_id, async_req=True)
+        >>> thread = api.get_package_record_with_http_info(log_id, record_id, warg_registry, async_req=True)
         >>> result = thread.get()
 
         :param log_id: The package log identifier. (required)
         :type log_id: str
         :param record_id: The record identifier. (required)
         :type record_id: str
+        :param warg_registry: If present and supported, this registry responds on behalf of the other registry specified in this header value.
+        :type warg_registry: str
         :param async_req: Whether to execute the request asynchronously.
         :type async_req: bool, optional
         :param _preload_content: if False, the ApiResponse.data will
@@ -120,7 +126,8 @@ class PackageApi:
 
         _all_params = [
             'log_id',
-            'record_id'
+            'record_id',
+            'warg_registry'
         ]
         _all_params.extend(
             [
@@ -159,6 +166,9 @@ class PackageApi:
         _query_params = []
         # process the header parameters
         _header_params = dict(_params.get('_headers', {}))
+        if _params['warg_registry'] is not None:
+            _header_params['Warg-Registry'] = _params['warg_registry']
+
         # process the form parameters
         _form_params = []
         _files = {}
@@ -194,20 +204,22 @@ class PackageApi:
             _request_auth=_params.get('_request_auth'))
 
     @validate_arguments
-    def publish_package_record(self, log_id : Annotated[constr(strict=True), Field(..., description="The package log identifier.")], publish_package_record_request : PublishPackageRecordRequest, **kwargs) -> PackageRecord:  # noqa: E501
+    def publish_package_record(self, log_id : Annotated[constr(strict=True), Field(..., description="The package log identifier.")], publish_package_record_request : PublishPackageRecordRequest, warg_registry : Annotated[Optional[StrictStr], Field(description="If present and supported, this registry responds on behalf of the other registry specified in this header value.")] = None, **kwargs) -> PackageRecord:  # noqa: E501
         """Publish package record  # noqa: E501
 
         Attempts to publish a new record to a package log.  Publishing package records is an asynchronous operation.  The record must be signed by a key that is authorized to modify the package log.   # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.publish_package_record(log_id, publish_package_record_request, async_req=True)
+        >>> thread = api.publish_package_record(log_id, publish_package_record_request, warg_registry, async_req=True)
         >>> result = thread.get()
 
         :param log_id: The package log identifier. (required)
         :type log_id: str
         :param publish_package_record_request: (required)
         :type publish_package_record_request: PublishPackageRecordRequest
+        :param warg_registry: If present and supported, this registry responds on behalf of the other registry specified in this header value.
+        :type warg_registry: str
         :param async_req: Whether to execute the request asynchronously.
         :type async_req: bool, optional
         :param _request_timeout: timeout setting for this request.
@@ -223,23 +235,25 @@ class PackageApi:
         if '_preload_content' in kwargs:
             message = "Error! Please call the publish_package_record_with_http_info method with `_preload_content` instead and obtain raw data from ApiResponse.raw_data"  # noqa: E501
             raise ValueError(message)
-        return self.publish_package_record_with_http_info(log_id, publish_package_record_request, **kwargs)  # noqa: E501
+        return self.publish_package_record_with_http_info(log_id, publish_package_record_request, warg_registry, **kwargs)  # noqa: E501
 
     @validate_arguments
-    def publish_package_record_with_http_info(self, log_id : Annotated[constr(strict=True), Field(..., description="The package log identifier.")], publish_package_record_request : PublishPackageRecordRequest, **kwargs) -> ApiResponse:  # noqa: E501
+    def publish_package_record_with_http_info(self, log_id : Annotated[constr(strict=True), Field(..., description="The package log identifier.")], publish_package_record_request : PublishPackageRecordRequest, warg_registry : Annotated[Optional[StrictStr], Field(description="If present and supported, this registry responds on behalf of the other registry specified in this header value.")] = None, **kwargs) -> ApiResponse:  # noqa: E501
         """Publish package record  # noqa: E501
 
         Attempts to publish a new record to a package log.  Publishing package records is an asynchronous operation.  The record must be signed by a key that is authorized to modify the package log.   # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.publish_package_record_with_http_info(log_id, publish_package_record_request, async_req=True)
+        >>> thread = api.publish_package_record_with_http_info(log_id, publish_package_record_request, warg_registry, async_req=True)
         >>> result = thread.get()
 
         :param log_id: The package log identifier. (required)
         :type log_id: str
         :param publish_package_record_request: (required)
         :type publish_package_record_request: PublishPackageRecordRequest
+        :param warg_registry: If present and supported, this registry responds on behalf of the other registry specified in this header value.
+        :type warg_registry: str
         :param async_req: Whether to execute the request asynchronously.
         :type async_req: bool, optional
         :param _preload_content: if False, the ApiResponse.data will
@@ -269,7 +283,8 @@ class PackageApi:
 
         _all_params = [
             'log_id',
-            'publish_package_record_request'
+            'publish_package_record_request',
+            'warg_registry'
         ]
         _all_params.extend(
             [
@@ -305,6 +320,9 @@ class PackageApi:
         _query_params = []
         # process the header parameters
         _header_params = dict(_params.get('_headers', {}))
+        if _params['warg_registry'] is not None:
+            _header_params['Warg-Registry'] = _params['warg_registry']
+
         # process the form parameters
         _form_params = []
         _files = {}

@@ -18,6 +18,11 @@ import warnings
 
 from pydantic import validate_arguments, ValidationError
 
+from typing_extensions import Annotated
+from pydantic import Field, StrictStr
+
+from typing import Optional
+
 from warg_openapi.models.fetch_logs_request import FetchLogsRequest
 from warg_openapi.models.fetch_logs_response import FetchLogsResponse
 from warg_openapi.models.fetch_package_names_request import FetchPackageNamesRequest
@@ -45,18 +50,20 @@ class FetchApi:
         self.api_client = api_client
 
     @validate_arguments
-    def fetch_logs(self, fetch_logs_request : FetchLogsRequest, **kwargs) -> FetchLogsResponse:  # noqa: E501
+    def fetch_logs(self, fetch_logs_request : FetchLogsRequest, warg_registry : Annotated[Optional[StrictStr], Field(description="If present and supported, this registry responds on behalf of the other registry specified in this header value.")] = None, **kwargs) -> FetchLogsResponse:  # noqa: E501
         """Fetch registry logs  # noqa: E501
 
         Fetch the operator and packages logs from the registry.   # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.fetch_logs(fetch_logs_request, async_req=True)
+        >>> thread = api.fetch_logs(fetch_logs_request, warg_registry, async_req=True)
         >>> result = thread.get()
 
         :param fetch_logs_request: (required)
         :type fetch_logs_request: FetchLogsRequest
+        :param warg_registry: If present and supported, this registry responds on behalf of the other registry specified in this header value.
+        :type warg_registry: str
         :param async_req: Whether to execute the request asynchronously.
         :type async_req: bool, optional
         :param _request_timeout: timeout setting for this request.
@@ -72,21 +79,23 @@ class FetchApi:
         if '_preload_content' in kwargs:
             message = "Error! Please call the fetch_logs_with_http_info method with `_preload_content` instead and obtain raw data from ApiResponse.raw_data"  # noqa: E501
             raise ValueError(message)
-        return self.fetch_logs_with_http_info(fetch_logs_request, **kwargs)  # noqa: E501
+        return self.fetch_logs_with_http_info(fetch_logs_request, warg_registry, **kwargs)  # noqa: E501
 
     @validate_arguments
-    def fetch_logs_with_http_info(self, fetch_logs_request : FetchLogsRequest, **kwargs) -> ApiResponse:  # noqa: E501
+    def fetch_logs_with_http_info(self, fetch_logs_request : FetchLogsRequest, warg_registry : Annotated[Optional[StrictStr], Field(description="If present and supported, this registry responds on behalf of the other registry specified in this header value.")] = None, **kwargs) -> ApiResponse:  # noqa: E501
         """Fetch registry logs  # noqa: E501
 
         Fetch the operator and packages logs from the registry.   # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.fetch_logs_with_http_info(fetch_logs_request, async_req=True)
+        >>> thread = api.fetch_logs_with_http_info(fetch_logs_request, warg_registry, async_req=True)
         >>> result = thread.get()
 
         :param fetch_logs_request: (required)
         :type fetch_logs_request: FetchLogsRequest
+        :param warg_registry: If present and supported, this registry responds on behalf of the other registry specified in this header value.
+        :type warg_registry: str
         :param async_req: Whether to execute the request asynchronously.
         :type async_req: bool, optional
         :param _preload_content: if False, the ApiResponse.data will
@@ -115,7 +124,8 @@ class FetchApi:
         _params = locals()
 
         _all_params = [
-            'fetch_logs_request'
+            'fetch_logs_request',
+            'warg_registry'
         ]
         _all_params.extend(
             [
@@ -148,6 +158,9 @@ class FetchApi:
         _query_params = []
         # process the header parameters
         _header_params = dict(_params.get('_headers', {}))
+        if _params['warg_registry'] is not None:
+            _header_params['Warg-Registry'] = _params['warg_registry']
+
         # process the form parameters
         _form_params = []
         _files = {}
@@ -193,18 +206,20 @@ class FetchApi:
             _request_auth=_params.get('_request_auth'))
 
     @validate_arguments
-    def fetch_names(self, fetch_package_names_request : FetchPackageNamesRequest, **kwargs) -> FetchPackageNamesResponse:  # noqa: E501
+    def fetch_names(self, fetch_package_names_request : FetchPackageNamesRequest, warg_registry : Annotated[Optional[StrictStr], Field(description="If present and supported, this registry responds on behalf of the other registry specified in this header value.")] = None, **kwargs) -> FetchPackageNamesResponse:  # noqa: E501
         """Fetch package names  # noqa: E501
 
         Fetch the package names for registry log IDs.   # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.fetch_names(fetch_package_names_request, async_req=True)
+        >>> thread = api.fetch_names(fetch_package_names_request, warg_registry, async_req=True)
         >>> result = thread.get()
 
         :param fetch_package_names_request: (required)
         :type fetch_package_names_request: FetchPackageNamesRequest
+        :param warg_registry: If present and supported, this registry responds on behalf of the other registry specified in this header value.
+        :type warg_registry: str
         :param async_req: Whether to execute the request asynchronously.
         :type async_req: bool, optional
         :param _request_timeout: timeout setting for this request.
@@ -220,21 +235,23 @@ class FetchApi:
         if '_preload_content' in kwargs:
             message = "Error! Please call the fetch_names_with_http_info method with `_preload_content` instead and obtain raw data from ApiResponse.raw_data"  # noqa: E501
             raise ValueError(message)
-        return self.fetch_names_with_http_info(fetch_package_names_request, **kwargs)  # noqa: E501
+        return self.fetch_names_with_http_info(fetch_package_names_request, warg_registry, **kwargs)  # noqa: E501
 
     @validate_arguments
-    def fetch_names_with_http_info(self, fetch_package_names_request : FetchPackageNamesRequest, **kwargs) -> ApiResponse:  # noqa: E501
+    def fetch_names_with_http_info(self, fetch_package_names_request : FetchPackageNamesRequest, warg_registry : Annotated[Optional[StrictStr], Field(description="If present and supported, this registry responds on behalf of the other registry specified in this header value.")] = None, **kwargs) -> ApiResponse:  # noqa: E501
         """Fetch package names  # noqa: E501
 
         Fetch the package names for registry log IDs.   # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.fetch_names_with_http_info(fetch_package_names_request, async_req=True)
+        >>> thread = api.fetch_names_with_http_info(fetch_package_names_request, warg_registry, async_req=True)
         >>> result = thread.get()
 
         :param fetch_package_names_request: (required)
         :type fetch_package_names_request: FetchPackageNamesRequest
+        :param warg_registry: If present and supported, this registry responds on behalf of the other registry specified in this header value.
+        :type warg_registry: str
         :param async_req: Whether to execute the request asynchronously.
         :type async_req: bool, optional
         :param _preload_content: if False, the ApiResponse.data will
@@ -263,7 +280,8 @@ class FetchApi:
         _params = locals()
 
         _all_params = [
-            'fetch_package_names_request'
+            'fetch_package_names_request',
+            'warg_registry'
         ]
         _all_params.extend(
             [
@@ -296,6 +314,9 @@ class FetchApi:
         _query_params = []
         # process the header parameters
         _header_params = dict(_params.get('_headers', {}))
+        if _params['warg_registry'] is not None:
+            _header_params['Warg-Registry'] = _params['warg_registry']
+
         # process the form parameters
         _form_params = []
         _files = {}
@@ -341,16 +362,18 @@ class FetchApi:
             _request_auth=_params.get('_request_auth'))
 
     @validate_arguments
-    def get_checkpoint(self, **kwargs) -> SignedCheckpoint:  # noqa: E501
+    def get_checkpoint(self, warg_registry : Annotated[Optional[StrictStr], Field(description="If present and supported, this registry responds on behalf of the other registry specified in this header value.")] = None, **kwargs) -> SignedCheckpoint:  # noqa: E501
         """Fetch latest registry checkpoint  # noqa: E501
 
         Fetch the latest checkpoint from the registry.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.get_checkpoint(async_req=True)
+        >>> thread = api.get_checkpoint(warg_registry, async_req=True)
         >>> result = thread.get()
 
+        :param warg_registry: If present and supported, this registry responds on behalf of the other registry specified in this header value.
+        :type warg_registry: str
         :param async_req: Whether to execute the request asynchronously.
         :type async_req: bool, optional
         :param _request_timeout: timeout setting for this request.
@@ -366,19 +389,21 @@ class FetchApi:
         if '_preload_content' in kwargs:
             message = "Error! Please call the get_checkpoint_with_http_info method with `_preload_content` instead and obtain raw data from ApiResponse.raw_data"  # noqa: E501
             raise ValueError(message)
-        return self.get_checkpoint_with_http_info(**kwargs)  # noqa: E501
+        return self.get_checkpoint_with_http_info(warg_registry, **kwargs)  # noqa: E501
 
     @validate_arguments
-    def get_checkpoint_with_http_info(self, **kwargs) -> ApiResponse:  # noqa: E501
+    def get_checkpoint_with_http_info(self, warg_registry : Annotated[Optional[StrictStr], Field(description="If present and supported, this registry responds on behalf of the other registry specified in this header value.")] = None, **kwargs) -> ApiResponse:  # noqa: E501
         """Fetch latest registry checkpoint  # noqa: E501
 
         Fetch the latest checkpoint from the registry.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.get_checkpoint_with_http_info(async_req=True)
+        >>> thread = api.get_checkpoint_with_http_info(warg_registry, async_req=True)
         >>> result = thread.get()
 
+        :param warg_registry: If present and supported, this registry responds on behalf of the other registry specified in this header value.
+        :type warg_registry: str
         :param async_req: Whether to execute the request asynchronously.
         :type async_req: bool, optional
         :param _preload_content: if False, the ApiResponse.data will
@@ -407,6 +432,7 @@ class FetchApi:
         _params = locals()
 
         _all_params = [
+            'warg_registry'
         ]
         _all_params.extend(
             [
@@ -439,6 +465,9 @@ class FetchApi:
         _query_params = []
         # process the header parameters
         _header_params = dict(_params.get('_headers', {}))
+        if _params['warg_registry'] is not None:
+            _header_params['Warg-Registry'] = _params['warg_registry']
+
         # process the form parameters
         _form_params = []
         _files = {}
