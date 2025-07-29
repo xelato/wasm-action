@@ -13,3 +13,9 @@ generate-warg-client:
         -o /local/warg-openapi \
         --package-name warg_openapi \
         --http-user-agent xelato-wasm-action \
+
+
+validate:
+    container run --rm -v "${PWD}:/local" \
+        openapitools/openapi-generator-cli validate \
+        -i /local/openapi/warg.yml

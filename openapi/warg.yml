@@ -46,6 +46,10 @@ paths:
         - fetch
       description: |
         Fetch the package names for registry log IDs.
+      parameters:
+        - name: Warg-Registry
+          in: header
+          $ref: "#/components/headers/WargRegistryHeader"
       requestBody:
         required: true
         content:
@@ -55,12 +59,18 @@ paths:
       responses:
         "200":
           description: The package names were successfully fetched.
+          headers:
+            Warg-Registry:
+              $ref: "#/components/headers/WargRegistryHeader"
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/FetchPackageNamesResponse"
         "404":
           description: A requested entity was not found.
+          headers:
+            Warg-Registry:
+              $ref: "#/components/headers/WargRegistryHeader"
           content:
             application/json:
               schema:
@@ -86,6 +96,9 @@ paths:
                     example: sha256:b5bb9d8014a0f9b1d61e21e796d78dccdf1352f23cd32812f4850b878ae4944c
         default:
           description: An error occurred when processing the request.
+          headers:
+            Warg-Registry:
+              $ref: "#/components/headers/WargRegistryHeader"
           content:
             application/json:
               schema:
@@ -99,6 +112,10 @@ paths:
         - fetch
       description: |
         Fetch the operator and packages logs from the registry.
+      parameters:
+        - name: Warg-Registry
+          in: header
+          $ref: "#/components/headers/WargRegistryHeader"
       requestBody:
         required: true
         content:
@@ -108,12 +125,18 @@ paths:
       responses:
         "200":
           description: The logs were successfully fetched.
+          headers:
+            Warg-Registry:
+              $ref: "#/components/headers/WargRegistryHeader"
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/FetchLogsResponse"
         "404":
           description: A requested entity was not found.
+          headers:
+            Warg-Registry:
+              $ref: "#/components/headers/WargRegistryHeader"
           content:
             application/json:
               schema:
@@ -122,6 +145,9 @@ paths:
                   - "$ref": "#/components/schemas/FetchLogsLogLengthNotFoundError"
         default:
           description: An error occurred when processing the request.
+          headers:
+            Warg-Registry:
+              $ref: "#/components/headers/WargRegistryHeader"
           content:
             application/json:
               schema:
@@ -134,15 +160,25 @@ paths:
       tags:
         - fetch
       description: Fetch the latest checkpoint from the registry.
+      parameters:
+        - name: Warg-Registry
+          in: header
+          $ref: "#/components/headers/WargRegistryHeader"
       responses:
         "200":
           description: The checkpoint was successfully fetched.
+          headers:
+            Warg-Registry:
+              $ref: "#/components/headers/WargRegistryHeader"
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/SignedCheckpoint"
         default:
           description: An error occurred when processing the request.
+          headers:
+            Warg-Registry:
+              $ref: "#/components/headers/WargRegistryHeader"
           content:
             application/json:
               schema:
@@ -167,6 +203,9 @@ paths:
           required: true
           schema:
             "$ref": "#/components/schemas/AnyHash"
+        - name: Warg-Registry
+          in: header
+          $ref: "#/components/headers/WargRegistryHeader"
       requestBody:
         required: true
         content:
@@ -176,6 +215,9 @@ paths:
       responses:
         "202":
           description: The package record was accepted.
+          headers:
+            Warg-Registry:
+              $ref: "#/components/headers/WargRegistryHeader"
           content:
             application/json:
               schema:
@@ -183,12 +225,18 @@ paths:
         "401":
           description: |
             Unauthorized rejection from the registry.
+          headers:
+            Warg-Registry:
+              $ref: "#/components/headers/WargRegistryHeader"
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
         "404":
           description: A requested entity was not found.
+          headers:
+            Warg-Registry:
+              $ref: "#/components/headers/WargRegistryHeader"
           content:
             application/json:
               schema:
@@ -214,6 +262,9 @@ paths:
                       The identifier of the entity that was not found.
         "409":
           description: The requested package publish conflicts.
+          headers:
+            Warg-Registry:
+              $ref: "#/components/headers/WargRegistryHeader"
           content:
             application/json:
               schema:
@@ -240,6 +291,9 @@ paths:
         "422":
           description: |
             The package was rejected by the registry.
+          headers:
+            Warg-Registry:
+              $ref: "#/components/headers/WargRegistryHeader"
           content:
             application/json:
               schema:
@@ -248,12 +302,18 @@ paths:
           description: |
             The server does not support publishing package records with explicitly
             specified content source locations.
+          headers:
+            Warg-Registry:
+              $ref: "#/components/headers/WargRegistryHeader"
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
         default:
           description: An error occurred when processing the request.
+          headers:
+            Warg-Registry:
+              $ref: "#/components/headers/WargRegistryHeader"
           content:
             application/json:
               schema:
@@ -286,15 +346,24 @@ paths:
           required: true
           schema:
             "$ref": "#/components/schemas/AnyHash"
+        - name: Warg-Registry
+          in: header
+          $ref: "#/components/headers/WargRegistryHeader"
       responses:
         "200":
           description: The package record.
+          headers:
+            Warg-Registry:
+              $ref: "#/components/headers/WargRegistryHeader"
           content:
             application/json:
               schema:
                 "$ref": "#/components/schemas/PackageRecord"
         "404":
           description: A requested entity was not found.
+          headers:
+            Warg-Registry:
+              $ref: "#/components/headers/WargRegistryHeader"
           content:
             application/json:
               schema:
@@ -320,6 +389,9 @@ paths:
                       The identifier of the entity that was not found.
         default:
           description: An error occurred when processing the request.
+          headers:
+            Warg-Registry:
+              $ref: "#/components/headers/WargRegistryHeader"
           content:
             application/json:
               schema:
@@ -340,15 +412,24 @@ paths:
           required: true
           schema:
             "$ref": "#/components/schemas/AnyHash"
+        - name: Warg-Registry
+          in: header
+          $ref: "#/components/headers/WargRegistryHeader"
       responses:
         "200":
           description: The content digest sources.
+          headers:
+            Warg-Registry:
+              $ref: "#/components/headers/WargRegistryHeader"
           content:
             application/json:
               schema:
                 "$ref": "#/components/schemas/ContentSourcesResponse"
         "404":
           description: A requested entity was not found.
+          headers:
+            Warg-Registry:
+              $ref: "#/components/headers/WargRegistryHeader"
           content:
             application/json:
               schema:
@@ -374,6 +455,9 @@ paths:
                       The identifier of the entity that was not found.
         default:
           description: An error occurred when processing the request.
+          headers:
+            Warg-Registry:
+              $ref: "#/components/headers/WargRegistryHeader"
           content:
             application/json:
               schema:
@@ -387,6 +471,10 @@ paths:
         - proof
       description: |
         Proves the consistency of the registry between two specified checkpoints.
+      parameters:
+        - name: Warg-Registry
+          in: header
+          $ref: "#/components/headers/WargRegistryHeader"
       requestBody:
         content:
           application/json:
@@ -395,12 +483,18 @@ paths:
       responses:
         "200":
           description: The consistency proof was generated successfully.
+          headers:
+            Warg-Registry:
+              $ref: "#/components/headers/WargRegistryHeader"
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ProveConsistencyResponse"
         "404":
           description: A requested entity was not found.
+          headers:
+            Warg-Registry:
+              $ref: "#/components/headers/WargRegistryHeader"
           content:
             application/json:
               schema:
@@ -425,6 +519,9 @@ paths:
                     description: The identifier of the entity that was not found. 
         "422":
           description: The proof bundle could not be generated.
+          headers:
+            Warg-Registry:
+              $ref: "#/components/headers/WargRegistryHeader"
           content:
             application/json:
               schema:
@@ -436,6 +533,9 @@ paths:
                     failure: "#/components/schemas/BundleFailureError"
         default:
           description: An error occurred when processing the request.
+          headers:
+            Warg-Registry:
+              $ref: "#/components/headers/WargRegistryHeader"
           content:
             application/json:
               schema:
@@ -449,6 +549,10 @@ paths:
         - proof
       description: |
         Proves that the given log leafs are present in the given registry checkpoint.
+      parameters:
+        - name: Warg-Registry
+          in: header
+          $ref: "#/components/headers/WargRegistryHeader"
       requestBody:
         content:
           application/json:
@@ -457,12 +561,18 @@ paths:
       responses:
         "200":
           description: The inclusion proof was generated successfully.
+          headers:
+            Warg-Registry:
+              $ref: "#/components/headers/WargRegistryHeader"
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ProveInclusionResponse"
         "404":
           description: A requested entity was not found.
+          headers:
+            Warg-Registry:
+              $ref: "#/components/headers/WargRegistryHeader"
           content:
             application/json:
               schema:
@@ -487,6 +597,9 @@ paths:
                     description: The identifier of the entity that was not found.
         "422":
           description: The proof bundle could not be generated.
+          headers:
+            Warg-Registry:
+              $ref: "#/components/headers/WargRegistryHeader"
           content:
             application/json:
               schema:
@@ -502,6 +615,9 @@ paths:
                     failure: "#/components/schemas/BundleFailureError"
         default:
           description: An error occurred when processing the request.
+          headers:
+            Warg-Registry:
+              $ref: "#/components/headers/WargRegistryHeader"
           content:
             application/json:
               schema:
@@ -514,6 +630,10 @@ paths:
       tags:
         - monitor
       description: Verify checkpoint from the registry. The client must interpret the response body to determine the verification status.
+      parameters:
+        - name: Warg-Registry
+          in: header
+          $ref: "#/components/headers/WargRegistryHeader"
       requestBody:
         content:
           application/json:
@@ -522,12 +642,18 @@ paths:
       responses:
         "200":
           description: The checkpoint verification request was processed. The client must interpret the response body to determine the verification status. 
+          headers:
+            Warg-Registry:
+              $ref: "#/components/headers/WargRegistryHeader"
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/CheckpointVerificationResponse"
         default:
           description: An error occurred when processing the request.
+          headers:
+            Warg-Registry:
+              $ref: "#/components/headers/WargRegistryHeader"
           content:
             application/json:
               schema:
@@ -540,21 +666,40 @@ paths:
       tags:
         - ledger
       description: Fetch the registry ledger download URL sources.
+      parameters:
+        - name: Warg-Registry
+          in: header
+          $ref: "#/components/headers/WargRegistryHeader"
       responses:
         "200":
           description: The ledger sources was successfully fetched.
+          headers:
+            Warg-Registry:
+              $ref: "#/components/headers/WargRegistryHeader"
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/LedgerSourcesResponse"
         default:
           description: An error occurred when processing the request.
+          headers:
+            Warg-Registry:
+              $ref: "#/components/headers/WargRegistryHeader"
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
 
 components:
+  headers:
+    WargRegistryHeader:
+      name: Warg-Registry
+      in: header
+      description: If present and supported, this registry responds on behalf of the other registry specified in this header value.
+      required: false
+      schema:
+        type: string
+      example: registry.example.com
   schemas:
     Error:
       type: object
