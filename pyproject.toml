@@ -6,6 +6,7 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "click>=8.2.1",
+    "pexpect>=4.9.0",
     "requests>=2.32.4",
     "semver>=3.0.4",
     "validators>=0.35.0",
