@@ -1,5 +1,10 @@
 name: 'Wasm publish'
-description: 'Publish a single WebAssembly artefact'
+description: 'Publish a WebAssembly artifact (module/component/wit) to a supported registry'
+author: 'Xelato'
+
+branding:
+  icon: 'package'
+  color: 'green'
 
 inputs:
   path:
@@ -14,73 +19,105 @@ inputs:
     description: "Target name"
     required: true
   version:
-    description: "Semver-style version attribute."
-    required: false
+    description: "Version attribute (must be valid semver)"
 
-  # repository options
-  repository:
-    description: "Repository fully qualified domain name"
+  # registry options
+  registry:
+    description: "Registry domain name"
     required: true
-
-  repository-type:
-    description: "Repository type: oci, warg"
-    required: false
-    type: choice
-    options:
-      - oci
-      - warg
-
-  repository-suffix:
-    description: "Repository suffix"
-    required: false
-    default: ''
-
-  # authentication options
-  username:
-    description: "Username for repository login"
-    required: false
-
-  password:
-    description: "Password for repository login"
-    required: false
 
   # modifiers
   check-existing:
-    description: "Check whether an existing version already exists in the repository"
-    required: false
+    description: "Check whether an existing version already exists in the registry"
     type: boolean
     default: true
 
   fail-on-existing:
     description: "Whether to fail if an already existing package with the same version is found"
-    required: false
     type: boolean
     default: false
 
   override:
     description: "Whether to attempt to override an already existing version"
-    required: false
     type: boolean
     default: false
 
+
 outputs:
+
   filename:
-    description: "Filename of the input file"
-  filename-sha256:
+    description: "Input filename"
+    value: ${{ steps.package.outputs.filename }}
+  digest:
     description: "sha256 hash of the input file"
+    value: ${{ steps.package.outputs.digest }}
+  namespace:
+    description: "Package namespace"
+    value: ${{ steps.package.outputs.namespace }}
+  name:
+    description: "Package name"
+    value: ${{ steps.package.outputs.name }}
+  version:
+    description: "Package version"
+    value: ${{ steps.package.outputs.version }}
+
+  registry:
+    description: "registry domain name"
+    value: ${{ steps.registry.outputs.registry }}
+  registry-type:
+    description: "registry domain name"
+    value: ${{ steps.registry.outputs.registry-type }}
+  oci-registry:
+    description: "domain name of OCI registry"
+    value: ${{ steps.registry.outputs.oci-registry }}
+  oci-namespace-prefix:
+    description: "Namespace prefix for OCI registry"
+    value: ${{ steps.registry.outputs.oci-namespace-prefix }}
+  warg-url:
+    description: "URL for working with warg registry"
+    value: ${{ steps.registry.outputs.warg-url }}
 
 
 runs:
   using: "composite"
+
   steps:
+
+    - name: Install uv
+      run: |
+        python -m pip install uv > /dev/null
+        uv sync -q
+      shell: bash
+
+    - name: Validate package
+      id: package
+      shell: bash
+      run: |
+        uv run action.py package \
+          --path "${{ inputs.path }}" \
+          --namespace "${{ inputs.namespace }}" \
+          --name "${{ inputs.name }}" \
+          --version "${{ inputs.version }}" \
+
+    - name: Validate registry
+      id: registry
+      shell: bash
+      run: |
+        uv run action.py registry \
+          --registry "${{ inputs.registry }}"
+
     - name: Install cargo-binstall
       uses: cargo-bins/cargo-binstall@main
-    - name: Install dependencies
+
+    - name: Warg login
+      if: ${{ steps.registry.outputs.registry-type == 'warg' }}
+      shell: bash
       run: |
-        cargo binstall wkg
         cargo binstall warg-cli
-      shell: bash
-    - name: Resolve filename
-      run: |
-        ls -l ${{ inputs.path }}
-      shell: bash
+        uv run action.py warg config \
+          --registry "${{ steps.registry.outputs.warg-url }}" \
+          --keyring-backend flat-file
+
+        uv run action.py warg key set
+        uv run action.py warg key info
+        warg key info

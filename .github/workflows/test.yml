@@ -1,0 +1,47 @@
+name: Test
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        # todo: include windows-latest, ubuntu-latest, macos-latest, ubuntu-22.04
+        os:
+          - macos-14
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: publish
+        uses: ./
+        id: publish
+        with:
+          path: test/files/gcd@*.wasm
+          namespace: xelato
+          name: gcd
+          registry: wa.dev
+        env:
+          WARG_TOKEN: ${{ secrets.WARG_TOKEN }}
+          WARG_PRIVATE_KEY: ${{ secrets.WARG_PRIVATE_KEY }}
+
+      - name: Display outputs
+        shell: bash
+        run: |
+          echo "filename:" ${{ steps.publish.outputs.filename }}
+          echo "digest:" ${{ steps.publish.outputs.digest }}
+          echo "namespace:" ${{ steps.publish.outputs.namespace }}
+          echo "name:" ${{ steps.publish.outputs.name }}
+          echo "version:" ${{ steps.publish.outputs.version }}
+
+          echo "registry:" ${{ steps.publish.outputs.registry }}
+          echo "registry type:" ${{ steps.publish.outputs.registry-type }}
+          echo "oci registry:" ${{ steps.publish.outputs.oci-registry }}
+          echo "oci namespace prefix:" ${{ steps.publish.outputs.oci-namespace-prefix }}
+          echo "warg url:" ${{ steps.publish.outputs.warg-url }}

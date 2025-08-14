@@ -1,0 +1,16 @@
+[project]
+name = "wasm-publish-action"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "click>=8.2.1",
+    "requests>=2.32.4",
+    "semver>=3.0.4",
+    "validators>=0.35.0",
+    "warg-openapi",
+]
+
+[tool.uv.sources]
+warg-openapi = { path = "warg-openapi" }
