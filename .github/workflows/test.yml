@@ -19,12 +19,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: publish
+      - name: Push
         uses: ./
-        id: publish
+        id: push
         with:
           path: test/files/gcd@*.wasm
-          namespace: xelato
+          namespace: rocketniko
           name: gcd
           registry: wa.dev
         env:
@@ -34,14 +34,14 @@ jobs:
       - name: Display outputs
         shell: bash
         run: |
-          echo "filename:" ${{ steps.publish.outputs.filename }}
-          echo "digest:" ${{ steps.publish.outputs.digest }}
-          echo "namespace:" ${{ steps.publish.outputs.namespace }}
-          echo "name:" ${{ steps.publish.outputs.name }}
-          echo "version:" ${{ steps.publish.outputs.version }}
+          echo "filename:" ${{ steps.push.outputs.filename }}
+          echo "digest:" ${{ steps.push.outputs.digest }}
+          echo "namespace:" ${{ steps.push.outputs.namespace }}
+          echo "name:" ${{ steps.push.outputs.name }}
+          echo "version:" ${{ steps.push.outputs.version }}
 
-          echo "registry:" ${{ steps.publish.outputs.registry }}
-          echo "registry type:" ${{ steps.publish.outputs.registry-type }}
-          echo "oci registry:" ${{ steps.publish.outputs.oci-registry }}
-          echo "oci namespace prefix:" ${{ steps.publish.outputs.oci-namespace-prefix }}
-          echo "warg url:" ${{ steps.publish.outputs.warg-url }}
+          echo "registry:" ${{ steps.push.outputs.registry }}
+          echo "registry type:" ${{ steps.push.outputs.registry-type }}
+          echo "oci registry:" ${{ steps.push.outputs.oci-registry }}
+          echo "oci namespace prefix:" ${{ steps.push.outputs.oci-namespace-prefix }}
+          echo "warg url:" ${{ steps.push.outputs.warg-url }}
