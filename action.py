@@ -9,7 +9,6 @@ import click
 import semver
 import validators
 import requests
-import pexpect
 
 
 def error(text):
@@ -135,60 +134,6 @@ def extract_version(filename):
     Return the substring between the last '@' and last '.'"""
     s = os.path.basename(filename)
     return s[s.rfind('@')+1:s.rfind('.')]
-
-
-@cli.command(
-    help="Wrapper for warg command",
-    context_settings={
-        "ignore_unknown_options": True,
-        "allow_extra_args": True,
-    })
-def warg():
-    argv = sys.argv[2:]
-
-    command = ['warg']
-    command.extend(argv)
-
-    print("$ {}".format(' '.join(command)))
-
-    # warg key set
-    if command == ['warg', 'key', 'set']:
-        key = os.environ.get('WARG_PRIVATE_KEY')
-        if not key:
-            raise error('no key provided')
-        if key.count(':') != 1:
-            raise error('expected key format ecdsa-p256:<key>')
-        alg, value = key.split(':')
-        if alg != 'ecdsa-p256':
-            raise error('alg ecdsa-p256 expected')
-        # private key has length 32
-        # public key has length 33
-        if len(base64.b64decode(value)) != 32:
-            raise error('unexpected private key length')
-        print("valid private key")
-
-        p = pexpect.spawn(' '.join(command))
-        p.expect('input signing key')
-        p.expect(':')
-        p.expect(':')
-        import time
-        time.sleep(1)
-        p.sendline(key)
-        p.expect(pexpect.EOF)
-        p.wait()
-        return p.exitstatus
-
-    # warg login
-    elif argv == ['warg', 'login']:
-        pass
-
-    # default
-    else:
-        p = pexpect.spawn(' '.join(command))
-        p.logfile = sys.stdout.buffer
-        p.expect(pexpect.EOF)
-        p.wait()
-        return p.exitstatus
 
 
 @cli.command(help="Push to a warg registry")
