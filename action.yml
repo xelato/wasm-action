@@ -106,18 +106,14 @@ runs:
         uv run action.py registry \
           --registry "${{ inputs.registry }}"
 
-    - name: Install cargo-binstall
-      uses: cargo-bins/cargo-binstall@main
-
-    - name: Warg login
+    - name: Warg push
       if: ${{ steps.registry.outputs.registry-type == 'warg' }}
       shell: bash
       run: |
-        cargo binstall warg-cli
-        uv run action.py warg config \
-          --registry "${{ steps.registry.outputs.warg-url }}" \
-          --keyring-backend flat-file
 
-        uv run action.py warg key set
-        uv run action.py warg key info
-        warg key info
+        uv run action.py warg-push \
+          --warg-url "${{ steps.registry.outputs.warg-url }}" \
+          --filename "${{ steps.package.outputs.filename }}" \
+          --namespace "${{ steps.package.outputs.namespace }}" \
+          --name "${{ steps.package.outputs.name }}" \
+          --version "${{ steps.package.outputs.version }}" \

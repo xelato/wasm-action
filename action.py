@@ -191,6 +191,35 @@ def warg():
         return p.exitstatus
 
 
+@cli.command(help="Push to a warg registry")
+@click.option('--warg-url', required=True, help="registry domain name")
+@click.option('--filename', required=True, help="filename")
+@click.option('--namespace', required=True, help="package namespace")
+@click.option('--name', required=True, help="package name")
+@click.option('--version', required=True, help="package version")
+def warg_push(warg_url, filename, namespace, name, version):
+    print(warg_url)
+    print(filename)
+    print(namespace)
+    print(name)
+    print(version)
+
+    # validate key
+    key = os.environ.get('WARG_PRIVATE_KEY')
+    if not key:
+        raise error('no key provided')
+    if key.count(':') != 1:
+        raise error('expected key format ecdsa-p256:<key>')
+    alg, value = key.split(':')
+    if alg != 'ecdsa-p256':
+        raise error('alg ecdsa-p256 expected')
+    # private key has length 32
+    # public key has length 33
+    if len(base64.b64decode(value)) != 32:
+        raise error('unexpected private key length')
+    print("valid private key")
+
+
 def main():
     cli()
 
