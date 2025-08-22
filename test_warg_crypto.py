@@ -20,7 +20,7 @@ class TestKeys(unittest.TestCase):
         private_key = PrivateKey.generate()
         public_key = private_key.public_key()
 
-        data = b"Hello!"
+        data = b"Hello, WebAssembly!"
         signature = private_key.sign(data)
         ok = public_key.verify(signature, data)
         self.assertTrue(ok)
