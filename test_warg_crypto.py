@@ -5,7 +5,7 @@ from warg_crypto import PrivateKey, PublicKey
 
 class TestKeys(unittest.TestCase):
 
-    def test_private_key_roundtrip(self):
+    def test_private_key(self):
         k1 = PrivateKey.generate()
         k2 = PrivateKey.load(k1.canonical())
         self.assertEqual(k1.canonical(), k2.canonical())

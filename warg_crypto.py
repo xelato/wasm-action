@@ -5,7 +5,7 @@ Cryptography support for interacting with warg-server.
 Warg uses elliptic curve cryptography, specifically SECP256R1
 for signing content uploads.
 
-Implementation relies on cryptography package (using OpenSSL internally.)
+Implementation relies on cryptography package (using OpenSSL internally).
 
 """
 
