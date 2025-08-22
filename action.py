@@ -10,6 +10,7 @@ import semver
 import validators
 import requests
 
+from warg_crypto import PrivateKey
 
 def error(text):
     return ValueError(text)
@@ -158,11 +159,15 @@ def warg_push(warg_url, filename, namespace, name, version):
     alg, value = key.split(':')
     if alg != 'ecdsa-p256':
         raise error('alg ecdsa-p256 expected')
-    # private key has length 32
-    # public key has length 33
     if len(base64.b64decode(value)) != 32:
         raise error('unexpected private key length')
-    print("valid private key")
+
+    try:
+        PrivateKey.load(key)
+    except:
+        raise error("Error loading private key")
+    else:
+        print("valid private key")
 
 
 def main():
