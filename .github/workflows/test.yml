@@ -14,6 +14,8 @@ jobs:
         # todo: include windows-latest, ubuntu-latest, macos-latest, ubuntu-22.04
         os:
           - macos-14
+          - ubuntu-latest
+          - windows-latest
     runs-on: ${{ matrix.os }}
 
     steps:
