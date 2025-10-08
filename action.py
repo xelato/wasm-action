@@ -14,7 +14,7 @@ from warg_crypto import PrivateKey
 from warg_client import WargClient
 
 
-class ActionType(enum.Enum):
+class Action(enum.Enum):
     PUSH = 'push'
     PULL = 'pull'
 
@@ -31,21 +31,18 @@ def cli():
 
 
 @cli.command(help="Validate action")
-@click.option('--action', required=True, help="requested action", type=ActionType)
+@click.option('--action', required=True, help="requested action", type=Action)
 def action(action):
     add_github_output('action', action.value)
 
 
 @cli.command(help="Validate package")
-@click.option('--action', required=True, help="requested action to perform", type=ActionType)
+@click.option('--action', required=True, help="requested action to perform", type=Action)
 @click.option('--path', required=True, help="package path, glob pattern supported")
 @click.option('--namespace', required=True, help="package namespace")
 @click.option('--name', required=True, help="package name")
 @click.option('--version', required=False, help="package version (optional)")
-def package(action, path, namespace, name, version):
-
-    if not path:
-        raise error('path is required')
+def package(action, path, namespace, name, version=''):
 
     if not namespace:
         raise error('namespace is required')
@@ -53,31 +50,44 @@ def package(action, path, namespace, name, version):
     if not name:
         raise error('name is required')
 
-    # expand path pattern into filename, ensure only a single file
-    files = glob.glob(path)
-    if not files:
-        raise error('file not found: {}'.format(path))
-    if len(files) > 1:
-        raise error('more than one files found: {}'.format(path))
+    if version:
+        # validate version as semver
+        semver.Version.parse(version)
 
-    filename = files[0]
+    if action == Action.PULL:
+        # todo: file extension
+        filename = path if path else (
+            "{}-{}@{}.wasm".format(namespace, name, version) if version
+            else "{}-{}.wasm".format(namespace, name)
+        )
 
-    # extract version from filename if not provided
-    if not version:
-        version = extract_version(filename)
+    elif action == Action.PUSH:
+        if not path:
+            raise error('path is required')
 
-    # validate version as semver
-    semver.Version.parse(version)
+        # expand path pattern into filename, ensure only a single file
+        files = glob.glob(path)
+        if not files:
+            raise error('file not found: {}'.format(path))
+        if len(files) > 1:
+            raise error('more than one files found: {}'.format(path))
 
-    # job outputs
-    with open(filename, 'rb') as f:
-        digest = "sha256:{}".format(hashlib.file_digest(f, "sha256").hexdigest())
+        filename = files[0]
 
-    add_github_output('filename', filename)
-    add_github_output('digest', digest)
+        # extract version from filename if not provided
+        if not version:
+            version = extract_version(filename)
+
+        # validate version as semver
+        semver.Version.parse(version)
+
+    else:
+        pass
+
     add_github_output('namespace', namespace)
     add_github_output('name', name)
     add_github_output('version', version)
+    add_github_output('filename', filename)
 
 
 class RegistryType(enum.Enum):
