@@ -6,15 +6,16 @@ default:
 
 # generate warg client
 generate-warg-openapi:
-    rm -rf warg-openapi
-    docker run --rm -v "${PWD}:/local" \
+    rm -rf warg_openapi
+    container run --rm -v "${PWD}:/local" \
         openapitools/openapi-generator-cli generate \
         -i /local/openapi/warg.yml \
         -g python-pydantic-v1 \
         -o /local/warg-openapi \
         --package-name warg_openapi \
         --http-user-agent xelato-wasm-action
-
+    mv warg-openapi/warg_openapi .
+    rm -rf warg-openapi
 
 # validate openAPI definition
 validate:
