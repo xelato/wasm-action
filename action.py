@@ -11,6 +11,16 @@ import validators
 import requests
 
 from warg_crypto import PrivateKey
+from warg_client import WargClient
+
+
+class ActionType(enum.Enum):
+    PUSH = 'push'
+    PULL = 'pull'
+
+    def __str__(self):
+        return self.value
+
 
 def error(text):
     return ValueError(text)
@@ -20,12 +30,19 @@ def cli():
     pass
 
 
+@cli.command(help="Validate action")
+@click.option('--action', required=True, help="requested action", type=ActionType)
+def action(action):
+    add_github_output('action', action.value)
+
+
 @cli.command(help="Validate package")
+@click.option('--action', required=True, help="requested action to perform", type=ActionType)
 @click.option('--path', required=True, help="package path, glob pattern supported")
 @click.option('--namespace', required=True, help="package namespace")
 @click.option('--name', required=True, help="package name")
 @click.option('--version', required=False, help="package version (optional)")
-def package(path, namespace, name, version):
+def package(action, path, namespace, name, version):
 
     if not path:
         raise error('path is required')
@@ -126,8 +143,12 @@ def detect_registry_settings(registry):
 
 def add_github_output(key, value):
     """Add a github job output to the file pointed by the GITHUB_OUTPUT variable"""
-    with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
-        f.write('{key}={value}\n'.format(key=key, value=value))
+    line = '{key}={value}\n'.format(key=key, value=value)
+    if 'GITHUB_OUTPUT' in os.environ:
+        with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+            f.write(line)
+    else:
+        sys.stdout.write(line)
 
 
 def extract_version(filename):
@@ -138,12 +159,14 @@ def extract_version(filename):
 
 
 @cli.command(help="Push to a warg registry")
-@click.option('--warg-url', required=True, help="registry domain name")
+@click.option('--registry', required=True, help="registry domain name")
+@click.option('--warg-url', required=True, help="registry warg url")
 @click.option('--filename', required=True, help="filename")
 @click.option('--namespace', required=True, help="package namespace")
 @click.option('--name', required=True, help="package name")
 @click.option('--version', required=True, help="package version")
-def warg_push(warg_url, filename, namespace, name, version):
+def warg_push(registry, warg_url, filename, namespace, name, version):
+    print(registry)
     print(warg_url)
     print(filename)
     print(namespace)
@@ -154,13 +177,6 @@ def warg_push(warg_url, filename, namespace, name, version):
     key = os.environ.get('WARG_PRIVATE_KEY')
     if not key:
         raise error('no key provided')
-    if key.count(':') != 1:
-        raise error('expected key format ecdsa-p256:<key>')
-    alg, value = key.split(':')
-    if alg != 'ecdsa-p256':
-        raise error('alg ecdsa-p256 expected')
-    if len(base64.b64decode(value)) != 32:
-        raise error('unexpected private key length')
 
     try:
         PrivateKey.load(key)
@@ -168,6 +184,81 @@ def warg_push(warg_url, filename, namespace, name, version):
         raise error("Error loading private key")
     else:
         print("valid private key")
+
+    # todo: implement push
+
+
+@cli.command(help="Pull from a warg registry")
+@click.option('--registry', required=True, help="registry domain name")
+@click.option('--warg-url', required=True, help="registry warg url")
+@click.option('--filename', required=False, help="filename")
+@click.option('--namespace', required=True, help="package namespace")
+@click.option('--name', required=True, help="package name")
+@click.option('--version', required=False, help="package version")
+def warg_pull(registry, warg_url, filename, namespace, name, version):
+    print(registry, warg_url)
+    print("{}/{}@{}".format(namespace, name, version))
+
+    client = WargClient(
+        registry=registry,
+        warg_url=warg_url,
+        access_token=os.environ.get('WARG_TOKEN'))
+
+    res = client.get_checkpoint(namespace=namespace)
+    print("\n", res)
+
+    log_length = res.contents.log_length
+    res = client.fetch_logs(namespace=namespace, name=name, log_length=log_length)
+    print("\n", res)
+
+    if not res.packages:
+        raise error('failed to fetch logs')
+
+    log_id, packages = res.packages.popitem()
+    print(log_id)
+    if not packages:
+        raise error('failed to fetch logs')
+
+    # todo: decide digest from contentBytes based on requested version
+    digest = None
+    print("\n", "==========")
+    for package in packages:
+        print()
+        print(package)
+        print(">>> BYTES:", base64.b64decode(package['contentBytes']))
+    print("========")
+
+    # extracted from contentBytes
+    # component-book:adder
+    digest = "sha256:2afffac0a89b4f6add89903754bb5a09a51378ef14f159283c1a6408abb43147"
+
+    # get content sources
+    res = client.get_content_sources(
+        namespace=namespace,
+        digest=digest
+    )
+    print("\n", res)
+
+    if not res.content_sources:
+        raise error('failed to fetch sources')
+    digest, sources = res.content_sources.popitem()
+    if not sources:
+        raise error('failed to fetch sources')
+    source = sources[0]
+    url = source['url']
+
+    # Fetch content from url with digest expected
+    res = requests.get(url)
+    content_digest = 'sha256:{}'.format(hashlib.sha256(res.content).hexdigest())
+    if digest != content_digest:
+        raise error('unexpected content digest')
+
+    # todo: filename
+    filename = "result.wasm"
+    with open(filename, 'wb') as f:
+        f.write(res.content)
+
+
 
 
 def main():

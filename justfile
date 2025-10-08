@@ -7,7 +7,7 @@ default:
 # generate warg client
 generate-warg-client:
     rm -rf warg-openapi
-    container run --rm -v "${PWD}:/local" \
+    docker run --rm -v "${PWD}:/local" \
         openapitools/openapi-generator-cli generate \
         -i /local/openapi/warg.yml \
         -g python-pydantic-v1 \
@@ -18,15 +18,34 @@ generate-warg-client:
 
 # validate openAPI definition
 validate:
-    container run --rm -v "${PWD}:/local" \
+    docker run --rm -v "${PWD}:/local" \
         openapitools/openapi-generator-cli validate \
         -i /local/openapi/warg.yml
 
-# test warg-push
-test-warg-push:
-    uv run action.py warg-push \
-        --warg-url https://warg.wa.dev/ \
-        --filename test/files/gcd@0.0.1.wasm \
-        --namespace rocketniko \
-        --name gcd \
+pytest:
+    uv run --with pytest pytest test_*.py
+
+# ngrok-proxy to wa.dev
+ngrok:
+    ngrok http \
+        --url=$NGROK_DOMAIN \
+        https://warg.wa.dev/ --host-header warg.wa.dev \
+        --request-header-remove X-Forwarded-For \
+        --request-header-remove X-Forwarded-Host \
+        --request-header-remove X-Forwarded-Proto \
+
+# test warg-pull
+test-warg-pull:
+    uv run action.py warg-pull \
+        --registry wa.dev \
+        --warg-url https://$NGROK_DOMAIN/ \
+        --namespace component-book \
+        --name adder \
         --version 0.0.1 \
+
+warg:
+    echo "/Users/`whoami`/Library/Application Support/warg/config.json"
+    echo "/Users/`whoami`/Library/Caches/warg"
+    warg config
+    warg help
+    warg download wasi:io

@@ -7,6 +7,10 @@ branding:
   color: 'green'
 
 inputs:
+  action:
+    description: "action to perform: push, pull"
+    required: true
+
   path:
     description: "file path, glob syntax supported, however, must resolve to a single file."
     required: true
@@ -89,11 +93,19 @@ runs:
         uv sync -q
       shell: bash
 
+    - name: Validate action
+      id: action
+      shell: bash
+      run: |
+        uv run action.py action \
+          --action "${{ inputs.action }}" \
+
     - name: Validate package
       id: package
       shell: bash
       run: |
-        uv run action.py package \
+        uv run action.py action \
+          --action "${{ inputs.action }}" \
           --path "${{ inputs.path }}" \
           --namespace "${{ inputs.namespace }}" \
           --name "${{ inputs.name }}" \
@@ -107,11 +119,25 @@ runs:
           --registry "${{ inputs.registry }}"
 
     - name: Warg push
-      if: ${{ steps.registry.outputs.registry-type == 'warg' }}
+      if: ${{ steps.action.outputs.action == 'push' && steps.registry.outputs.registry-type == 'warg' }}
       shell: bash
       run: |
 
         uv run action.py warg-push \
+          --registry "${{ steps.registry.outputs.registry }}" \
+          --warg-url "${{ steps.registry.outputs.warg-url }}" \
+          --filename "${{ steps.package.outputs.filename }}" \
+          --namespace "${{ steps.package.outputs.namespace }}" \
+          --name "${{ steps.package.outputs.name }}" \
+          --version "${{ steps.package.outputs.version }}" \
+
+    - name: Warg pull
+      if: ${{ steps.action.outputs.action == 'pull' && steps.registry.outputs.registry-type == 'warg' }}
+      shell: bash
+      run: |
+
+        uv run action.py warg-pull \
+          --registry "${{ steps.registry.outputs.registry }}" \
           --warg-url "${{ steps.registry.outputs.warg-url }}" \
           --filename "${{ steps.package.outputs.filename }}" \
           --namespace "${{ steps.package.outputs.namespace }}" \

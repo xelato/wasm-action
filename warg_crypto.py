@@ -2,8 +2,7 @@
 """
 Cryptography support for interacting with warg-server.
 
-Warg uses elliptic curve cryptography, specifically SECP256R1
-for signing content uploads.
+Warg uses ECC secp256r1 for signing content uploads.
 
 Implementation relies on cryptography package (using OpenSSL internally).
 
@@ -49,6 +48,8 @@ class PrivateKey:
             raise ValueError('algorithm not supported: {}'.format(algo))
 
         key_bytes = base64.b64decode(key_b64)
+        # todo: compare bytes length with curve key length
+
         key_int = int.from_bytes(key_bytes)
         key = ec.derive_private_key(key_int, curve=curve)
         return cls(key)

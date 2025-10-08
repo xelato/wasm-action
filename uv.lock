@@ -1,5 +1,5 @@
 version = 1
-revision = 2
+revision = 3
 requires-python = ">=3.12"
 
 [[package]]
@@ -153,6 +153,15 @@ wheels = [
 ]
 
 [[package]]
+name = "leb128"
+version = "1.0.8"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/43/3b/476c8bcb181abb060e45bca5ce9b5ba055ea9e2ed3fac6c25b2fe7b9f16b/leb128-1.0.8.tar.gz", hash = "sha256:3a52dca242f93f87a3d766380a93a3fad53ef4044f03018d21705d3b2d9021ee", size = 3361, upload-time = "2024-06-28T05:48:31.697Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/09/97/45ab4bab1a89e6fdbc822f818bb18b39eed0dd7ed1faac8b89bc6b49a9ed/leb128-1.0.8-py3-none-any.whl", hash = "sha256:76cd271e75ea91aa2fbf7783d60cb7d667b62143d544bcee59159ff258bf4523", size = 3778, upload-time = "2024-06-28T05:48:29.398Z" },
+]
+
+[[package]]
 name = "pycparser"
 version = "2.22"
 source = { registry = "https://pypi.org/simple" }
@@ -285,6 +294,7 @@ source = { virtual = "." }
 dependencies = [
     { name = "click" },
     { name = "cryptography" },
+    { name = "leb128" },
     { name = "requests" },
     { name = "semver" },
     { name = "validators" },
@@ -295,6 +305,7 @@ dependencies = [
 requires-dist = [
     { name = "click", specifier = ">=8.2.1" },
     { name = "cryptography", specifier = ">=45.0.6" },
+    { name = "leb128", specifier = ">=1.0.8" },
     { name = "requests", specifier = ">=2.32.4" },
     { name = "semver", specifier = ">=3.0.4" },
     { name = "validators", specifier = ">=0.35.0" },
