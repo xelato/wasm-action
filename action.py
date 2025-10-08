@@ -259,8 +259,6 @@ def warg_pull(registry, warg_url, filename, namespace, name, version):
         f.write(res.content)
 
 
-
-
 def main():
     cli()
 
