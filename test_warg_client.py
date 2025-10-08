@@ -1,6 +1,5 @@
 import unittest
 
-from warg_crypto import PrivateKey, PublicKey
 from warg_client import WargClient, generate_log_id
 
 
