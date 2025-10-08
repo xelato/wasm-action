@@ -11,9 +11,8 @@ jobs:
   test:
     strategy:
       matrix:
-        # todo: include windows-latest, ubuntu-latest, macos-latest, ubuntu-22.04
         os:
-          - macos-14
+          - macos-latest
           - ubuntu-latest
           - windows-latest
     runs-on: ${{ matrix.os }}
