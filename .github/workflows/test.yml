@@ -46,16 +46,3 @@ jobs:
           echo "oci registry:" ${{ steps.pull.outputs.oci-registry }}
           echo "oci namespace prefix:" ${{ steps.pull.outputs.oci-namespace-prefix }}
           echo "warg url:" ${{ steps.pull.outputs.warg-url }}
-
-      - name: Push
-        uses: ./
-        id: push
-        with:
-          action: push
-          path: test/files/gcd@*.wasm
-          namespace: rocketniko
-          name: gcd
-          registry: wa.dev
-        env:
-          WARG_TOKEN: ${{ secrets.WARG_TOKEN }}
-          WARG_PRIVATE_KEY: ${{ secrets.WARG_PRIVATE_KEY }}
