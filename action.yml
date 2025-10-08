@@ -1,4 +1,4 @@
-name: 'Wasm publish'
+name: 'Wasm action'
 description: 'Publish a WebAssembly artifact (module/component/wit) to a supported registry'
 author: 'Xelato'
 
