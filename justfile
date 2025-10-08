@@ -5,7 +5,7 @@ default:
 # https://raw.githubusercontent.com/bytecodealliance/registry/refs/heads/main/crates/server/openapi.yaml
 
 # generate warg client
-generate-warg-client:
+generate-warg-openapi:
     rm -rf warg-openapi
     docker run --rm -v "${PWD}:/local" \
         openapitools/openapi-generator-cli generate \
@@ -13,7 +13,7 @@ generate-warg-client:
         -g python-pydantic-v1 \
         -o /local/warg-openapi \
         --package-name warg_openapi \
-        --http-user-agent xelato-wasm-action \
+        --http-user-agent xelato-wasm-action
 
 
 # validate openAPI definition

@@ -7,8 +7,9 @@ branding:
   color: 'green'
 
 inputs:
+
   action:
-    description: "action to perform: push, pull"
+    description: "possible values: push, pull"
     required: true
 
   path:
@@ -23,28 +24,12 @@ inputs:
     description: "Target name"
     required: true
   version:
-    description: "Version attribute (must be valid semver)"
+    description: "Version attribute (must be valid semver if specified)"
 
   # registry options
   registry:
     description: "Registry domain name"
     required: true
-
-  # modifiers
-  check-existing:
-    description: "Check whether an existing version already exists in the registry"
-    type: boolean
-    default: true
-
-  fail-on-existing:
-    description: "Whether to fail if an already existing package with the same version is found"
-    type: boolean
-    default: false
-
-  override:
-    description: "Whether to attempt to override an already existing version"
-    type: boolean
-    default: false
 
 
 outputs:
