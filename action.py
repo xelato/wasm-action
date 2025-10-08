@@ -207,7 +207,8 @@ def warg_push(registry, warg_url, filename, namespace, name, version):
 @click.option('--version', required=False, help="package version")
 def warg_pull(registry, warg_url, filename, namespace, name, version):
     print(registry, warg_url)
-    print("{}/{}@{}".format(namespace, name, version))
+    package = "{}/{}@{}".format(namespace, name, version)
+    print(package)
 
     client = WargClient(
         registry=registry,
@@ -238,7 +239,7 @@ def warg_pull(registry, warg_url, filename, namespace, name, version):
         print(">>> BYTES:", base64.b64decode(package['contentBytes']))
     print("========")
 
-    # extracted from contentBytes
+    # todo: extract from contentBytes
     # component-book:adder
     digest = "sha256:2afffac0a89b4f6add89903754bb5a09a51378ef14f159283c1a6408abb43147"
 

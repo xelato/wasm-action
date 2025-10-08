@@ -27,8 +27,8 @@ jobs:
         with:
           action: pull
           registry: wa.dev
-          namespace: wasi
-          name: io
+          namespace: component-book
+          name: adder
         env:
           WARG_TOKEN: ${{ secrets.WARG_TOKEN }}
 
