@@ -23,6 +23,12 @@ validate:
         openapitools/openapi-generator-cli validate \
         -i /local/openapi/warg.yml
 
+generate-warg-proto:
+    mkdir -p warg_proto
+    protoc --python_out warg_proto proto/warg/protocol/warg.proto
+    mv warg_proto/proto/warg/protocol/warg_pb2.py warg_proto.py
+    rm -rf warg_proto
+
 pytest:
     uv run --with pytest pytest test_*.py
 
