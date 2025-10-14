@@ -12,11 +12,12 @@ inputs:
     description: "possible values: push, pull"
     required: true
 
-  path:
-    description: "file path, glob syntax supported, however, must resolve to a single file."
+  # registry
+  registry:
+    description: "Registry domain name"
     required: true
 
-  # package options
+  # package
   namespace:
     description: "Target namespace"
     required: true
@@ -26,45 +27,35 @@ inputs:
   version:
     description: "Version attribute (must be valid semver if specified)"
 
-  # registry options
-  registry:
-    description: "Registry domain name"
-    required: true
+  # filename
+  path:
+    description: "file path, glob syntax supported, however, must resolve to a single file."
 
 
 outputs:
 
   filename:
-    description: "Input filename"
-    value: ${{ steps.package.outputs.filename }}
+    description: "Package filename"
+    value: ${{ steps.action.outputs.filename }}
   digest:
-    description: "sha256 hash of the input file"
-    value: ${{ steps.package.outputs.digest }}
+    description: "sha256 hash of the package file"
+    value: ${{ steps.action.outputs.digest }}
   namespace:
     description: "Package namespace"
-    value: ${{ steps.package.outputs.namespace }}
+    value: ${{ steps.action.outputs.namespace }}
   name:
     description: "Package name"
-    value: ${{ steps.package.outputs.name }}
+    value: ${{ steps.action.outputs.name }}
   version:
     description: "Package version"
-    value: ${{ steps.package.outputs.version }}
+    value: ${{ steps.action.outputs.version }}
 
   registry:
     description: "registry domain name"
-    value: ${{ steps.registry.outputs.registry }}
+    value: ${{ steps.action.outputs.registry }}
   registry-type:
     description: "registry domain name"
-    value: ${{ steps.registry.outputs.registry-type }}
-  oci-registry:
-    description: "domain name of OCI registry"
-    value: ${{ steps.registry.outputs.oci-registry }}
-  oci-namespace-prefix:
-    description: "Namespace prefix for OCI registry"
-    value: ${{ steps.registry.outputs.oci-namespace-prefix }}
-  warg-url:
-    description: "URL for working with warg registry"
-    value: ${{ steps.registry.outputs.warg-url }}
+    value: ${{ steps.action.outputs.registry-type }}
 
 
 runs:
@@ -78,53 +69,21 @@ runs:
         uv sync -q
       shell: bash
 
-    - name: Validate action
-      id: action
+    - name: Validate
+      id: validate
       shell: bash
       run: |
         uv run action.py action \
           --action "${{ inputs.action }}" \
 
-    - name: Validate package
-      id: package
+    - name:
+      id: action
       shell: bash
       run: |
-        uv run action.py package \
-          --action "${{ inputs.action }}" \
-          --path "${{ inputs.path }}" \
+
+        uv run action.py "${{ inputs.action }}" \
+          --registry "${{ inputs.registry }}" \
           --namespace "${{ inputs.namespace }}" \
           --name "${{ inputs.name }}" \
           --version "${{ inputs.version }}" \
-
-    - name: Validate registry
-      id: registry
-      shell: bash
-      run: |
-        uv run action.py registry \
-          --registry "${{ inputs.registry }}"
-
-    - name: Warg push
-      if: ${{ steps.action.outputs.action == 'push' && steps.registry.outputs.registry-type == 'warg' }}
-      shell: bash
-      run: |
-
-        uv run action.py warg-push \
-          --registry "${{ steps.registry.outputs.registry }}" \
-          --warg-url "${{ steps.registry.outputs.warg-url }}" \
-          --filename "${{ steps.package.outputs.filename }}" \
-          --namespace "${{ steps.package.outputs.namespace }}" \
-          --name "${{ steps.package.outputs.name }}" \
-          --version "${{ steps.package.outputs.version }}" \
-
-    - name: Warg pull
-      if: ${{ steps.action.outputs.action == 'pull' && steps.registry.outputs.registry-type == 'warg' }}
-      shell: bash
-      run: |
-
-        uv run action.py warg-pull \
-          --registry "${{ steps.registry.outputs.registry }}" \
-          --warg-url "${{ steps.registry.outputs.warg-url }}" \
-          --filename "${{ steps.package.outputs.filename }}" \
-          --namespace "${{ steps.package.outputs.namespace }}" \
-          --name "${{ steps.package.outputs.name }}" \
-          --version "${{ steps.package.outputs.version }}" \
+          --path "${{ inputs.path }}" \
