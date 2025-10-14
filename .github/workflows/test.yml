@@ -1,0 +1,45 @@
+name: Test
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - macos-latest
+          - windows-latest
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Pull test
+        uses: ./
+        id: pull
+        with:
+          action: pull
+          registry: wa.dev
+          namespace: component-book
+          name: adder
+
+      - name: Display outputs
+        shell: bash
+        run: |
+          echo "filename:" ${{ steps.pull.outputs.filename }}
+          echo "digest:" ${{ steps.pull.outputs.digest }}
+          echo "namespace:" ${{ steps.pull.outputs.namespace }}
+          echo "name:" ${{ steps.pull.outputs.name }}
+          echo "version:" ${{ steps.pull.outputs.version }}
+
+          echo "registry:" ${{ steps.pull.outputs.registry }}
+          echo "registry type:" ${{ steps.pull.outputs.registry-type }}
+          echo "oci registry:" ${{ steps.pull.outputs.oci-registry }}
+          echo "oci namespace prefix:" ${{ steps.pull.outputs.oci-namespace-prefix }}
+          echo "warg url:" ${{ steps.pull.outputs.warg-url }}

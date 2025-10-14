@@ -1,0 +1,19 @@
+name: Python
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  validate:
+    name: Python
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Validate
+      shell: bash
+      run: |
+        python -m pip install uv > /dev/null
+        uv run --with pytest pytest test_*.py
