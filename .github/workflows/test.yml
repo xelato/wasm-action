@@ -32,14 +32,10 @@ jobs:
       - name: Display outputs
         shell: bash
         run: |
-          echo "filename:" ${{ steps.pull.outputs.filename }}
-          echo "digest:" ${{ steps.pull.outputs.digest }}
+          echo "registry:" ${{ steps.pull.outputs.registry }}
+          echo "registry-type:" ${{ steps.pull.outputs.registry-type }}
           echo "namespace:" ${{ steps.pull.outputs.namespace }}
           echo "name:" ${{ steps.pull.outputs.name }}
           echo "version:" ${{ steps.pull.outputs.version }}
-
-          echo "registry:" ${{ steps.pull.outputs.registry }}
-          echo "registry type:" ${{ steps.pull.outputs.registry-type }}
-          echo "oci registry:" ${{ steps.pull.outputs.oci-registry }}
-          echo "oci namespace prefix:" ${{ steps.pull.outputs.oci-namespace-prefix }}
-          echo "warg url:" ${{ steps.pull.outputs.warg-url }}
+          echo "filename:" ${{ steps.pull.outputs.filename }}
+          echo "digest:" ${{ steps.pull.outputs.digest }}

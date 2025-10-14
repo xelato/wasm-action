@@ -12,8 +12,7 @@ def add_github_output(key, value):
     if 'GITHUB_OUTPUT' in os.environ:
         with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
             f.write(line)
-    else:
-        sys.stdout.write(line)
+    sys.stdout.write(line)
 
 def detect_registry_settings(registry):
     """Discovery based on .well-known domain config"""
