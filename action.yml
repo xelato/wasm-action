@@ -1,5 +1,5 @@
 name: 'Wasm action'
-description: 'Publish a WebAssembly artifact (module/component/wit) to a supported registry'
+description: 'Interact with a WebAssembly registry'
 author: 'Xelato'
 
 branding:
