@@ -10,8 +10,10 @@ import semver
 import validators
 import requests
 
+import warg_proto
 from warg_crypto import PrivateKey
 from warg_client import WargClient
+
 
 
 class Action(enum.Enum):
@@ -230,18 +232,12 @@ def warg_pull(registry, warg_url, filename, namespace, name, version):
     if not packages:
         raise error('failed to fetch logs')
 
-    # todo: decide digest from contentBytes based on requested version
-    digest = None
-    print("\n", "==========")
-    for package in packages:
-        print()
-        print(package)
-        print(">>> BYTES:", base64.b64decode(package['contentBytes']))
-    print("========")
+    found_version, digest = find_version(packages, requested_version=version)
 
-    # todo: extract from contentBytes
-    # component-book:adder
-    digest = "sha256:2afffac0a89b4f6add89903754bb5a09a51378ef14f159283c1a6408abb43147"
+    if not digest or not found_version:
+        raise error(
+            'no package version found' if not version
+            else 'requested version {} not found'.format(version))
 
     # get content sources
     res = client.get_content_sources(
@@ -264,10 +260,32 @@ def warg_pull(registry, warg_url, filename, namespace, name, version):
     if digest != content_digest:
         raise error('unexpected content digest')
 
-    # todo: filename
-    filename = "result.wasm"
+    filename = "{}-{}@{}.wasm".format(namespace, name, version)
     with open(filename, 'wb') as f:
         f.write(res.content)
+
+
+def find_version(packages, requested_version=None):
+    version, digest = None, None
+    for package in packages:
+        record = warg_proto.PackageRecord()
+        record.ParseFromString(base64.b64decode(package['contentBytes']))
+        for entry in record.entries:
+
+            obj = getattr(entry, entry.WhichOneof('contents'))
+
+            if isinstance(obj, warg_proto.PackageRelease):
+
+                if requested_version:
+                    if obj.version == requested_version:
+                        version = obj.version
+                        digest = obj.content_hash
+                else:
+                    # latest version, assuming already ordered
+                    version = obj.version
+                    digest = obj.content_hash
+
+    return version, digest
 
 
 def main():

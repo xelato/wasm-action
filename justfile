@@ -48,7 +48,6 @@ test-warg-pull:
         --warg-url https://$NGROK_DOMAIN/ \
         --namespace component-book \
         --name adder \
-        --version 0.0.1 \
 
 warg:
     echo "/Users/`whoami`/Library/Application Support/warg/config.json"
