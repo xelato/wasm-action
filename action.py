@@ -15,7 +15,6 @@ from warg_crypto import PrivateKey
 from warg_client import WargClient
 
 
-
 class Action(enum.Enum):
     PUSH = 'push'
     PULL = 'pull'
@@ -206,11 +205,10 @@ def warg_push(registry, warg_url, filename, namespace, name, version):
 @click.option('--filename', required=False, help="filename")
 @click.option('--namespace', required=True, help="package namespace")
 @click.option('--name', required=True, help="package name")
-@click.option('--version', required=False, help="package version")
+@click.option('--version', required=False, help="requested package version")
 def warg_pull(registry, warg_url, filename, namespace, name, version):
-    print(registry, warg_url)
-    package = "{}/{}@{}".format(namespace, name, version)
-    print(package)
+    package = "{}:{}@{}".format(namespace, name, version) if version else "{}:{}".format(namespace, name)
+    print("Resolving {} from {}".format(package, warg_url))
 
     client = WargClient(
         registry=registry,
@@ -218,17 +216,15 @@ def warg_pull(registry, warg_url, filename, namespace, name, version):
         access_token=os.environ.get('WARG_TOKEN'))
 
     res = client.get_checkpoint(namespace=namespace)
-    print("\n", res)
 
     log_length = res.contents.log_length
     res = client.fetch_logs(namespace=namespace, name=name, log_length=log_length)
-    print("\n", res)
 
     if not res.packages:
         raise error('failed to fetch logs')
 
     log_id, packages = res.packages.popitem()
-    print(log_id)
+
     if not packages:
         raise error('failed to fetch logs')
 
@@ -244,7 +240,6 @@ def warg_pull(registry, warg_url, filename, namespace, name, version):
         namespace=namespace,
         digest=digest
     )
-    print("\n", res)
 
     if not res.content_sources:
         raise error('failed to fetch sources')
@@ -260,9 +255,15 @@ def warg_pull(registry, warg_url, filename, namespace, name, version):
     if digest != content_digest:
         raise error('unexpected content digest')
 
-    filename = "{}-{}@{}.wasm".format(namespace, name, version)
+    filename = "{}:{}@{}.wasm".format(namespace, name, found_version)
     with open(filename, 'wb') as f:
         f.write(res.content)
+
+    add_github_output('namespace', namespace)
+    add_github_output('name', name)
+    add_github_output('version', found_version)
+    add_github_output('filename', filename)
+    add_github_output('digest', digest)
 
 
 def find_version(packages, requested_version=None):

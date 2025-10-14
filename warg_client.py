@@ -37,7 +37,6 @@ class WargClient:
 
     def fetch_logs(self, namespace, name, log_length):
         log_id = generate_log_id(namespace, name)
-        print("{}/{}: {}".format(namespace, name, log_id))
         return self.fetch_api.fetch_logs(
             fetch_logs_request=warg.FetchLogsRequest(
                 log_length=log_length,

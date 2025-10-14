@@ -28,8 +28,6 @@ jobs:
           registry: wa.dev
           namespace: component-book
           name: adder
-        env:
-          WARG_TOKEN: ${{ secrets.WARG_TOKEN }}
 
       - name: Display outputs
         shell: bash
