@@ -1,0 +1,93 @@
+import os
+import hashlib
+import base64
+
+import requests
+
+import warg_proto
+from warg_client import WargClient
+from util import detect_registry_settings
+from model import Action, RegistryType, PackageDownload
+
+
+def error(text):
+    return ValueError(text)
+
+
+def warg_pull(registry, warg_url, namespace, name, version=None):
+
+    client = WargClient(
+        registry=registry,
+        warg_url=warg_url,
+        access_token=os.environ.get('WARG_TOKEN'))
+
+    res = client.get_checkpoint(namespace=namespace)
+
+    res = client.fetch_logs(
+        namespace=namespace, name=name, log_length=res.contents.log_length)
+
+    if not res.packages:
+        raise error('failed to fetch logs')
+
+    log_id, packages = res.packages.popitem()
+
+    if not packages:
+        raise error('failed to fetch logs')
+
+    found_version, digest = find_version(packages, requested_version=version)
+
+    if not digest or not found_version:
+        raise error(
+            'no package version found' if not version
+            else 'requested version {} not found'.format(version))
+
+    # get content sources
+    res = client.get_content_sources(
+        namespace=namespace,
+        digest=digest
+    )
+
+    if not res.content_sources:
+        raise error('failed to fetch sources')
+    digest, sources = res.content_sources.popitem()
+    if not sources:
+        raise error('failed to fetch sources')
+    source = sources[0]
+    url = source['url']
+
+    # Fetch content from url with digest expected
+    res = requests.get(url)
+    content_digest = 'sha256:{}'.format(hashlib.sha256(res.content).hexdigest())
+    if digest != content_digest:
+        raise error('unexpected content digest')
+
+    return PackageDownload(
+        namespace=namespace,
+        name=name,
+        version=found_version,
+        content=res.content,
+        digest=digest,
+    )
+
+
+def find_version(packages, requested_version=None):
+    version, digest = None, None
+    for package in packages:
+        record = warg_proto.PackageRecord()
+        record.ParseFromString(base64.b64decode(package['contentBytes']))
+        for entry in record.entries:
+
+            obj = getattr(entry, entry.WhichOneof('contents'))
+
+            if isinstance(obj, warg_proto.PackageRelease):
+
+                if requested_version:
+                    if obj.version == requested_version:
+                        version = obj.version
+                        digest = obj.content_hash
+                else:
+                    # latest version, assuming already ordered
+                    version = obj.version
+                    digest = obj.content_hash
+
+    return version, digest
