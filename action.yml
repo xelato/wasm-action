@@ -73,7 +73,7 @@ runs:
       id: validate
       shell: bash
       run: |
-        uv run action.py action \
+        uv run wasm-action action \
           --action "${{ inputs.action }}" \
 
     - name:
@@ -81,7 +81,7 @@ runs:
       shell: bash
       run: |
 
-        uv run action.py "${{ inputs.action }}" \
+        uv run wasm-action "${{ inputs.action }}" \
           --registry "${{ inputs.registry }}" \
           --namespace "${{ inputs.namespace }}" \
           --name "${{ inputs.name }}" \

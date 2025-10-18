@@ -16,4 +16,5 @@ jobs:
       shell: bash
       run: |
         python -m pip install uv > /dev/null
-        uv run --with pytest pytest test_*.py
+        PYTHONPATH=. uv run --with pytest pytest
+        uv build

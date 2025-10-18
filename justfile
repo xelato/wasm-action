@@ -6,7 +6,7 @@ default:
 
 # generate warg client
 generate-warg-openapi:
-    rm -rf warg_openapi
+    rm -rf src/warg_openapi
     container run --rm -v "${PWD}:/local" \
         openapitools/openapi-generator-cli generate \
         -i /local/openapi/warg.yml \
@@ -14,7 +14,7 @@ generate-warg-openapi:
         -o /local/warg-openapi \
         --package-name warg_openapi \
         --http-user-agent xelato-wasm-action
-    mv warg-openapi/warg_openapi .
+    mv warg-openapi/warg_openapi src
     rm -rf warg-openapi
 
 # validate openAPI definition
@@ -30,7 +30,7 @@ generate-warg-proto:
     rm -rf warg_proto
 
 pytest:
-    uv run --with pytest pytest test_*.py
+    PYTHONPATH=. uv run --with pytest pytest
 
 # ngrok-proxy to wa.dev
 ngrok:
@@ -41,10 +41,9 @@ ngrok:
         --request-header-remove X-Forwarded-Host \
         --request-header-remove X-Forwarded-Proto \
 
-# test warg-pull
-test-warg-pull:
-    uv run action.py warg-pull \
+# test pull
+test-pull:
+    uv run wasm-action pull \
         --registry wa.dev \
-        --warg-url https://$NGROK_DOMAIN/ \
         --namespace component-book \
         --name adder \
