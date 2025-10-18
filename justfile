@@ -30,7 +30,7 @@ generate-warg-proto:
     rm -rf warg_proto
 
 pytest:
-    uv run --with pytest pytest test_*.py
+    PYTHONPATH=. uv run --with pytest pytest
 
 # ngrok-proxy to wa.dev
 ngrok:
