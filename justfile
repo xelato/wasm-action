@@ -41,10 +41,9 @@ ngrok:
         --request-header-remove X-Forwarded-Host \
         --request-header-remove X-Forwarded-Proto \
 
-# test warg-pull
-test-warg-pull:
-    uv run action.py warg-pull \
+# test pull
+test-pull:
+    uv run wasm-action pull \
         --registry wa.dev \
-        --warg-url https://$NGROK_DOMAIN/ \
         --namespace component-book \
         --name adder \
