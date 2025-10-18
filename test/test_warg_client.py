@@ -1,6 +1,6 @@
 import unittest
 
-from warg_client import WargClient, generate_log_id
+from wasm_action.warg_client import WargClient, generate_log_id
 
 
 class TestWargClient(unittest.TestCase):
