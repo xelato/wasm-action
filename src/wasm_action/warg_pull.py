@@ -4,10 +4,10 @@ import base64
 
 import requests
 
-import warg_proto
-from warg_client import WargClient
-from util import detect_registry_settings
-from model import Action, RegistryType, PackageDownload
+from . import warg_proto
+from .warg_client import WargClient
+from .util import detect_registry_settings
+from .model import Action, RegistryType, PackageDownload
 
 
 def error(text):

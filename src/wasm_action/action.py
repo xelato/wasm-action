@@ -10,12 +10,12 @@ import semver
 import validators
 import requests
 
-import warg_proto
-from warg_crypto import PrivateKey
-from warg_client import WargClient
-from util import add_github_output, detect_registry_settings, RegistryType
-from model import Action, RegistryType
-from warg_pull import warg_pull
+from . import warg_proto
+from .warg_crypto import PrivateKey
+from .warg_client import WargClient
+from .util import add_github_output, detect_registry_settings, RegistryType
+from .model import Action, RegistryType
+from .warg_pull import warg_pull
 
 
 def error(text):

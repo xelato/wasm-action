@@ -3,7 +3,7 @@ import os
 import sys
 import requests
 
-from model import RegistryType
+from .model import RegistryType
 
 
 def add_github_output(key, value):
