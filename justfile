@@ -6,7 +6,7 @@ default:
 
 # generate warg client
 generate-warg-openapi:
-    rm -rf warg_openapi
+    rm -rf src/warg_openapi
     container run --rm -v "${PWD}:/local" \
         openapitools/openapi-generator-cli generate \
         -i /local/openapi/warg.yml \
@@ -14,7 +14,7 @@ generate-warg-openapi:
         -o /local/warg-openapi \
         --package-name warg_openapi \
         --http-user-agent xelato-wasm-action
-    mv warg-openapi/warg_openapi .
+    mv warg-openapi/warg_openapi src
     rm -rf warg-openapi
 
 # validate openAPI definition
