@@ -5,7 +5,7 @@ default:
 # https://raw.githubusercontent.com/bytecodealliance/registry/refs/heads/main/crates/server/openapi.yaml
 
 # generate warg client
-generate-warg-openapi:
+openapi-generate:
     rm -rf src/warg_openapi
     container run --rm -v "${PWD}:/local" \
         openapitools/openapi-generator-cli generate \
@@ -18,17 +18,19 @@ generate-warg-openapi:
     rm -rf warg-openapi
 
 # validate openAPI definition
-validate:
+openapi-validate:
     docker run --rm -v "${PWD}:/local" \
         openapitools/openapi-generator-cli validate \
         -i /local/openapi/warg.yml
 
-generate-warg-proto:
+# generate protobuf module
+proto:
     mkdir -p warg_proto
     protoc --python_out warg_proto proto/warg/protocol/warg.proto
-    mv warg_proto/proto/warg/protocol/warg_pb2.py warg_proto.py
+    mv warg_proto/proto/warg/protocol/warg_pb2.py src/wasm_action/warg_proto.py
     rm -rf warg_proto
 
+# test
 pytest:
     PYTHONPATH=. uv run --with pytest pytest
 
