@@ -3,7 +3,7 @@
 **Interact with WebAssembly registries.**
 
 ## Features
-* Versatile use as a GitHub action, CLI or Python library.
+* Versatile use as a GitHub [action](https://github.com/marketplace/actions/wasm-action), CLI or Python [library](https://pypi.org/project/wasm-action/).
 * Supported registry types: warg (wa.dev)
 * Supported artifact types: wasm
 * Supported actions: pull
