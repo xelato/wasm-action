@@ -24,6 +24,7 @@ jobs:
     - name: Validate
       shell: bash
       run: |
+        which python
         python -m pip install uv > /dev/null
         PYTHONPATH=. uv run --with pytest pytest
         uv build
