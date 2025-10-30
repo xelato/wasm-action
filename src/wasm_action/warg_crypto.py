@@ -50,7 +50,7 @@ class PrivateKey:
         key_bytes = base64.b64decode(key_b64)
         # todo: compare bytes length with curve key length
 
-        key_int = int.from_bytes(key_bytes)
+        key_int = int.from_bytes(key_bytes, byteorder='big')
         key = ec.derive_private_key(key_int, curve=curve)
         return cls(key)
 
@@ -81,7 +81,7 @@ class PrivateKey:
     def canonical(self):
         """Convert to `<algo>:<base64>` format."""
         key_int = self.key.private_numbers().private_value
-        key_bytes = key_int.to_bytes(length=32)
+        key_bytes = key_int.to_bytes(length=32, byteorder='big')
         key_b64 = base64.b64encode(key_bytes).decode('ascii')
         return "{}:{}".format('ecdsa-p256', key_b64)
 
