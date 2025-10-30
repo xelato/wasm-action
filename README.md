@@ -9,7 +9,6 @@
 * Supported actions: pull
 * Supports Python 3.10+ on Linux, MacOS and Windows
 
-
 ## Usage
 ### Pull from registry
 ```
