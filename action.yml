@@ -34,16 +34,16 @@ outputs:
     value: ${{ steps.action.outputs.digest }}
   package:
     description: "Full package name"
-    value: ${{ steps.action.outputs.namespace }}
+    value: ${{ steps.action.outputs.package }}
   package-namespace:
     description: "Package namespace"
-    value: ${{ steps.action.outputs.namespace }}
+    value: ${{ steps.action.outputs.package-namespace }}
   package-name:
     description: "Package name"
-    value: ${{ steps.action.outputs.name }}
+    value: ${{ steps.action.outputs.package-name }}
   package-version:
     description: "Package version"
-    value: ${{ steps.action.outputs.version }}
+    value: ${{ steps.action.outputs.package-version }}
 
   registry:
     description: "registry domain name"
