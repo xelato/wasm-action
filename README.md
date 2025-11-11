@@ -18,8 +18,7 @@
         with:
           action: pull
           registry: wa.dev
-          namespace: component-book
-          name: adder
+          package: component-book/adder
 ```
 
 Outputs:
@@ -29,9 +28,9 @@ Outputs:
         run: |
           echo "registry:" ${{ steps.pull.outputs.registry }}
           echo "registry-type:" ${{ steps.pull.outputs.registry-type }}
-          echo "namespace:" ${{ steps.pull.outputs.namespace }}
-          echo "name:" ${{ steps.pull.outputs.name }}
-          echo "version:" ${{ steps.pull.outputs.version }}
+          echo "package-namespace:" ${{ steps.pull.outputs.namespace }}
+          echo "package-name:" ${{ steps.pull.outputs.name }}
+          echo "package-version:" ${{ steps.pull.outputs.version }}
           echo "filename:" ${{ steps.pull.outputs.filename }}
           echo "digest:" ${{ steps.pull.outputs.digest }}
 ```
