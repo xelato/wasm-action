@@ -9,27 +9,19 @@ branding:
 inputs:
 
   action:
-    description: "possible values: push, pull"
+    description: "Requested action to perform: push, pull"
     required: true
 
-  # registry
   registry:
     description: "Registry domain name"
     required: true
 
-  # package
-  namespace:
-    description: "Target namespace"
+  package:
+    description: "Package specified as namespace/name@version where version is optional and in semver format."
     required: true
-  name:
-    description: "Target name"
-    required: true
-  version:
-    description: "Version attribute (must be valid semver if specified)"
 
-  # filename
   path:
-    description: "file path, glob syntax supported, however, must resolve to a single file."
+    description: "File path, glob syntax supported"
 
 
 outputs:
@@ -40,13 +32,16 @@ outputs:
   digest:
     description: "sha256 hash of the package file"
     value: ${{ steps.action.outputs.digest }}
-  namespace:
+  package:
+    description: "Full package name"
+    value: ${{ steps.action.outputs.namespace }}
+  package-namespace:
     description: "Package namespace"
     value: ${{ steps.action.outputs.namespace }}
-  name:
+  package-name:
     description: "Package name"
     value: ${{ steps.action.outputs.name }}
-  version:
+  package-version:
     description: "Package version"
     value: ${{ steps.action.outputs.version }}
 
@@ -69,21 +64,11 @@ runs:
         uv sync -q
       shell: bash
 
-    - name: Validate
-      id: validate
-      shell: bash
-      run: |
-        uv run wasm-action action \
-          --action "${{ inputs.action }}" \
-
     - name:
       id: action
       shell: bash
       run: |
-
         uv run wasm-action "${{ inputs.action }}" \
           --registry "${{ inputs.registry }}" \
-          --namespace "${{ inputs.namespace }}" \
-          --name "${{ inputs.name }}" \
-          --version "${{ inputs.version }}" \
+          --package "${{ inputs.package }}" \
           --path "${{ inputs.path }}" \

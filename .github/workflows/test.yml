@@ -26,8 +26,7 @@ jobs:
         with:
           action: pull
           registry: wa.dev
-          namespace: component-book
-          name: adder
+          package: component-book/adder
 
       - name: Display outputs
         shell: bash
