@@ -22,7 +22,7 @@ jobs:
 
       - name: Test Pull
         uses: ./
-        id: pull
+        id: pull1
         with:
           action: pull
           registry: wa.dev
@@ -31,12 +31,12 @@ jobs:
       - name: Test pull outputs
         shell: bash
         run: |
-          [ "${{ steps.pull.outputs.registry }}" != "wa.dev" ] && exit 1;
-          [ "${{ steps.pull.outputs.registry-type }}" != "warg" ] && exit 1;
-          [ "${{ steps.pull.outputs.package }}" != "component-book:adder@0.1.0" ] && exit 1;
-          [ "${{ steps.pull.outputs.package-namespace }}" != "component-book" ] && exit 1;
-          [ "${{ steps.pull.outputs.package-name }}" != "adder" ] && exit 1;
-          [ "${{ steps.pull.outputs.package-version }}" != "0.1.0" ] && exit 1;
-          [ "${{ steps.pull.outputs.filename }}" != "component-book:adder@0.1.0.wasm" ] && exit 1;
-          [ "${{ steps.pull.outputs.digest }}" != "sha256:2afffac0a89b4f6add89903754bb5a09a51378ef14f159283c1a6408abb43147" ] && exit 1;
+          [ "${{ steps.pull1.outputs.registry }}" != "wa.dev" ] && exit 1;
+          [ "${{ steps.pull1.outputs.registry-type }}" != "warg" ] && exit 1;
+          [ "${{ steps.pull1.outputs.package }}" != "component-book:adder@0.1.0" ] && exit 1;
+          [ "${{ steps.pull1.outputs.package-namespace }}" != "component-book" ] && exit 1;
+          [ "${{ steps.pull1.outputs.package-name }}" != "adder" ] && exit 1;
+          [ "${{ steps.pull1.outputs.package-version }}" != "0.1.0" ] && exit 1;
+          [ "${{ steps.pull1.outputs.filename }}" != "component-book:adder@0.1.0.wasm" ] && exit 1;
+          [ "${{ steps.pull1.outputs.digest }}" != "sha256:2afffac0a89b4f6add89903754bb5a09a51378ef14f159283c1a6408abb43147" ] && exit 1;
           exit 0;
