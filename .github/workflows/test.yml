@@ -26,13 +26,13 @@ jobs:
         with:
           action: pull
           registry: wa.dev
-          package: component-book:adder
+          package: component-book:adder@0.1.0
 
       - name: Test pull outputs
         shell: bash
         run: |
           [ "${{ steps.pull.outputs.registry }}" != "wa.dev" ] && exit 1;
-          [ "${{ steps.pull.outputs.registry-type }}" != "test" ] && exit 1;
+          [ "${{ steps.pull.outputs.registry-type }}" != "warg" ] && exit 1;
           [ "${{ steps.pull.outputs.package }}" != "component-book:adder@0.1.0" ] && exit 1;
           [ "${{ steps.pull.outputs.package-namespace }}" != "component-book" ] && exit 1;
           [ "${{ steps.pull.outputs.package-name }}" != "adder" ] && exit 1;
