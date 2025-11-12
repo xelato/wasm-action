@@ -12,8 +12,7 @@
 ## Usage
 ### Pull from registry
 ```
-      - name: Pull from registry
-        uses: xelato/wasm-action
+      - uses: xelato/wasm-action
         with:
           action: pull
           registry: wa.dev
@@ -38,5 +37,5 @@
 |package-namespace|Package namespace|foo|
 |package-name|Package name|bar|
 |package-version|Package version|1.2.3|
-|filename|Download location|foo:bar@1.2.3.wasm|
+|filename|Download location|foo-bar_1.2.3.wasm|
 |digest|File hash|sha256:2afffac0a89b4f6add89903754bb5a09a51378ef14f159283c1a6408abb43147|
