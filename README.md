@@ -32,7 +32,7 @@
 #### Outputs:
 | Name | Description | Example |
 |------|-------------|---------|
-|registry|Registry domain name||
+|registry|Registry domain name|wa.dev|
 |registry-type|Detected registry type|warg|
 |package|Package|foo:bar@1.2.3|
 |package-namespace|Package namespace|foo|
