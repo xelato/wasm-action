@@ -14,7 +14,7 @@ def error(text):
     return ValueError(text)
 
 
-def warg_pull(registry, warg_url, namespace, name, version=None):
+def warg_pull(registry, warg_url, namespace, name, version=None) -> PackageDownload:
 
     client = WargClient(
         registry=registry,

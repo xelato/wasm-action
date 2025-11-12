@@ -14,6 +14,7 @@ from . import warg_proto
 from .warg_crypto import PrivateKey
 from .warg_client import WargClient
 from .util import add_github_output, detect_registry_settings, RegistryType
+from .util import format_package, parse_package
 from .model import Action, RegistryType
 from .warg_pull import warg_pull
 
@@ -24,12 +25,6 @@ def error(text):
 @click.group()
 def cli():
     pass
-
-
-@cli.command(help="Validate action")
-@click.option('--action', required=True, help="requested action", type=Action)
-def action(action):
-    add_github_output('action', action.value)
 
 
 @cli.command(help="Push to a WebAssembly registry")
@@ -77,37 +72,31 @@ def push(registry, namespace, name, version, path):
 
 @cli.command(help="Pull from a WebAssembly registry")
 @click.option('--registry', required=True, help="registry domain name")
-@click.option('--namespace', required=True, help="package namespace")
-@click.option('--name', required=True, help="package name")
-@click.option('--version', required=False, help="requested package version")
+@click.option('--package', required=True, help="package spec")
 @click.option('--path', required=False, help="filename")
-def pull(registry, namespace, name, version=None, path=None):
+def pull(registry, package, path=None):
 
-    if not namespace:
-        raise error('namespace is required')
+    if not package:
+        raise error("package is required")
 
-    if not name:
-        raise error('name is required')
-
-    if version:
-        # validate version as semver
-        semver.Version.parse(version)
+    namespace, name, version = parse_package(package)
 
     settings = validate_registry(registry)
 
     if settings.get('registry-type') != RegistryType.WARG:
         raise error("Registry type not supported: {}".format(settings.get('registry-type')))
 
-    package = warg_pull(registry, settings['warg-url'], namespace, name, version)
+    download = warg_pull(registry, settings['warg-url'], namespace, name, version)
 
-    filename = path or "{}:{}@{}.wasm".format(namespace, name, package.version)
+    filename = path or "{}:{}@{}.wasm".format(namespace, name, download.version)
     with open(filename, 'wb') as f:
-        f.write(package.content)
+        f.write(download.content)
 
-    add_github_output('namespace', package.namespace)
-    add_github_output('name', package.name)
-    add_github_output('version', package.version)
-    add_github_output('digest', package.digest)
+    add_github_output('package', format_package(namespace=namespace, name=name, version=download.version))
+    add_github_output('package-namespace', download.namespace)
+    add_github_output('package-name', download.name)
+    add_github_output('package-version', download.version)
+    add_github_output('digest', download.digest)
     add_github_output('filename', filename)
 
 

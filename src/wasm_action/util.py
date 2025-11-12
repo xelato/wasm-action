@@ -1,7 +1,9 @@
 
 import os
+import re
 import sys
 import requests
+import semver
 
 from .model import RegistryType
 
@@ -60,7 +62,44 @@ def extract_version(filename):
 
 
 def format_package(namespace, name, version):
-	if version:
-		return "{}:{}@{}".format(namespace, name, version)
-	else:
-		return "{}:{}".format(namespace, name)
+    """Canonical package representation in namespace:name@version format"""
+    if version:
+        return "{}:{}@{}".format(namespace, name, version)
+    else:
+        return "{}:{}".format(namespace, name)
+
+
+def parse_package(package):
+    """Parse a package string.
+
+    The following forms are supported:
+        namespace:name
+        namespace:name@version
+        namespace/name
+        namespace/name@version
+
+    Returns a tuple (namespace, name, version)
+    """
+    left, version = package, None
+    if '@' in package:
+        left, version = package.split('@', 1)
+    if ':' in left:
+        namespace, name = left.split(':', 1)
+    elif '/' in left:
+        namespace, name = left.split('/', 1)
+    else:
+        namespace, name = None, left
+
+    if not namespace:
+        raise ValueError("package namespace is required")
+    if not name:
+        raise ValueError("package version is required")
+
+    if not re.match(r"[\w-]+", namespace):
+        raise ValueError("invalid package namespace")
+    if not re.match(r"[\w-]+", name):
+        raise ValueError("invalid package name")
+    if version:
+        # throws on failed validation
+        semver.Version.parse(version)
+    return namespace, name, version
