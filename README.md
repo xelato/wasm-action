@@ -39,3 +39,38 @@
 |package-version|Package version|1.2.3|
 |filename|Download location|foo-bar_1.2.3.wasm|
 |digest|File hash|sha256:2afffac0a89b4f6add89903754bb5a09a51378ef14f159283c1a6408abb43147|
+
+## CLI
+```
+$ uv run wasm-action --help
+Usage: wasm-action [OPTIONS] COMMAND [ARGS]...
+
+Options:
+  --help  Show this message and exit.
+
+Commands:
+  pull  Pull from a WebAssembly registry
+  push  Push to a WebAssembly registry
+$ uv run wasm-action pull --help
+Usage: wasm-action pull [OPTIONS]
+
+  Pull from a WebAssembly registry
+
+Options:
+  --registry TEXT  registry domain name  [required]
+  --package TEXT   package spec  [required]
+  --path TEXT      filename
+  --help           Show this message and exit.
+$ uv run wasm-action pull --registry wa.dev --package wasi:io
+registry=wa.dev
+registry-type=warg
+warg-url=https://warg.wa.dev
+package=wasi:io@0.2.0
+package-namespace=wasi
+package-name=io
+package-version=0.2.0
+digest=sha256:c33b1dbf050f64229ff4decbf9a3d3420e0643a86f5f0cea29f81054820020a6
+filename=wasi:io@0.2.0.wasm
+$ file wasi:io@0.2.0.wasm 
+wasi:io@0.2.0.wasm: WebAssembly (wasm) binary module version 0x1000d
+```
