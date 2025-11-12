@@ -38,7 +38,7 @@
 |package-name|Package name|bar|
 |package-version|Package version|1.2.3|
 |filename|Download location|foo-bar_1.2.3.wasm|
-|digest|File hash|sha256:2afffac0a89b4f6add89903754bb5a09a51378ef14f159283c1a6408abb43147|
+|digest|File hash|sha256:2afffac0...|
 
 ## CLI
 The tool can be run without installing using [uv](https://docs.astral.sh/uv/).
