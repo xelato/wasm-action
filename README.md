@@ -41,8 +41,9 @@
 |digest|File hash|sha256:2afffac0a89b4f6add89903754bb5a09a51378ef14f159283c1a6408abb43147|
 
 ## CLI
+The tool can be run without installing using [uv](https://docs.astral.sh/uv/).
 ```
-$ uv run wasm-action --help
+$ uvx wasm-action --help
 Usage: wasm-action [OPTIONS] COMMAND [ARGS]...
 
 Options:
@@ -51,7 +52,7 @@ Options:
 Commands:
   pull  Pull from a WebAssembly registry
   push  Push to a WebAssembly registry
-$ uv run wasm-action pull --help
+$ uvx wasm-action pull --help
 Usage: wasm-action pull [OPTIONS]
 
   Pull from a WebAssembly registry
@@ -61,7 +62,7 @@ Options:
   --package TEXT   package spec  [required]
   --path TEXT      filename
   --help           Show this message and exit.
-$ uv run wasm-action pull --registry wa.dev --package wasi:io
+$ uvx wasm-action pull --registry wa.dev --package wasi:io
 registry=wa.dev
 registry-type=warg
 warg-url=https://warg.wa.dev
