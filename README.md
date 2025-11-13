@@ -52,6 +52,8 @@ Options:
 Commands:
   pull  Pull from a WebAssembly registry
   push  Push to a WebAssembly registry
+```
+```
 $ uvx wasm-action pull --help
 Usage: wasm-action pull [OPTIONS]
 
@@ -62,6 +64,8 @@ Options:
   --package TEXT   package spec  [required]
   --path TEXT      filename
   --help           Show this message and exit.
+```
+```
 $ uvx wasm-action pull --registry wa.dev --package wasi:io
 registry=wa.dev
 registry-type=warg
@@ -72,6 +76,18 @@ package-name=io
 package-version=0.2.0
 digest=sha256:c33b1dbf050f64229ff4decbf9a3d3420e0643a86f5f0cea29f81054820020a6
 filename=wasi:io@0.2.0.wasm
+```
+```
 $ file wasi:io@0.2.0.wasm 
 wasi:io@0.2.0.wasm: WebAssembly (wasm) binary module version 0x1000d
 ```
+
+## Use as Library
+The package is [published](http://pypi.org/project/wasm-action/) to the Python Package Index and can be installed/depended-on under the name `wasm-action` on all [supported](https://devguide.python.org/versions/#versions) Python versions.
+```
+$ pip install wasm-action
+```
+```
+> import wasm_action as wa
+```
+However, the library interface is not yet standardised and may (and will!) change.
