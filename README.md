@@ -6,7 +6,7 @@
 * Versatile use as a GitHub [action](https://github.com/marketplace/actions/wasm-action), CLI or Python [library](https://pypi.org/project/wasm-action/).
 * Supported registry types: warg (wa.dev)
 * Supported artifact types: wasm
-* Supported actions: pull
+* Supported actions: pull (public and private packages)
 * Supports Python 3.10+ on Linux, MacOS and Windows
 
 ## Usage
