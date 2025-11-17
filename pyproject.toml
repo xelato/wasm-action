@@ -17,6 +17,9 @@ dependencies = [
     "validators>=0.35.0",
 ]
 
+[project.urls]
+Repository = "https://github.com/xelato/wasm-action"
+
 [project.scripts]
 wasm-action = "wasm_action.action:main"
 
