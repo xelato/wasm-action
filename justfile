@@ -34,7 +34,6 @@ proto:
 pytest:
     PYTHONPATH=. uv run --with pytest pytest
 
-# ngrok-proxy to wa.dev
 ngrok:
     ngrok http \
         --url=$NGROK_DOMAIN \
@@ -42,9 +41,3 @@ ngrok:
         --request-header-remove X-Forwarded-For \
         --request-header-remove X-Forwarded-Host \
         --request-header-remove X-Forwarded-Proto \
-
-# test pull
-test-pull:
-    uv run wasm-action pull \
-        --registry wa.dev \
-        --package rocketniko:gcd \
