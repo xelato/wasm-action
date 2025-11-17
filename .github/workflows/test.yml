@@ -50,3 +50,13 @@ jobs:
           package: rocketniko:gcd
         env:
           WARG_TOKEN: ${{ secrets.WARG_TOKEN }}
+
+      - name: Test Pull Public With Auth
+        uses: ./
+        id: pull3
+        with:
+          action: pull
+          registry: wa.dev
+          package: component-book:adder
+        env:
+          WARG_TOKEN: ${{ secrets.WARG_TOKEN }}
