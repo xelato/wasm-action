@@ -14,12 +14,13 @@ def error(text):
     return ValueError(text)
 
 
-def warg_pull(registry, warg_url, namespace, name, version=None) -> PackageDownload:
+def warg_pull(registry, warg_url, namespace, name, version=None, token=None) -> PackageDownload:
 
     client = WargClient(
         registry=registry,
         warg_url=warg_url,
-        access_token=os.environ.get('WARG_TOKEN'))
+        access_token=token,
+    )
 
     res = client.get_checkpoint(namespace=namespace)
 
@@ -44,11 +45,12 @@ def warg_pull(registry, warg_url, namespace, name, version=None) -> PackageDownl
     # get content sources
     res = client.get_content_sources(
         namespace=namespace,
-        digest=digest
+        digest=digest,
     )
 
     if not res.content_sources:
         raise error('failed to fetch sources')
+
     digest, sources = res.content_sources.popitem()
     if not sources:
         raise error('failed to fetch sources')

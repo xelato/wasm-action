@@ -74,7 +74,8 @@ def push(registry, namespace, name, version, path):
 @click.option('--registry', required=True, help="registry domain name")
 @click.option('--package', required=True, help="package spec")
 @click.option('--path', required=False, help="filename")
-def pull(registry, package, path=None):
+@click.option('--warg-token', required=False, envvar='WARG_TOKEN', help="warg token")
+def pull(registry, package, path=None, warg_token=None):
 
     if not package:
         raise error("package is required")
@@ -86,7 +87,7 @@ def pull(registry, package, path=None):
     if settings.get('registry-type') != RegistryType.WARG:
         raise error("Registry type not supported: {}".format(settings.get('registry-type')))
 
-    download = warg_pull(registry, settings['warg-url'], namespace, name, version)
+    download = warg_pull(registry, settings['warg-url'], namespace, name, version, token=warg_token)
 
     filename = path or "{}:{}@{}.wasm".format(namespace, name, download.version)
     with open(filename, 'wb') as f:

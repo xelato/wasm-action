@@ -47,5 +47,4 @@ ngrok:
 test-pull:
     uv run wasm-action pull \
         --registry wa.dev \
-        --namespace component-book \
-        --name adder \
+        --package rocketniko:gcd \
