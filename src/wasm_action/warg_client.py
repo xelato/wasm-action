@@ -9,7 +9,7 @@ import warg_openapi as warg
 
 class WargClient:
 
-    def __init__(self, registry, warg_url, access_token=None, stealth=False):
+    def __init__(self, registry, warg_url, warg_token=None, stealth=False):
         self.registry = registry
 
         configuration = warg.Configuration(
@@ -25,8 +25,8 @@ class WargClient:
         )
 
         # private packages
-        if access_token:
-            client.default_headers['Authorization'] = 'Bearer {}'.format(access_token)
+        if warg_token:
+            client.default_headers['Authorization'] = 'Bearer {}'.format(warg_token)
 
         if stealth:
             client.default_headers['User-Agent'] = urllib3.util.SKIP_HEADER

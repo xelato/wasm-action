@@ -14,12 +14,12 @@ def error(text):
     return ValueError(text)
 
 
-def warg_pull(registry, warg_url, namespace, name, version=None, token=None) -> PackageDownload:
+def warg_pull(registry, warg_url, namespace, name, version=None, warg_token=None) -> PackageDownload:
 
     client = WargClient(
         registry=registry,
         warg_url=warg_url,
-        access_token=token,
+        warg_token=warg_token,
     )
 
     res = client.get_checkpoint(namespace=namespace)
