@@ -87,7 +87,7 @@ def pull(registry, package, path=None, warg_token=None):
     if settings.get('registry-type') != RegistryType.WARG:
         raise error("Registry type not supported: {}".format(settings.get('registry-type')))
 
-    download = warg_pull(registry, settings['warg-url'], namespace, name, version, token=warg_token)
+    download = warg_pull(registry, settings['warg-url'], namespace, name, version, warg_token=warg_token)
 
     filename = path or "{}:{}@{}.wasm".format(namespace, name, download.version)
     with open(filename, 'wb') as f:
