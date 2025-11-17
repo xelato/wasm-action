@@ -19,6 +19,12 @@
           package: component-book:adder
 ```
 
+To pull a private package define your [token](https://wa.dev/account/credentials/new):
+```
+        env:
+          WARG_TOKEN: ${{ secrets.WARG_TOKEN }}
+```
+
 #### Inputs
 
 | Name | Description | Required | Example |
@@ -60,10 +66,11 @@ Usage: wasm-action pull [OPTIONS]
   Pull from a WebAssembly registry
 
 Options:
-  --registry TEXT  registry domain name  [required]
-  --package TEXT   package spec  [required]
-  --path TEXT      filename
-  --help           Show this message and exit.
+  --registry TEXT    registry domain name  [required]
+  --package TEXT     package spec  [required]
+  --path TEXT        filename
+  --warg-token TEXT  warg token
+  --help             Show this message and exit.
 ```
 ```
 $ uvx wasm-action pull --registry wa.dev --package wasi:io

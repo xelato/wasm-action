@@ -40,3 +40,23 @@ jobs:
           [ "${{ steps.pull1.outputs.filename }}" != "component-book:adder@0.1.0.wasm" ] && exit 1;
           [ "${{ steps.pull1.outputs.digest }}" != "sha256:2afffac0a89b4f6add89903754bb5a09a51378ef14f159283c1a6408abb43147" ] && exit 1;
           exit 0;
+
+      - name: Test Pull Private
+        uses: ./
+        id: pull2
+        with:
+          action: pull
+          registry: wa.dev
+          package: rocketniko:gcd
+        env:
+          WARG_TOKEN: ${{ secrets.WARG_TOKEN }}
+
+      - name: Test Pull Public With Auth
+        uses: ./
+        id: pull3
+        with:
+          action: pull
+          registry: wa.dev
+          package: component-book:adder
+        env:
+          WARG_TOKEN: ${{ secrets.WARG_TOKEN }}

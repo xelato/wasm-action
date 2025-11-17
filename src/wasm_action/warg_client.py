@@ -9,22 +9,27 @@ import warg_openapi as warg
 
 class WargClient:
 
-    def __init__(self, registry, warg_url, access_token=None):
+    def __init__(self, registry, warg_url, warg_token=None, stealth=False):
         self.registry = registry
 
         configuration = warg.Configuration(
             host = "{}{}".format(warg_url, 'v1' if warg_url.endswith('/') else '/v1'),
-            #access_token=access_token,
         )
 
         # Support for digest strings as path params: sha256:<digest>
         # or else they get quoted, resulting in "Invalid content digest" error.
         configuration.safe_chars_for_path_param = "/:"
 
-        client = warg.ApiClient(configuration=configuration)
+        client = warg.ApiClient(
+            configuration=configuration,
+        )
 
-        # stealth mode
-        # client.default_headers['User-Agent'] = urllib3.util.SKIP_HEADER
+        # private packages
+        if warg_token:
+            client.default_headers['Authorization'] = 'Bearer {}'.format(warg_token)
+
+        if stealth:
+            client.default_headers['User-Agent'] = urllib3.util.SKIP_HEADER
 
         self.fetch_api = warg.FetchApi(client)
         self.content_api = warg.ContentApi(client)
