@@ -14,9 +14,9 @@ from . import warg_proto
 from .warg_crypto import PrivateKey
 from .warg_client import WargClient
 from .util import add_github_output, detect_registry_settings, RegistryType
-from .util import format_package, parse_package
+from .util import format_package, parse_package, extract_version
 from .model import Action, RegistryType
-from .warg_pull import warg_pull
+from .warg_pull import warg_pull, warg_push
 
 
 def error(text):
@@ -27,25 +27,32 @@ def cli():
     pass
 
 
-@cli.command(help="Push to a WebAssembly registry")
+@cli.command(help="Push to registry")
 @click.option('--registry', required=True, help="registry domain name")
-@click.option('--namespace', required=True, help="package namespace")
-@click.option('--name', required=True, help="package name")
-@click.option('--version', required=True, help="package version")
+@click.option('--package', required=True, help="package spec")
 @click.option('--path', required=True, help="filename")
-def push(registry, namespace, name, version, path):
+@click.option('--warg-token', required=False, envvar='WARG_TOKEN', help="warg token")
+@click.option('--warg-private-key', required=False, envvar='WARG_PRIVATE_KEY', help="warg private key")
+def push(registry, package, path, warg_token, warg_private_key):
 
+    # path
     if not path:
         raise error('path is required')
 
+    # glob pattern support: (ex.: package-*.wasm)
     # expand path pattern into filename, ensure only a single file
     files = glob.glob(path)
     if not files:
         raise error('file not found: {}'.format(path))
     if len(files) > 1:
         raise error('more than one files found: {}'.format(path))
-
     filename = files[0]
+
+    # package
+    if not package:
+        raise error("package is required")
+
+    namespace, name, version = parse_package(package)
 
     # extract version from filename if not provided
     if not version:
@@ -54,23 +61,24 @@ def push(registry, namespace, name, version, path):
     # validate version as semver
     semver.Version.parse(version)
 
+    settings = validate_registry(registry)
+    if settings.get('registry-type') != RegistryType.WARG:
+        raise error("Registry type not supported: {}".format(settings.get('registry-type')))
 
-    # validate key
-    key = os.environ.get('WARG_PRIVATE_KEY')
-    if not key:
-        raise error('no key provided')
+    # validate private key
+    if not warg_private_key:
+        raise error('no private key provided')
 
     try:
-        PrivateKey.load(key)
+        private_key = PrivateKey.load(warg_private_key)
     except:
         raise error("Error loading private key")
-    else:
-        print("valid private key")
 
-    # todo: implement push
+    # push
+    warg_push(registry, settings['warg-url'], namespace, name, version, filename, warg_token, warg_private_key)
 
 
-@cli.command(help="Pull from a WebAssembly registry")
+@cli.command(help="Pull from registry")
 @click.option('--registry', required=True, help="registry domain name")
 @click.option('--package', required=True, help="package spec")
 @click.option('--path', required=False, help="filename")

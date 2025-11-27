@@ -65,10 +65,21 @@ runs:
       shell: bash
 
     - name:
-      id: action
+      id: pull
+      if: ${{ inputs.action == 'pull' }}
       shell: bash
       run: |
-        uv run wasm-action "${{ inputs.action }}" \
+        uv run wasm-action pull \
+          --registry "${{ inputs.registry }}" \
+          --package "${{ inputs.package }}" \
+          --path "${{ inputs.path }}" \
+
+    - name:
+      id: push
+      if: ${{ inputs.action == 'push' }}
+      shell: bash
+      run: |
+        uv run wasm-action push \
           --registry "${{ inputs.registry }}" \
           --package "${{ inputs.package }}" \
           --path "${{ inputs.path }}" \

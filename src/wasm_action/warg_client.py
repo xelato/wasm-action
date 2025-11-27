@@ -1,15 +1,19 @@
 
 from urllib.parse import urlparse
+import time
 import hashlib
 import urllib3
-
+import base64
 import leb128
 import warg_openapi as warg
 
+from .warg_crypto import PrivateKey
+from . import warg_proto as wp
+from .model import PackageRecord
 
 class WargClient:
 
-    def __init__(self, registry, warg_url, warg_token=None, stealth=False):
+    def __init__(self, registry, warg_url, warg_token=None, warg_private_key=None, stealth=False):
         self.registry = registry
 
         configuration = warg.Configuration(
@@ -33,6 +37,9 @@ class WargClient:
 
         self.fetch_api = warg.FetchApi(client)
         self.content_api = warg.ContentApi(client)
+        self.package_api = warg.PackageApi(client)
+
+        self.private_key = PrivateKey.load(warg_private_key) if warg_private_key else None
 
     def get_warg_registry(self, namespace):
         return "{}.{}".format(namespace, self.registry)
@@ -66,6 +73,108 @@ class WargClient:
             warg_registry=self.get_warg_registry(namespace)
         )
 
+    def publish_package_record(self, namespace, name, version, content_bytes, prev_id):
+        digest = hashlib.sha256(content_bytes).hexdigest()
+        record = self.create_version_record(
+            version=version,
+            digest=digest,
+        )
+
+        # link to previous record
+        if prev_id:
+            record.prev = prev_id
+
+        record_bytes = record.SerializeToString()
+
+        record_request = warg.PublishPackageRecordRequest(
+            package_name="{}:{}".format(namespace, name),
+
+            # signed record bytes
+            record=warg.EnvelopeBody(
+                key_id=self.private_key.public_key().fingerprint(),
+                signature=self.private_key.sign_canonical(record_bytes),
+                content_bytes=base64.b64encode(record_bytes).decode('ascii'),
+            ),
+
+            # map of content digest to sources (file content bytes)
+            content_sources={
+                "sha256:{}".format(digest): base64.b64encode(content_bytes).decode('ascii'),
+            }
+        )
+
+        print()
+        print(record_request)
+
+        kwargs = {
+            'log_id': generate_log_id(namespace, name),
+            'publish_package_record_request': record_request,
+            'warg_registry': self.get_warg_registry(namespace),
+        }
+
+        print(kwargs)
+        return
+
+        res = self.package_api.publish_package_record(**kwargs)
+        print(type(res))
+        print(res)
+
+        # todo: wait for completion
+
+    def create_version_record(self, version, digest) -> wp.PackageRecord:
+        release = wp.PackageRelease()
+        release.version = version
+        release.content_hash = "sha256:{}".format(digest)
+
+        entry = wp.PackageEntry()
+        entry.release.CopyFrom(release)
+
+        record = wp.PackageRecord()
+        record.entries.MergeFrom([entry])
+        # sets it to current time
+        record.time.GetCurrentTime()
+        return record
+
+
+class PackageLogs:
+
+    def __init__(self, res: warg.FetchLogsResponse):
+        self.log_id = None
+        if res.packages:
+            for key in res.packages:
+                self.log_id = key
+
+        self.packages = res.packages.get(self.log_id) if self.log_id else []
+        self.res = res
+
+    def records(self):
+        records = []
+        prev: PackageRecord = None
+        for package in self.packages:
+
+            record_bytes = base64.b64decode(package['contentBytes'])
+            record = wp.PackageRecord()
+            record.ParseFromString(record_bytes)
+
+            if prev and prev.id != record.prev:
+                raise Exception('Log inconsistency')
+
+            # augment the original record with more attributes
+            item = PackageRecord(
+                id=generate_record_id(record_bytes),
+                prev_id=prev.id if prev else None,
+                proto=record,
+                orig=package,
+            )
+
+            records.append(item)
+            prev = item
+
+        return records
+
+    def last_record(self):
+        records = self.records()
+        return records[-1] if records else None
+
 
 def generate_log_id(namespace, name):
     """Derive logId from package name"""
@@ -75,4 +184,12 @@ def generate_log_id(namespace, name):
     s.update(b'WARG-PACKAGE-ID-V0')
     s.update(leb128.u.encode(len(package_name)))
     s.update(package_name.encode('utf8'))
+    return 'sha256:{}'.format(s.hexdigest())
+
+
+def generate_record_id(record_bytes):
+    """Derive package record id from record content bytes."""
+    s = hashlib.sha256()
+    s.update(b'WARG-PACKAGE-LOG-RECORD-V0:')
+    s.update(record_bytes)
     return 'sha256:{}'.format(s.hexdigest())

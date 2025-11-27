@@ -41,3 +41,9 @@ ngrok:
         --request-header-remove X-Forwarded-For \
         --request-header-remove X-Forwarded-Host \
         --request-header-remove X-Forwarded-Proto \
+
+push:
+    uv run wasm-action push \
+        --registry wa.dev \
+        --package rocketniko:gcd \
+        --path test/files/gcd*.wasm \

@@ -5,13 +5,49 @@ import base64
 import requests
 
 from . import warg_proto
-from .warg_client import WargClient
+from .warg_client import WargClient, PackageLogs
 from .util import detect_registry_settings
 from .model import Action, RegistryType, PackageDownload
 
+import warg_openapi
 
 def error(text):
     return ValueError(text)
+
+
+def warg_push(registry, warg_url, namespace, name, version, filename, warg_token:str, warg_private_key:str):
+    print(registry, warg_url)
+    print(namespace, name, version)
+    print(filename)
+
+    with open(filename, 'rb') as f:
+        content_bytes = f.read()
+
+    client = WargClient(
+        registry=registry,
+        warg_url=warg_url,
+        warg_token=warg_token,
+        warg_private_key=warg_private_key,
+    )
+
+    # fetch logs
+    res = client.get_checkpoint(namespace=namespace)
+
+    res = client.fetch_logs(
+        namespace=namespace, name=name, log_length=res.contents.log_length)
+
+    package_logs = PackageLogs(res)
+    for record in package_logs.records():
+        print()
+        print('==========')
+        print(record)
+
+    print('===========')
+
+    # publish record
+    last = package_logs.last_record()
+    prev_id = last.id if last else ''
+    client.publish_package_record(namespace, name, version, content_bytes, prev_id=prev_id)
 
 
 def warg_pull(registry, warg_url, namespace, name, version=None, warg_token=None) -> PackageDownload:
