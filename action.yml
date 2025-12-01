@@ -47,7 +47,7 @@ outputs:
 
   registry:
     description: "registry domain name"
-    value: ${{ steps.action.outputs.registry }}
+    value: ${{ steps[inputs.action].outputs.registry }}
   registry-type:
     description: "registry domain name"
     value: ${{ steps.action.outputs.registry-type }}
@@ -65,7 +65,7 @@ runs:
       shell: bash
 
     - name:
-      id: action
+      id: pull
       if: ${{ inputs.action == 'pull' }}
       shell: bash
       run: |
@@ -75,7 +75,7 @@ runs:
           --path "${{ inputs.path }}" \
 
     - name:
-      id: action
+      id: push
       if: ${{ inputs.action == 'push' }}
       shell: bash
       run: |
