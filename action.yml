@@ -65,7 +65,7 @@ runs:
       shell: bash
 
     - name:
-      id: pull
+      id: action
       if: ${{ inputs.action == 'pull' }}
       shell: bash
       run: |
@@ -75,7 +75,7 @@ runs:
           --path "${{ inputs.path }}" \
 
     - name:
-      id: push
+      id: action
       if: ${{ inputs.action == 'push' }}
       shell: bash
       run: |
