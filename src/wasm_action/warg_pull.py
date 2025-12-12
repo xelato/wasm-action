@@ -1,6 +1,7 @@
 import os
 import hashlib
 import base64
+import time
 
 import requests
 
@@ -47,7 +48,45 @@ def warg_push(registry, warg_url, namespace, name, version, filename, warg_token
     # publish record
     last = package_logs.last_record()
     prev_id = last.id if last else ''
-    client.publish_package_record(namespace, name, version, content_bytes, prev_id=prev_id)
+    res = client.publish_package_record(namespace, name, version, content_bytes, prev_id=prev_id)
+    print(res)
+
+    record_id = res['recordId']
+    state = res['state']
+
+    timeout_sec = 10
+    start = time.time()
+    while time.time() - start < timeout_sec:
+
+        # state: processing -> wait
+        if state == 'processing':
+            time.sleep(1)
+
+        # state: sourcing -> upload sources
+        elif state == 'sourcing':
+            # todo: upload sources
+            pass
+
+        # state: rejected -> error
+        elif state == 'rejected':
+            break
+
+        # state: published -> complete
+        elif state == 'published':
+            break
+
+        # get updated published record
+        res = client.get_package_record(namespace, name, record_id)
+        print(res)
+        state = res['state']
+
+    return {
+        'namespace': namespace,
+        'name': name,
+        'version': version,
+        'record_id': record_id,
+        'state': state,
+    }
 
 
 def warg_pull(registry, warg_url, namespace, name, version=None, warg_token=None) -> PackageDownload:

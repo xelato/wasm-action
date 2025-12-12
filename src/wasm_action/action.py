@@ -45,7 +45,7 @@ def push(registry, package, path, warg_token, warg_private_key):
     if not files:
         raise error('file not found: {}'.format(path))
     if len(files) > 1:
-        raise error('more than one files found: {}'.format(path))
+        raise error('more than one file found: {}'.format(path))
     filename = files[0]
 
     # package
@@ -73,6 +73,13 @@ def push(registry, package, path, warg_token, warg_private_key):
         private_key = PrivateKey.load(warg_private_key)
     except:
         raise error("Error loading private key")
+    else:
+        add_github_output('key-id', private_key.public_key().fingerprint())
+        add_github_output('public-key', private_key.public_key().canonical())
+
+    if warg_token and '/' in warg_token:
+        v = warg_token.split('/', 1)[1]
+        add_github_output('token-id', "sha256:{}".format(hashlib.sha256(v.encode('utf8')).hexdigest()))
 
     # push
     warg_push(registry, settings['warg-url'], namespace, name, version, filename, warg_token, warg_private_key)

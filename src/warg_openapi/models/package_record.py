@@ -13,81 +13,205 @@
 
 
 from __future__ import annotations
+from inspect import getfullargspec
+import json
 import pprint
 import re  # noqa: F401
-import json
 
+from typing import Any, List, Optional
+from pydantic import BaseModel, Field, StrictStr, ValidationError, validator
+from warg_openapi.models.processing_record import ProcessingRecord
+from warg_openapi.models.published_record import PublishedRecord
+from warg_openapi.models.rejected_record import RejectedRecord
+from warg_openapi.models.sourcing_record import SourcingRecord
+from typing import Union, Any, List, TYPE_CHECKING
+from pydantic import StrictStr, Field
 
-from typing import Any, Dict
-from pydantic import BaseModel, Field, StrictInt, StrictStr, constr, validator
+PACKAGERECORD_ONE_OF_SCHEMAS = ["ProcessingRecord", "PublishedRecord", "RejectedRecord", "SourcingRecord"]
 
 class PackageRecord(BaseModel):
     """
-    A package log record.  # noqa: E501
+    A package log record.
     """
-    record_id: constr(strict=True) = Field(default=..., alias="recordId", description="Represents a supported hash.")
-    state: StrictStr = Field(default=..., description="The state of the package record.")
-    missing_content: Dict[str, Any] = Field(default=..., alias="missingContent", description="The map of content digest to missing content info.")
-    reason: StrictStr = Field(default=..., description="The reason the package record was rejected.")
-    registry_index: StrictInt = Field(default=..., alias="registryIndex", description="The index of the record in the registry log.")
-    __properties = ["recordId", "state", "missingContent", "reason", "registryIndex"]
-
-    @validator('record_id')
-    def record_id_validate_regular_expression(cls, value):
-        """Validates the regular expression"""
-        if not re.match(r"^[a-z0-9-]+:[a-f0-9]+$", value):
-            raise ValueError(r"must validate the regular expression /^[a-z0-9-]+:[a-f0-9]+$/")
-        return value
-
-    @validator('state')
-    def state_validate_enum(cls, value):
-        """Validates the enum"""
-        if value not in ('published',):
-            raise ValueError("must be one of enum values ('published')")
-        return value
+    # data type: SourcingRecord
+    oneof_schema_1_validator: Optional[SourcingRecord] = None
+    # data type: ProcessingRecord
+    oneof_schema_2_validator: Optional[ProcessingRecord] = None
+    # data type: RejectedRecord
+    oneof_schema_3_validator: Optional[RejectedRecord] = None
+    # data type: PublishedRecord
+    oneof_schema_4_validator: Optional[PublishedRecord] = None
+    if TYPE_CHECKING:
+        actual_instance: Union[ProcessingRecord, PublishedRecord, RejectedRecord, SourcingRecord]
+    else:
+        actual_instance: Any
+    one_of_schemas: List[str] = Field(PACKAGERECORD_ONE_OF_SCHEMAS, const=True)
 
     class Config:
-        """Pydantic configuration"""
-        allow_population_by_field_name = True
         validate_assignment = True
 
-    def to_str(self) -> str:
-        """Returns the string representation of the model using alias"""
-        return pprint.pformat(self.dict(by_alias=True))
+    discriminator_value_class_map = {
+    }
 
-    def to_json(self) -> str:
-        """Returns the JSON representation of the model using alias"""
-        return json.dumps(self.to_dict())
+    def __init__(self, *args, **kwargs) -> None:
+        if args:
+            if len(args) > 1:
+                raise ValueError("If a position argument is used, only 1 is allowed to set `actual_instance`")
+            if kwargs:
+                raise ValueError("If a position argument is used, keyword arguments cannot be used.")
+            super().__init__(actual_instance=args[0])
+        else:
+            super().__init__(**kwargs)
 
-    @classmethod
-    def from_json(cls, json_str: str) -> PackageRecord:
-        """Create an instance of PackageRecord from a JSON string"""
-        return cls.from_dict(json.loads(json_str))
-
-    def to_dict(self):
-        """Returns the dictionary representation of the model using alias"""
-        _dict = self.dict(by_alias=True,
-                          exclude={
-                          },
-                          exclude_none=True)
-        return _dict
+    @validator('actual_instance')
+    def actual_instance_must_validate_oneof(cls, v):
+        instance = PackageRecord.construct()
+        error_messages = []
+        match = 0
+        # validate data type: SourcingRecord
+        if not isinstance(v, SourcingRecord):
+            error_messages.append(f"Error! Input type `{type(v)}` is not `SourcingRecord`")
+        else:
+            match += 1
+        # validate data type: ProcessingRecord
+        if not isinstance(v, ProcessingRecord):
+            error_messages.append(f"Error! Input type `{type(v)}` is not `ProcessingRecord`")
+        else:
+            match += 1
+        # validate data type: RejectedRecord
+        if not isinstance(v, RejectedRecord):
+            error_messages.append(f"Error! Input type `{type(v)}` is not `RejectedRecord`")
+        else:
+            match += 1
+        # validate data type: PublishedRecord
+        if not isinstance(v, PublishedRecord):
+            error_messages.append(f"Error! Input type `{type(v)}` is not `PublishedRecord`")
+        else:
+            match += 1
+        if match > 1:
+            # more than 1 match
+            raise ValueError("Multiple matches found when setting `actual_instance` in PackageRecord with oneOf schemas: ProcessingRecord, PublishedRecord, RejectedRecord, SourcingRecord. Details: " + ", ".join(error_messages))
+        elif match == 0:
+            # no match
+            raise ValueError("No match found when setting `actual_instance` in PackageRecord with oneOf schemas: ProcessingRecord, PublishedRecord, RejectedRecord, SourcingRecord. Details: " + ", ".join(error_messages))
+        else:
+            return v
 
     @classmethod
     def from_dict(cls, obj: dict) -> PackageRecord:
-        """Create an instance of PackageRecord from a dict"""
-        if obj is None:
+        return cls.from_json(json.dumps(obj))
+
+    @classmethod
+    def from_json(cls, json_str: str) -> PackageRecord:
+        """Returns the object represented by the json string"""
+        instance = PackageRecord.construct()
+        error_messages = []
+        match = 0
+
+        # use oneOf discriminator to lookup the data type
+        _data_type = json.loads(json_str).get("state")
+        if not _data_type:
+            raise ValueError("Failed to lookup data type from the field `state` in the input.")
+
+        # check if data type is `ProcessingRecord`
+        if _data_type == "processing":
+            instance.actual_instance = ProcessingRecord.from_json(json_str)
+            return instance
+
+        # check if data type is `PublishedRecord`
+        if _data_type == "published":
+            instance.actual_instance = PublishedRecord.from_json(json_str)
+            return instance
+
+        # check if data type is `RejectedRecord`
+        if _data_type == "rejected":
+            instance.actual_instance = RejectedRecord.from_json(json_str)
+            return instance
+
+        # check if data type is `SourcingRecord`
+        if _data_type == "sourcing":
+            instance.actual_instance = SourcingRecord.from_json(json_str)
+            return instance
+
+        # check if data type is `ProcessingRecord`
+        if _data_type == "ProcessingRecord":
+            instance.actual_instance = ProcessingRecord.from_json(json_str)
+            return instance
+
+        # check if data type is `PublishedRecord`
+        if _data_type == "PublishedRecord":
+            instance.actual_instance = PublishedRecord.from_json(json_str)
+            return instance
+
+        # check if data type is `RejectedRecord`
+        if _data_type == "RejectedRecord":
+            instance.actual_instance = RejectedRecord.from_json(json_str)
+            return instance
+
+        # check if data type is `SourcingRecord`
+        if _data_type == "SourcingRecord":
+            instance.actual_instance = SourcingRecord.from_json(json_str)
+            return instance
+
+        # deserialize data into SourcingRecord
+        try:
+            instance.actual_instance = SourcingRecord.from_json(json_str)
+            match += 1
+        except (ValidationError, ValueError) as e:
+            error_messages.append(str(e))
+        # deserialize data into ProcessingRecord
+        try:
+            instance.actual_instance = ProcessingRecord.from_json(json_str)
+            match += 1
+        except (ValidationError, ValueError) as e:
+            error_messages.append(str(e))
+        # deserialize data into RejectedRecord
+        try:
+            instance.actual_instance = RejectedRecord.from_json(json_str)
+            match += 1
+        except (ValidationError, ValueError) as e:
+            error_messages.append(str(e))
+        # deserialize data into PublishedRecord
+        try:
+            instance.actual_instance = PublishedRecord.from_json(json_str)
+            match += 1
+        except (ValidationError, ValueError) as e:
+            error_messages.append(str(e))
+
+        if match > 1:
+            # more than 1 match
+            raise ValueError("Multiple matches found when deserializing the JSON string into PackageRecord with oneOf schemas: ProcessingRecord, PublishedRecord, RejectedRecord, SourcingRecord. Details: " + ", ".join(error_messages))
+        elif match == 0:
+            # no match
+            raise ValueError("No match found when deserializing the JSON string into PackageRecord with oneOf schemas: ProcessingRecord, PublishedRecord, RejectedRecord, SourcingRecord. Details: " + ", ".join(error_messages))
+        else:
+            return instance
+
+    def to_json(self) -> str:
+        """Returns the JSON representation of the actual instance"""
+        if self.actual_instance is None:
+            return "null"
+
+        to_json = getattr(self.actual_instance, "to_json", None)
+        if callable(to_json):
+            return self.actual_instance.to_json()
+        else:
+            return json.dumps(self.actual_instance)
+
+    def to_dict(self) -> dict:
+        """Returns the dict representation of the actual instance"""
+        if self.actual_instance is None:
             return None
 
-        if not isinstance(obj, dict):
-            return PackageRecord.parse_obj(obj)
+        to_dict = getattr(self.actual_instance, "to_dict", None)
+        if callable(to_dict):
+            return self.actual_instance.to_dict()
+        else:
+            # primitive type
+            return self.actual_instance
 
-        _obj = PackageRecord.parse_obj({
-            "record_id": obj.get("recordId"),
-            "state": obj.get("state"),
-            "missing_content": obj.get("missingContent"),
-            "reason": obj.get("reason"),
-            "registry_index": obj.get("registryIndex")
-        })
-        return _obj
+    def to_str(self) -> str:
+        """Returns the string representation of the actual instance"""
+        return pprint.pformat(self.dict())
 
 

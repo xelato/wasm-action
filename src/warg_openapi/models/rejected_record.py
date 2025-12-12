@@ -19,15 +19,23 @@ import json
 
 
 
-from pydantic import BaseModel, Field, StrictStr, validator
+from pydantic import BaseModel, Field, StrictStr, constr, validator
 
 class RejectedRecord(BaseModel):
     """
     A rejected package record.  # noqa: E501
     """
+    record_id: constr(strict=True) = Field(default=..., alias="recordId", description="Represents a supported hash.")
     state: StrictStr = Field(default=..., description="The state of the package record.")
     reason: StrictStr = Field(default=..., description="The reason the package record was rejected.")
-    __properties = ["state", "reason"]
+    __properties = ["recordId", "state", "reason"]
+
+    @validator('record_id')
+    def record_id_validate_regular_expression(cls, value):
+        """Validates the regular expression"""
+        if not re.match(r"^[a-z0-9-]+:[a-f0-9]+$", value):
+            raise ValueError(r"must validate the regular expression /^[a-z0-9-]+:[a-f0-9]+$/")
+        return value
 
     @validator('state')
     def state_validate_enum(cls, value):
@@ -72,6 +80,7 @@ class RejectedRecord(BaseModel):
             return RejectedRecord.parse_obj(obj)
 
         _obj = RejectedRecord.parse_obj({
+            "record_id": obj.get("recordId"),
             "state": obj.get("state"),
             "reason": obj.get("reason")
         })

@@ -73,6 +73,15 @@ class WargClient:
             warg_registry=self.get_warg_registry(namespace)
         )
 
+    def get_package_record(self, namespace, name, record_id):
+        kwargs = {
+            'log_id': generate_log_id(namespace, name),
+            'record_id': record_id,
+            'warg_registry': self.get_warg_registry(namespace),
+        }
+        res = self.package_api.get_package_record(**kwargs)
+        return res.to_dict()
+
     def publish_package_record(self, namespace, name, version, content_bytes, prev_id):
         digest = hashlib.sha256(content_bytes).hexdigest()
         record = self.create_version_record(
@@ -92,18 +101,11 @@ class WargClient:
             # signed record bytes
             record=warg.EnvelopeBody(
                 key_id=self.private_key.public_key().fingerprint(),
-                signature=self.private_key.sign_canonical(record_bytes),
+                signature=self.sign(record_bytes),
                 content_bytes=base64.b64encode(record_bytes).decode('ascii'),
             ),
 
-            # map of content digest to sources (file content bytes)
-            content_sources={
-                "sha256:{}".format(digest): base64.b64encode(content_bytes).decode('ascii'),
-            }
         )
-
-        print()
-        print(record_request)
 
         kwargs = {
             'log_id': generate_log_id(namespace, name),
@@ -111,14 +113,8 @@ class WargClient:
             'warg_registry': self.get_warg_registry(namespace),
         }
 
-        print(kwargs)
-        return
-
         res = self.package_api.publish_package_record(**kwargs)
-        print(type(res))
-        print(res)
-
-        # todo: wait for completion
+        return res.to_dict()
 
     def create_version_record(self, version, digest) -> wp.PackageRecord:
         release = wp.PackageRelease()
@@ -133,6 +129,10 @@ class WargClient:
         # sets it to current time
         record.time.GetCurrentTime()
         return record
+
+    def sign(self, record_bytes):
+        prefix = b'WARG-PACKAGE-RECORD-SIGNATURE-V0'
+        return self.private_key.sign_canonical(prefix + b':' + record_bytes)
 
 
 class PackageLogs:

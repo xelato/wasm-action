@@ -871,26 +871,18 @@ components:
             and content will need to be directly uploaded to the registry.
     PackageRecord:
       description: A package log record.
-      allOf:
-        - type: object
-          required:
-            - recordId
-          properties:
-            recordId:
-              "$ref": "#/components/schemas/AnyHash"
-              description: The record identifier.
-        - oneOf:
-            - "$ref": "#/components/schemas/SourcingRecord"
-            - "$ref": "#/components/schemas/ProcessingRecord"
-            - "$ref": "#/components/schemas/RejectedRecord"
-            - "$ref": "#/components/schemas/PublishedRecord"
-          discriminator:
-            propertyName: state
-            mapping:
-              sourcing: "#/components/schemas/SourcingRecord"
-              processing: "#/components/schemas/ProcessingRecord"
-              rejected: "#/components/schemas/RejectedRecord"
-              published: "#/components/schemas/PublishedRecord"
+      oneOf:
+        - "$ref": "#/components/schemas/SourcingRecord"
+        - "$ref": "#/components/schemas/ProcessingRecord"
+        - "$ref": "#/components/schemas/RejectedRecord"
+        - "$ref": "#/components/schemas/PublishedRecord"
+      discriminator:
+        propertyName: state
+        mapping:
+          sourcing: "#/components/schemas/SourcingRecord"
+          processing: "#/components/schemas/ProcessingRecord"
+          rejected: "#/components/schemas/RejectedRecord"
+          published: "#/components/schemas/PublishedRecord"
     ProveConsistencyRequest:
       type: object
       description: A request to prove the consistency of the registry.
@@ -960,9 +952,13 @@ components:
       type: object
       description: The package record is sourcing content.
       required:
+        - recordId
         - state
         - missingContent
       properties:
+        recordId:
+          "$ref": "#/components/schemas/AnyHash"
+          description: The record identifier.
         state:
           type: string
           description: The state of the package record.
@@ -976,8 +972,12 @@ components:
       type: object
       description: A record that is being processed.
       required:
+        - recordId
         - state
       properties:
+        recordId:
+          "$ref": "#/components/schemas/AnyHash"
+          description: The record identifier.
         state:
           type: string
           description: The state of the package record.
@@ -987,9 +987,13 @@ components:
       type: object
       description: A rejected package record.
       required:
+        - recordId
         - state
         - reason
       properties:
+        recordId:
+          "$ref": "#/components/schemas/AnyHash"
+          description: The record identifier.
         state:
           type: string
           description: The state of the package record.
@@ -1003,9 +1007,13 @@ components:
       type: object
       description: A record that has been published to the log.
       required:
+        - recordId
         - state
         - registryIndex
       properties:
+        recordId:
+          "$ref": "#/components/schemas/AnyHash"
+          description: The record identifier.
         state:
           type: string
           description: The state of the package record.

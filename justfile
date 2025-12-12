@@ -12,6 +12,7 @@ openapi-generate:
         -i /local/openapi/warg.yml \
         -g python-pydantic-v1 \
         -o /local/warg-openapi \
+        -p useOneOfDiscriminatorLookup=true \
         --package-name warg_openapi \
         --http-user-agent xelato-wasm-action
     mv warg-openapi/warg_openapi src
@@ -45,5 +46,5 @@ ngrok:
 push:
     uv run wasm-action push \
         --registry wa.dev \
-        --package rocketniko:gcd \
+        --package rocketniko:test1@0.0.6 \
         --path test/files/gcd*.wasm \
