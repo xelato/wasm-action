@@ -17,9 +17,6 @@ def error(text):
 
 
 def warg_push(registry, warg_url, namespace, name, version, filename, warg_token:str, warg_private_key:str):
-    print(registry, warg_url)
-    print(namespace, name, version)
-    print(filename)
 
     with open(filename, 'rb') as f:
         content_bytes = f.read()
@@ -38,18 +35,11 @@ def warg_push(registry, warg_url, namespace, name, version, filename, warg_token
         namespace=namespace, name=name, log_length=res.contents.log_length)
 
     package_logs = PackageLogs(res)
-    for record in package_logs.records():
-        print()
-        print('==========')
-        print(record)
-
-    print('===========')
 
     # publish record
     last = package_logs.last_record()
     prev_id = last.id if last else ''
     res = client.publish_package_record(namespace, name, version, content_bytes, prev_id=prev_id)
-    print(res)
 
     record_id = res['recordId']
     state = res['state']
@@ -77,7 +67,7 @@ def warg_push(registry, warg_url, namespace, name, version, filename, warg_token
 
         # get updated published record
         res = client.get_package_record(namespace, name, record_id)
-        print(res)
+
         state = res['state']
 
     return {
