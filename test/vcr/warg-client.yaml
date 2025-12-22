@@ -1,0 +1,77 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      User-Agent:
+      - xelato-wasm-action
+      Warg-Registry:
+      - wasi.wa.dev
+    method: GET
+    uri: https://warg.wa.dev/v1/fetch/checkpoint
+  response:
+    body:
+      string: '{"contents":{"logRoot":"sha256:1c96adaed7a42e6ee5190d91c5b739fb94466ffea53af3e706eba093122a93e7","logLength":61,"mapRoot":"sha256:a033a632a64b2c167dadd2609dda9fe4c0175284b74ce7cf19b4b2f3ff4004e0","timestamp":1766409778},"keyId":"sha256:2eccf9d9acb3ae75f163bb8fe91cc8b31bbd6b39c7e557cae277b4c4076e6ff3","signature":"ecdsa-p256:MEQCICZmo/PITvF7RLm4rXh0tCCtbiYSZ1C4k6a97R0vCW0yAiBTtQArQQYzbscrekSPD1tv1ubDdZ7b58zsQg3TsdG6Ag=="}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '424'
+      access-control-allow-origin:
+      - '*'
+      cache-control:
+      - max-age=0, private, must-revalidate
+      content-type:
+      - application/json
+      date:
+      - Mon, 22 Dec 2025 13:22:57 GMT
+      vary:
+      - Origin
+      warg-registry:
+      - wasi.wa.dev
+      x-served-by:
+      - cache-sof1510058-SOF
+    status:
+      code: 200
+      message: ''
+- request:
+    body: '{"logLength": 61, "limit": 100, "packages": {"sha256:4dd80f8165e12905a35accf700f015164b844127ab341a8860f4769d319cc8ab":
+      null}}'
+    headers:
+      Accept:
+      - application/json
+      Content-Type:
+      - application/json
+      User-Agent:
+      - xelato-wasm-action
+      Warg-Registry:
+      - wasi.wa.dev
+    method: POST
+    uri: https://warg.wa.dev/v1/fetch/logs
+  response:
+    body:
+      string: '{"more":false,"operator":[{"contentBytes":"GgwI+7y1tAYQoPviyAIiQwpBCgZzaGEyNTYSN2VjZHNhLXAyNTY6QWlkSmZCZnRNZVRza3Q0a0IzUVFIYUk1SkoyMmltcktLVzZDRm1OTVRIc1QiCCIGCgR3YXNp","keyId":"sha256:2eccf9d9acb3ae75f163bb8fe91cc8b31bbd6b39c7e557cae277b4c4076e6ff3","signature":"ecdsa-p256:MEUCIAH2heeOB9vnwecQ1NMU09Nli04IRLGUgdo4K1hx24r1AiEA+pTOqGsteRuJga35jy5tRz9fdjapch3LE2HmekG7Tgs=","registryIndex":0,"fetchToken":"0-0"}],"packages":{"sha256:4dd80f8165e12905a35accf700f015164b844127ab341a8860f4769d319cc8ab":[{"contentBytes":"GgwIqb+1tAYQ8Y/w/wEiQwpBCjdlY2RzYS1wMjU2OkFpZEpmQmZ0TWVUc2t0NGtCM1FRSGFJNUpKMjJpbXJLS1c2Q0ZtTk1USHNUEgZzaGEyNTYiPxI9CjdlY2RzYS1wMjU2OkFxRk1GenJMVHk4TjFwNTBJK2lMWVk1US9HczB1YzFIMTYvTzdXUFBmOFRBEgIBAiI/Ej0KN2VjZHNhLXAyNTY6QXUxM0J0OEVIWXgxWmdDdzU3bGV1ZXFBRStYR2NBOElPUmhReHRrbE1TbWISAgECIj8SPQo3ZWNkc2EtcDI1NjpBeFNXd1FBK3B2aytTaklkRmJlMU9Id0dXQmZONWw0aCtRVkxtS2NOemFGWRICAQIiPxI9CjdlY2RzYS1wMjU2OkFoekttUUVuc2l0aStJQ0VvUnR2eUVuenY0ZzNrd0F5cHpueFNYVFBydlJYEgIBAg==","keyId":"sha256:2eccf9d9acb3ae75f163bb8fe91cc8b31bbd6b39c7e557cae277b4c4076e6ff3","signature":"ecdsa-p256:MEQCIHVBOJKkrK8kM0qNn9RcMY1SEXKDg/7UIgX4kCEzKklpAiBLeF2V+oCwW5frF3wU0iXlxiMPlsLSzxFfwJM7Tv6gKA==","registryIndex":9,"fetchToken":"9-0"},{"contentBytes":"CkdzaGEyNTY6MzE0NTNjMjc2MjE2NDUxMjdiMTljZmRmYjQ4YmMwYjAwNDFmMmZmMzAzZTFmYmJiZDZiOTNiYjllZDY4ZWMzNBoLCKu/tbQGEOic9n0iUiJQCgUwLjIuMBJHc2hhMjU2OmMzM2IxZGJmMDUwZjY0MjI5ZmY0ZGVjYmY5YTNkMzQyMGUwNjQzYTg2ZjVmMGNlYTI5ZjgxMDU0ODIwMDIwYTY=","keyId":"sha256:d29e1e0e89f170bbc8d7598c0253e50c0e47a5c3ad7a8727050ca96d35358b12","signature":"ecdsa-p256:MEUCIBrnX2VWz1kcUBgoxe9K8783utt2EctjfyNkrJ+hGh0yAiEA7P44bDnJdxRFzBnGmkfYmwXs2VM2LRVWhfIJgUVZb+U=","registryIndex":10,"fetchToken":"10-1"},{"contentBytes":"CkdzaGEyNTY6NzIwZTM2ZGRmYWE5MTRmYWI2NjNkODFjOTIwN2NmZDNmM2VjMzVkMjEyOThlNzRiNzcwZDIxMWMxNjNhMDdhZhoMCJKyjrkGEJjlgtkBIj8SPQo3ZWNkc2EtcDI1NjpBejcrVFJNa3pCN016YlVBM2JpWjVNZDg4blB5SXByTnFoZ3k0cnFnVW1mbRICAQI=","keyId":"sha256:2eccf9d9acb3ae75f163bb8fe91cc8b31bbd6b39c7e557cae277b4c4076e6ff3","signature":"ecdsa-p256:MEUCIQCRv0FjSLhSioxHBjeXtV52PKdIHn+xU86egV3DTETARgIgK2SFs94HLeCtkmhxiPpBdBdrf2d3suutJZu0uMWDguo=","registryIndex":19,"fetchToken":"19-2"},{"contentBytes":"CkdzaGEyNTY6NDg0NmVlZDY2NjY4OGJkZDg4ODVlZjZiN2FlOTczN2IzYzJlYzhkZjVmYmQxYjhkNmRjZjNhOThkNGQxOTg4ORoMCKrPpLkGEPTas7kDIj8SPQo3ZWNkc2EtcDI1NjpBcGR1S1hpMml1MmN4S1Zvc1N4eGNyL083bnNscjBHZ01TZjhJdDh6bDJiThICAQI=","keyId":"sha256:2eccf9d9acb3ae75f163bb8fe91cc8b31bbd6b39c7e557cae277b4c4076e6ff3","signature":"ecdsa-p256:MEYCIQDCljj2tDOvPQch+iQoxo9EQZGpKGGKrN8O/16wGhKYggIhAOE0g2k1N+glj67A6s/Hf/CVfcYwThn1eFl5B84MpGC8","registryIndex":27,"fetchToken":"27-3"},{"contentBytes":"CkdzaGEyNTY6ZjUyMWJjMWIwM2QxMmRiZGZjNTBmMzllODMxNzRhZmUxOGI2MWVhYjgxMGI2N2FkNGMyMzM2NmNmYzc3NzJmYRoMCOX+g70GEJvFjO0CIj8SPQo3ZWNkc2EtcDI1NjpBcUtRem1rYk5XNjF2UmJtSHgzbEtOTWtSRnMxSnlhTm15SW1BcUdzbHJlSxICAQI=","keyId":"sha256:2eccf9d9acb3ae75f163bb8fe91cc8b31bbd6b39c7e557cae277b4c4076e6ff3","signature":"ecdsa-p256:MEUCIHzuhq5vLjHkUL5EE0u5XW8QwaPCOl2T7unKIW7Pjfv3AiEAuzjpYVcIfhUkgsPJtby74QLnaeYJMXOLX0PT6QyLX0k=","registryIndex":39,"fetchToken":"39-4"},{"contentBytes":"CkdzaGEyNTY6M2JiZGUxNzNhM2NiOTBlMzliNzM2ZmNiMDM2NjBmMzBmMTczMzI4ZjYyNzEwNzUxZjg4YTI0NTQxNTg0MTExMxoMCLvTzr0GEKOj6OICIj8SPQo3ZWNkc2EtcDI1NjpBK2x0ai9YSmMyMm9idm1tMnJYNm9zRnorRjRwRm0yVFlNWmxPcnkyQU5JThICAQI=","keyId":"sha256:2eccf9d9acb3ae75f163bb8fe91cc8b31bbd6b39c7e557cae277b4c4076e6ff3","signature":"ecdsa-p256:MEUCIQDloqvrhmgu+BmIyBoOThZxkT2yuycwGAC5g7/SDAw2lwIgNJFrhJYaOX4H1q0CPWYwwi/01OzsYFseIy/fE73x800=","registryIndex":48,"fetchToken":"48-5"},{"contentBytes":"CkdzaGEyNTY6N2RkMTRiYjEyMzY5M2Q5Mjc4ZjYxY2EzODUxNWM4MDg0YmE0NDIzNDU5ZTRkNjBlNzA0ZjQ3MTc3YzVkNGQxMRoLCKuBv8AGEJjr5gwiPxI9CjdlY2RzYS1wMjU2OkE1N2JwU0EwLzRkWHJlbEoyV3hVVTNoQW55Um9vN3F2ZS92eHB5V1AxQzkyEgIBAg==","keyId":"sha256:2eccf9d9acb3ae75f163bb8fe91cc8b31bbd6b39c7e557cae277b4c4076e6ff3","signature":"ecdsa-p256:MEYCIQDFG0QO98j0WJwwMOAGE7FT5F5NTRKyL/+ePprcakJIWAIhAMen1SEIkCyvntAjMoL7/qHiyPdaO1Nv9PaXH3FWTGEO","registryIndex":57,"fetchToken":"57-6"}]}}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '4048'
+      access-control-allow-origin:
+      - '*'
+      cache-control:
+      - max-age=0, private, must-revalidate
+      content-type:
+      - application/json
+      date:
+      - Mon, 22 Dec 2025 13:22:58 GMT
+      vary:
+      - Origin
+      warg-registry:
+      - wasi.wa.dev
+      x-served-by:
+      - cache-sof1510058-SOF
+    status:
+      code: 200
+      message: ''
+version: 1
