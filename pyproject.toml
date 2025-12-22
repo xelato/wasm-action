@@ -29,3 +29,9 @@ build-backend = "uv_build"
 
 [tool.uv.build-backend]
 module-name = ["wasm_action", "warg_openapi"]
+
+[dependency-groups]
+dev = [
+    "frozendict>=2.4.7",
+    "vcrpy>=8.1.0",
+]
