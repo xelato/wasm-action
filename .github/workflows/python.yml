@@ -29,5 +29,5 @@ jobs:
       shell: bash
       run: |
         python -m pip install uv > /dev/null
-        PYTHONPATH=. uv run --python ${{ matrix.python-version }} --with pytest pytest
+        PYTHONPATH=. uv run --python ${{ matrix.python-version }} pytest
         uv build --python ${{ matrix.python-version }}
