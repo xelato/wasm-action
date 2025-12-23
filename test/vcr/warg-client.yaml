@@ -74,4 +74,42 @@ interactions:
     status:
       code: 200
       message: ''
+- request:
+    body: '{"packages": ["sha256:4dd80f8165e12905a35accf700f015164b844127ab341a8860f4769d319cc8ab"]}'
+    headers:
+      Accept:
+      - application/json
+      Content-Type:
+      - application/json
+      User-Agent:
+      - xelato-wasm-action
+      Warg-Registry:
+      - wasi.wa.dev
+    method: POST
+    uri: https://warg.wa.dev/v1/fetch/names
+  response:
+    body:
+      string: '{"packages":{"sha256:4dd80f8165e12905a35accf700f015164b844127ab341a8860f4769d319cc8ab":"wasi:io"}}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '98'
+      access-control-allow-origin:
+      - '*'
+      cache-control:
+      - max-age=0, private, must-revalidate
+      content-type:
+      - application/json
+      date:
+      - Tue, 23 Dec 2025 11:47:11 GMT
+      vary:
+      - Origin
+      warg-registry:
+      - wasi.wa.dev
+      x-served-by:
+      - cache-sof1510035-SOF
+    status:
+      code: 200
+      message: ''
 version: 1
