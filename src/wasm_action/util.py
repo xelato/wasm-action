@@ -16,6 +16,19 @@ def add_github_output(key, value):
             f.write(line)
     sys.stdout.write(line)
 
+def get_github_outputs():
+    if 'GITHUB_OUTPUT' not in os.environ:
+        return {}
+    with open(os.environ['GITHUB_OUTPUT'], 'r') as f:
+        content = f.read()
+    result = {}
+    for line in [line.strip() for line in content.split('\n')]:
+        if not line:
+            continue
+        key, value = line.split('=', 1)
+        result[key] = value
+    return result
+
 def detect_registry_settings(registry):
     """Discovery based on .well-known domain config"""
     url = "https://{domain}/.well-known/wasm-pkg/registry.json".format(domain=registry)

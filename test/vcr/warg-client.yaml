@@ -12,7 +12,7 @@ interactions:
     uri: https://warg.wa.dev/v1/fetch/checkpoint
   response:
     body:
-      string: '{"contents":{"logRoot":"sha256:1c96adaed7a42e6ee5190d91c5b739fb94466ffea53af3e706eba093122a93e7","logLength":61,"mapRoot":"sha256:a033a632a64b2c167dadd2609dda9fe4c0175284b74ce7cf19b4b2f3ff4004e0","timestamp":1766409778},"keyId":"sha256:2eccf9d9acb3ae75f163bb8fe91cc8b31bbd6b39c7e557cae277b4c4076e6ff3","signature":"ecdsa-p256:MEQCICZmo/PITvF7RLm4rXh0tCCtbiYSZ1C4k6a97R0vCW0yAiBTtQArQQYzbscrekSPD1tv1ubDdZ7b58zsQg3TsdG6Ag=="}'
+      string: '{"contents":{"logRoot":"sha256:1c96adaed7a42e6ee5190d91c5b739fb94466ffea53af3e706eba093122a93e7","logLength":61,"mapRoot":"sha256:a033a632a64b2c167dadd2609dda9fe4c0175284b74ce7cf19b4b2f3ff4004e0","timestamp":1767553790},"keyId":"sha256:2eccf9d9acb3ae75f163bb8fe91cc8b31bbd6b39c7e557cae277b4c4076e6ff3","signature":"ecdsa-p256:MEUCIQCjyOQ/HSAjGijQOSk7E/5/XqKkQ6LnJu2TULGz6b+qLwIgBn/ZexQbBCgXn4l13ljEC/eebme5oMC1uYkTaj9BTlE="}'
     headers:
       Connection:
       - keep-alive
@@ -25,13 +25,13 @@ interactions:
       content-type:
       - application/json
       date:
-      - Mon, 22 Dec 2025 13:22:57 GMT
+      - Sun, 04 Jan 2026 19:09:49 GMT
       vary:
       - Origin
       warg-registry:
       - wasi.wa.dev
       x-served-by:
-      - cache-sof1510058-SOF
+      - cache-sof1510020-SOF
     status:
       code: 200
       message: ''
@@ -64,13 +64,13 @@ interactions:
       content-type:
       - application/json
       date:
-      - Mon, 22 Dec 2025 13:22:58 GMT
+      - Sun, 04 Jan 2026 19:09:50 GMT
       vary:
       - Origin
       warg-registry:
       - wasi.wa.dev
       x-served-by:
-      - cache-sof1510058-SOF
+      - cache-sof1510037-SOF
     status:
       code: 200
       message: ''
@@ -102,13 +102,13 @@ interactions:
       content-type:
       - application/json
       date:
-      - Tue, 23 Dec 2025 11:47:11 GMT
+      - Sun, 04 Jan 2026 19:09:50 GMT
       vary:
       - Origin
       warg-registry:
       - wasi.wa.dev
       x-served-by:
-      - cache-sof1510035-SOF
+      - cache-sof1510051-SOF
     status:
       code: 200
       message: ''

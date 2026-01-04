@@ -1,5 +1,5 @@
 import unittest
-import vcr
+from helpers import use_cassette
 
 from wasm_action.warg_client import WargClient, generate_log_id
 from wasm_action.warg_pull import warg_pull
@@ -17,7 +17,7 @@ class TestWargClient(unittest.TestCase):
         log_id = generate_log_id(namespace='wasi', name='io')
         self.assertEqual(log_id, "sha256:4dd80f8165e12905a35accf700f015164b844127ab341a8860f4769d319cc8ab")
 
-    @vcr.use_cassette('test/vcr/warg-client.yaml', record_mode='new_episodes')
+    @use_cassette('test/vcr/warg-client.yaml')
     def test_client(self):
         namespace = 'wasi'
         name = 'io'
@@ -32,7 +32,7 @@ class TestWargClient(unittest.TestCase):
         res = self.client.fetch_names(namespace, name)
         assert res is not None
 
-    @vcr.use_cassette('test/vcr/warg-pull.yaml', record_mode='new_episodes')
+    @use_cassette('test/vcr/warg-pull.yaml')
     def test_warg_pull(self):
         download = warg_pull(
             registry="wa.dev",
