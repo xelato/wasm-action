@@ -7,11 +7,14 @@ from wasm_action.util import get_github_outputs
 
 from helpers import use_cassette
 
+DUMMY_PRIVATE_KEY = "ecdsa-p256:I+UlDo0HxyBBFeelhPPWmD+LnklOpqZDkrFP5VduASk="
+
 class TestWargPush(unittest.TestCase):
 
     @use_cassette('test/vcr/action-push-warg-already-released.yaml')
     def test_warg_push_already_released(self):
         os.environ['GITHUB_OUTPUT'] = tempfile.mktemp()
+        os.environ['WARG_PRIVATE_KEY'] = DUMMY_PRIVATE_KEY
         try:
             push(args=[
                 "--registry", "wa.dev",
@@ -29,6 +32,7 @@ class TestWargPush(unittest.TestCase):
     @use_cassette('test/vcr/action-push-warg-same-source.yaml')
     def test_warg_push_already_released(self):
         os.environ['GITHUB_OUTPUT'] = tempfile.mktemp()
+        os.environ['WARG_PRIVATE_KEY'] = DUMMY_PRIVATE_KEY
         try:
             push(args=[
                 "--registry", "wa.dev",
@@ -51,6 +55,7 @@ class TestWargPush(unittest.TestCase):
     @use_cassette('test/vcr/action-push-warg-upload-source.yaml')
     def test_warg_push_new_version(self):
         os.environ['GITHUB_OUTPUT'] = tempfile.mktemp()
+        os.environ['WARG_PRIVATE_KEY'] = DUMMY_PRIVATE_KEY
         try:
             push(args=[
                 "--registry", "wa.dev",
