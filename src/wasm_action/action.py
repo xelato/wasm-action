@@ -4,6 +4,7 @@ import glob
 import os
 import hashlib
 import base64
+import json
 
 import click
 import semver
@@ -82,7 +83,31 @@ def push(registry, package, path, warg_token, warg_private_key):
         add_github_output('token-id', "sha256:{}".format(hashlib.sha256(v.encode('utf8')).hexdigest()))
 
     # push
-    warg_push(registry, settings['warg-url'], namespace, name, version, filename, warg_token, warg_private_key)
+    try:
+
+        record = warg_push(
+            registry, settings['warg-url'],
+            namespace, name, version, filename,
+            warg_token, warg_private_key)
+
+    except Exception as e:
+        message = str(e)
+        if hasattr(e, 'body'):
+            message = str(e.body)
+            try:
+                message = json.loads(e.body)['message']
+            except:
+                pass
+        add_github_output('error', message)
+        sys.exit(1)
+
+    add_github_output('state', record['state'])
+    add_github_output('package', format_package(namespace=record['namespace'], name=record['name'], version=record['version']))
+    add_github_output('package-namespace', record['namespace'])
+    add_github_output('package-name', record['name'])
+    add_github_output('package-version', record['version'])
+    add_github_output('package-record-id', record['record_id'])
+
 
 
 @cli.command(help="Pull from registry")

@@ -1,0 +1,209 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.32.5
+    method: GET
+    uri: https://wa.dev/.well-known/wasm-pkg/registry.json
+  response:
+    body:
+      string: '{ "wargUrl": "https://warg.wa.dev" }
+
+        '
+    headers:
+      Access-Control-Allow-Origin:
+      - '*'
+      CF-RAY:
+      - 9bbf63dcf942d0e0-SOF
+      Cache-Control:
+      - public, max-age=600
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Sat, 10 Jan 2026 21:50:27 GMT
+      ETag:
+      - W/"5ece5302c0ea142773c7afb25aacb255"
+      Nel:
+      - '{"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}'
+      Report-To:
+      - '{"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=C7oyv78hL6bfPbEaFkBeTRg%2FTKAUsEepK2uLzi2akIWgcVcBftYLxtHimFB4OnRWxhsJAO7%2B%2BlMFMHVDi7%2F490ymuKw%3D"}]}'
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - accept-encoding
+      alt-svc:
+      - h3=":443"; ma=86400
+      cf-cache-status:
+      - DYNAMIC
+      referrer-policy:
+      - strict-origin-when-cross-origin
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      User-Agent:
+      - xelato-wasm-action
+      Warg-Registry:
+      - rocketniko.wa.dev
+    method: GET
+    uri: https://warg.wa.dev/v1/fetch/checkpoint
+  response:
+    body:
+      string: '{"contents":{"logRoot":"sha256:f2b4d765926b5492135934f7dd1127bfcf5475e5d52e43db447dde1e7f078faa","logLength":52,"mapRoot":"sha256:312e6f072750a08b0d63eea53a18b68453dea15046b4f6d993cf1442abcd529d","timestamp":1768081828},"keyId":"sha256:2eccf9d9acb3ae75f163bb8fe91cc8b31bbd6b39c7e557cae277b4c4076e6ff3","signature":"ecdsa-p256:MEYCIQCpFfehRp5a5ZGYg1XvMSlbCctENE5CNOW+WsEm/iPQigIhAPtZh2mL4tQeGMM3VDcn2ef3HLu6AqP81YgKTpso4o/9"}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '424'
+      access-control-allow-origin:
+      - '*'
+      cache-control:
+      - max-age=0, private, must-revalidate
+      content-type:
+      - application/json
+      date:
+      - Sat, 10 Jan 2026 21:50:28 GMT
+      vary:
+      - Origin
+      warg-registry:
+      - rocketniko.wa.dev
+      x-served-by:
+      - cache-sof1510027-SOF
+    status:
+      code: 200
+      message: ''
+- request:
+    body: '{"logLength": 52, "limit": 100, "packages": {"sha256:e75f8a3538107efcd283f8d323090b113638988d446a104fee12221df99b4232":
+      null}}'
+    headers:
+      Accept:
+      - application/json
+      Content-Type:
+      - application/json
+      User-Agent:
+      - xelato-wasm-action
+      Warg-Registry:
+      - rocketniko.wa.dev
+    method: POST
+    uri: https://warg.wa.dev/v1/fetch/logs
+  response:
+    body:
+      string: '{"more":false,"operator":[{"contentBytes":"GgsImvqAwgYQoMmZZyJDCkEKBnNoYTI1NhI3ZWNkc2EtcDI1NjpBaWRKZkJmdE1lVHNrdDRrQjNRUUhhSTVKSjIyaW1yS0tXNkNGbU5NVEhzVCIOIgwKCnJvY2tldG5pa28=","keyId":"sha256:2eccf9d9acb3ae75f163bb8fe91cc8b31bbd6b39c7e557cae277b4c4076e6ff3","signature":"ecdsa-p256:MEQCIHmXhUk0pt1k1GTi1k+i46v9UvcsYEj1Sa5KOJTyOWP7AiAyX/Mr/NYq9bHyWOSfsHyyWLDJEefsctDg0r7ZG7wcgg==","registryIndex":0,"fetchToken":"0-0"}],"packages":{"sha256:e75f8a3538107efcd283f8d323090b113638988d446a104fee12221df99b4232":[{"contentBytes":"GgsI9YWvwwYQ/OH9RiJDCkEKN2VjZHNhLXAyNTY6QWlkSmZCZnRNZVRza3Q0a0IzUVFIYUk1SkoyMmltcktLVzZDRm1OTVRIc1QSBnNoYTI1NiI/Ej0KN2VjZHNhLXAyNTY6QWdVNGdWNHR5SDc0eDg1elZjUWdlMlM0d0VvazBHNWs4NTJBWUxCMzh5S3USAgEC","keyId":"sha256:2eccf9d9acb3ae75f163bb8fe91cc8b31bbd6b39c7e557cae277b4c4076e6ff3","signature":"ecdsa-p256:MEYCIQDuWPaKIvUKpG9jDWVeS7CWqfYbuknZZ4jf1LmiCIV36AIhAIJTUY2oVM+FG77Q4kbZqSbUsCY/r50I+nYqzq3sawkU","registryIndex":7,"fetchToken":"7-0"},{"contentBytes":"CkdzaGEyNTY6N2UzMGY1N2ExMzJlOGY3ZDk3ZjJkZDBkNmUwZTlhMWQ4NzdiNTU2MzQ2NDliNGE5MTY2ZDc2NTdlNmY0MTc3MRoMCKuGr8MGENDZ9oICIlIiUAoFMC4wLjESR3NoYTI1NjpkOWM3NzhlMzFiYzkwZTg0YzA0M2NkNGZmYTliZmMyY2E2M2NiMGVmZWFjNzIwNzk5NDQwM2VhYjcwOGVlZTll","keyId":"sha256:3455c23cf9ad80cf2e5bffd48f9722893f94d14fa2e82c6ff3a817384ffa5804","signature":"ecdsa-p256:MEUCIQDODsC2p34DGF1FFnXM6O1n2Wb5/JNEutTKQLUebw6pYgIgL13PscNtRBORkS/DfjelOAzP4Kmv3G+NkSpZtRBkxBY=","registryIndex":8,"fetchToken":"8-1"},{"contentBytes":"CkdzaGEyNTY6YTUzMmRhMjg4NDc4MzAzMzBhNjUyZmEwMmYxMTA0ZGZkYjgwMTRjYzM5MGJlN2EwOTEyZDZmOTgzOGE3NmQzMxoMCKvn+MMGEJusv9YDIk8aTQpHc2hhMjU2OjM0NTVjMjNjZjlhZDgwY2YyZTViZmZkNDhmOTcyMjg5M2Y5NGQxNGZhMmU4MmM2ZmYzYTgxNzM4NGZmYTU4MDQSAgEC","keyId":"sha256:2eccf9d9acb3ae75f163bb8fe91cc8b31bbd6b39c7e557cae277b4c4076e6ff3","signature":"ecdsa-p256:MEYCIQDATZ0TFryJI5GwWDdAUfT65cnPpULtqtegAbExuC2I6gIhAMc4hg8QfvnhhIjfD6XWH0xtoJSoESOSQvjC3Ur1V9Na","registryIndex":15,"fetchToken":"15-2"},{"contentBytes":"CkdzaGEyNTY6NmZkMWJmNGE0NjIxMjY1NDkxODllMGE1NGIxMzYyNDAxY2UwODU1OTM2MjlhMTVhN2FiMDZhODk3MDRmODM1MRoMCOjn+MMGELjtkM4CIj8SPQo3ZWNkc2EtcDI1NjpBN1psWDhkeEdlSCtLVzdPaHc1K1lSTU5pa3ozais5SVliVTRaUlNDd1h0bBICAQI=","keyId":"sha256:2eccf9d9acb3ae75f163bb8fe91cc8b31bbd6b39c7e557cae277b4c4076e6ff3","signature":"ecdsa-p256:MEUCIBvSvuuIjd0BAj7eHPw2zOio1FrBpD+Ut/5t3ziszWoTAiEAsRcQ+EPw0QGucLtvOzZDVWNm6kZrbH8HHVsPWYdiDjA=","registryIndex":20,"fetchToken":"20-3"},{"contentBytes":"CkdzaGEyNTY6YWIyNGQ5MWNkNDI1YjU0YjM5ODUxYjUxZDI2NjVmMzgzMzIyY2YyMTQ1MDBiMTc5YWM5NmFmZmJhODc0M2Y2NRoMCJiQ+cMGEI6LmJ4CIk8aTQpHc2hhMjU2OjgyN2RjZjQ2YWQ3NTE3Yjk0ZGFhYzRkYWEzOTYxZDEyZGUzOGEyMzQwYTc1MGJjNDhkNjdmMDczMWNhYTAwZDASAgEC","keyId":"sha256:2eccf9d9acb3ae75f163bb8fe91cc8b31bbd6b39c7e557cae277b4c4076e6ff3","signature":"ecdsa-p256:MEYCIQD2jcIVRtZZk6J5uPf1spDNZSgPedeUMJllJer1c5k5sAIhAL2k+AvN34P6DW0Xqq89nyrq7xpAqXlNrohYOe0gA81+","registryIndex":25,"fetchToken":"25-4"},{"contentBytes":"CkdzaGEyNTY6NTUyMDJhZjZiOGU3MjEyYjcxMjhhYjBlY2ZmNmE2NTk2Y2EzMzcyYjRiMWI1ZTYyYjhjMzQxY2U3MGZmZTY5OBoMCOujk8QGEJHJuZMCIj8SPQo3ZWNkc2EtcDI1NjpBNVpaemExTm9qcjFWK0l4VVpUd0tpaGZKZ3VLVXN2blB2QitCWncwVnpDSBICAQI=","keyId":"sha256:2eccf9d9acb3ae75f163bb8fe91cc8b31bbd6b39c7e557cae277b4c4076e6ff3","signature":"ecdsa-p256:MEYCIQCEon2R7KHd5nojRfYjRqF0C17Spd1PPswOb4tclhvqnAIhAOOV8ZsvTBG9q8GmaLpejjjW6LMITJHTp4UkjfpulTKf","registryIndex":30,"fetchToken":"30-5"},{"contentBytes":"CkdzaGEyNTY6OWYxNWMxYjk3OWVmMTBiMTU5M2U3YWNlMjBjZjA4MTkwNDUxNjhmNzRmZjdlNWQ1NTJjMmEyNjI0NzU1ZTJmNhoMCMvJ/8UGEIjh2JsCIk8aTQpHc2hhMjU2Ojg4NjE5ZjQyOTc2NTAwMjkzZDA4OTJlOWViZGFlYTk1NzJiZWIwODI4NjljNDI3ZTMwOWY4M2MwN2U1ODFkMzQSAgEC","keyId":"sha256:2eccf9d9acb3ae75f163bb8fe91cc8b31bbd6b39c7e557cae277b4c4076e6ff3","signature":"ecdsa-p256:MEUCIEkEXNA/s/e417tL7RSv6vnvN47eZRg1P8CFc2XBDpuvAiEAvR18KlzsaqaR8U60hOZL2920YPMgsWMlw1aSL0LKj2o=","registryIndex":35,"fetchToken":"35-6"},{"contentBytes":"CkdzaGEyNTY6MWYxNTYzMjFkNGEwZmU5ZjRlNzVkOTg1OWNjNjczZTJmZWIwYTgyNjliZTE3M2NiZWYyNDMyNWYzOTk1YTkwNxoLCJzL/8UGEMyw3lciPxI9CjdlY2RzYS1wMjU2OkFsb3Bra2cwM28wdzFibGx6RFMrTXdvTTA1eWtBR08weEZOZFZLM1dXSFhYEgIBAg==","keyId":"sha256:2eccf9d9acb3ae75f163bb8fe91cc8b31bbd6b39c7e557cae277b4c4076e6ff3","signature":"ecdsa-p256:MEUCIC6OY9Qwy7AWc1Gl2Hhdt7kPFqY4Edf6KgbA5NEN2g4GAiEAn749xbpSyZCEVmFvLfHgN03A1ikvWeVASRLvNdBjX2M=","registryIndex":40,"fetchToken":"40-7"},{"contentBytes":"CkdzaGEyNTY6MzBlODMyYjczY2JjMjU5OTg1ODcwMmYyZTYyYTdkYzExNzdkMjZmYWJkYzBmMWE0MmNjMzY0ZThkMDQwZDVmNRoMCPrF+8gGELjFzs0BIlIiUAoFMC4wLjISR3NoYTI1NjpkOWM3NzhlMzFiYzkwZTg0YzA0M2NkNGZmYTliZmMyY2E2M2NiMGVmZWFjNzIwNzk5NDQwM2VhYjcwOGVlZTll","keyId":"sha256:0ac0ee97fe97a4fe5ee151297417144ef4c111053c377ac06506df0914b77fae","signature":"ecdsa-p256:MEUCIQDSZUE/2wiJps2bNtlmPPdeshgCczK+KgrPzJDWegngRQIgKM76ulxxIp3vNZ8STeec71+ZbccnrcqoQFJu3ZzhfqM=","registryIndex":44,"fetchToken":"44-8"}]}}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '4808'
+      access-control-allow-origin:
+      - '*'
+      cache-control:
+      - max-age=0, private, must-revalidate
+      content-type:
+      - application/json
+      date:
+      - Sat, 10 Jan 2026 21:50:29 GMT
+      vary:
+      - Origin
+      warg-registry:
+      - rocketniko.wa.dev
+      x-served-by:
+      - cache-sof1510037-SOF
+    status:
+      code: 200
+      message: ''
+- request:
+    body: '{"packageName": "rocketniko:gcd", "record": {"keyId": "sha256:0ac0ee97fe97a4fe5ee151297417144ef4c111053c377ac06506df0914b77fae",
+      "signature": "ecdsa-p256:MEYCIQDugf0YJZ/9C2ZJG+PE6yYiuGpGG51ldDcDpXuXfDx4oAIhAIDyWyu/Xc8XokkZc7wfvdw8V0v8JaZYvLeJER4szR5I",
+      "contentBytes": "CkdzaGEyNTY6ZjRlZjMyZWY2NzdiMWIwNmJhMWM2OWQ3ZTEyMmUyM2YzZGI2OTc0ZDhiOGQ0OTFhN2Q3NTczODEyMDYyYzllMhoMCKWTi8sGELjhyLsCIlIiUAoFMC4wLjMSR3NoYTI1NjpkOWM3NzhlMzFiYzkwZTg0YzA0M2NkNGZmYTliZmMyY2E2M2NiMGVmZWFjNzIwNzk5NDQwM2VhYjcwOGVlZTll"}}'
+    headers:
+      Accept:
+      - application/json
+      Content-Type:
+      - application/json
+      User-Agent:
+      - xelato-wasm-action
+      Warg-Registry:
+      - rocketniko.wa.dev
+    method: POST
+    uri: https://warg.wa.dev/v1/package/sha256:e75f8a3538107efcd283f8d323090b113638988d446a104fee12221df99b4232/record
+  response:
+    body:
+      string: '{"recordId":"sha256:aba3083af805a794b8075361d760db16d1701e32fe1b7713f3ec9996a81adaeb","state":"processing"}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '107'
+      access-control-allow-origin:
+      - '*'
+      cache-control:
+      - max-age=0, private, must-revalidate
+      content-type:
+      - application/json
+      date:
+      - Sat, 10 Jan 2026 21:50:30 GMT
+      vary:
+      - Origin
+      warg-registry:
+      - rocketniko.wa.dev
+      x-served-by:
+      - cache-sof1510037-SOF
+    status:
+      code: 202
+      message: ''
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      User-Agent:
+      - xelato-wasm-action
+      Warg-Registry:
+      - rocketniko.wa.dev
+    method: GET
+    uri: https://warg.wa.dev/v1/package/sha256:e75f8a3538107efcd283f8d323090b113638988d446a104fee12221df99b4232/record/sha256:aba3083af805a794b8075361d760db16d1701e32fe1b7713f3ec9996a81adaeb
+  response:
+    body:
+      string: '{"recordId":"sha256:aba3083af805a794b8075361d760db16d1701e32fe1b7713f3ec9996a81adaeb","state":"published","registryIndex":52}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '125'
+      access-control-allow-origin:
+      - '*'
+      cache-control:
+      - max-age=0, private, must-revalidate
+      content-type:
+      - application/json
+      date:
+      - Sat, 10 Jan 2026 21:50:33 GMT
+      vary:
+      - Origin
+      warg-registry:
+      - rocketniko.wa.dev
+      x-served-by:
+      - cache-sof1510037-SOF
+    status:
+      code: 200
+      message: ''
+version: 1

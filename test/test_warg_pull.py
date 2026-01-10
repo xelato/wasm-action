@@ -31,5 +31,6 @@ class TestWargPull(unittest.TestCase):
             self.assertEqual(outputs['filename'], 'wasi:io@0.2.0.wasm')
             self.assertTrue(os.path.exists(outputs['filename']))
             self.assertTrue(os.path.isfile(outputs['filename']))
+            os.remove(outputs['filename'])
         else:
             assert False, "did not exit"
