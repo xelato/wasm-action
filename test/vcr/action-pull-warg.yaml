@@ -3,6 +3,62 @@ interactions:
     body: null
     headers:
       Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.32.5
+    method: GET
+    uri: https://wa.dev/.well-known/wasm-pkg/registry.json
+  response:
+    body:
+      string: '{ "wargUrl": "https://warg.wa.dev" }
+
+        '
+    headers:
+      Access-Control-Allow-Origin:
+      - '*'
+      CF-RAY:
+      - 9b8d0866f9280bcf-SOF
+      Cache-Control:
+      - public, max-age=600
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Sun, 04 Jan 2026 19:09:53 GMT
+      ETag:
+      - W/"5ece5302c0ea142773c7afb25aacb255"
+      Nel:
+      - '{"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}'
+      Report-To:
+      - '{"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=%2Bha2z0LSgcJ2WqT18V3yX1KByK7LROexdSj4GvF1Y8DMdin%2FznJ1T9Tr7Ly8bE5DRKwB95%2BfupzGtoRVxU6wwW9dAKI%3D"}]}'
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - accept-encoding
+      alt-svc:
+      - h3=":443"; ma=86400
+      cf-cache-status:
+      - DYNAMIC
+      referrer-policy:
+      - strict-origin-when-cross-origin
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
       - application/json
       User-Agent:
       - xelato-wasm-action
@@ -12,7 +68,7 @@ interactions:
     uri: https://warg.wa.dev/v1/fetch/checkpoint
   response:
     body:
-      string: '{"contents":{"logRoot":"sha256:1c96adaed7a42e6ee5190d91c5b739fb94466ffea53af3e706eba093122a93e7","logLength":61,"mapRoot":"sha256:a033a632a64b2c167dadd2609dda9fe4c0175284b74ce7cf19b4b2f3ff4004e0","timestamp":1767553791},"keyId":"sha256:2eccf9d9acb3ae75f163bb8fe91cc8b31bbd6b39c7e557cae277b4c4076e6ff3","signature":"ecdsa-p256:MEYCIQDS4CKfoSin9IZ/dnXGGVvQD4O+sV0boiSOnShd2jIt8QIhALhiZLdmwJ5/DxNPMqq73MZhRBk73dAlGmC9u9F4i1pk"}'
+      string: '{"contents":{"logRoot":"sha256:1c96adaed7a42e6ee5190d91c5b739fb94466ffea53af3e706eba093122a93e7","logLength":61,"mapRoot":"sha256:a033a632a64b2c167dadd2609dda9fe4c0175284b74ce7cf19b4b2f3ff4004e0","timestamp":1767553794},"keyId":"sha256:2eccf9d9acb3ae75f163bb8fe91cc8b31bbd6b39c7e557cae277b4c4076e6ff3","signature":"ecdsa-p256:MEUCIBujJyNW6KsZAQatbsqLbJeERmDLBthnL3xfBXW40ymlAiEA4yAeq+h2WJjj6Hobw1GMN0e2oka1AwkBqcy3rhHsBbg="}'
     headers:
       Connection:
       - keep-alive
@@ -25,13 +81,13 @@ interactions:
       content-type:
       - application/json
       date:
-      - Sun, 04 Jan 2026 19:09:50 GMT
+      - Sun, 04 Jan 2026 19:09:53 GMT
       vary:
       - Origin
       warg-registry:
       - wasi.wa.dev
       x-served-by:
-      - cache-sof1510051-SOF
+      - cache-sof1510042-SOF
     status:
       code: 200
       message: ''
@@ -64,13 +120,13 @@ interactions:
       content-type:
       - application/json
       date:
-      - Sun, 04 Jan 2026 19:09:50 GMT
+      - Sun, 04 Jan 2026 19:09:54 GMT
       vary:
       - Origin
       warg-registry:
       - wasi.wa.dev
       x-served-by:
-      - cache-sof1510051-SOF
+      - cache-sof1510020-SOF
     status:
       code: 200
       message: ''
@@ -87,7 +143,7 @@ interactions:
     uri: https://warg.wa.dev/v1/content/sha256:c33b1dbf050f64229ff4decbf9a3d3420e0643a86f5f0cea29f81054820020a6
   response:
     body:
-      string: '{"contentSources":{"sha256:c33b1dbf050f64229ff4decbf9a3d3420e0643a86f5f0cea29f81054820020a6":[{"type":"httpGet","url":"https://pkg.wa.dev/blob/wasi_wa_dev/c33b1dbf050f64229ff4decbf9a3d3420e0643a86f5f0cea29f81054820020a6?exp=1767557391&sig=242c15cb0aaf90ccc46d413f5a0a907c8824855bb8971fa6d673467a7c7ce821","acceptRanges":true,"size":13987}]}}'
+      string: '{"contentSources":{"sha256:c33b1dbf050f64229ff4decbf9a3d3420e0643a86f5f0cea29f81054820020a6":[{"type":"httpGet","url":"https://pkg.wa.dev/blob/wasi_wa_dev/c33b1dbf050f64229ff4decbf9a3d3420e0643a86f5f0cea29f81054820020a6?exp=1767557395&sig=fd832fe04c28ddda794a7c50c6395b51ac18b29d9b67361baf4db99c37f0e288","acceptRanges":true,"size":13987}]}}'
     headers:
       Connection:
       - keep-alive
@@ -100,13 +156,13 @@ interactions:
       content-type:
       - application/json
       date:
-      - Sun, 04 Jan 2026 19:09:50 GMT
+      - Sun, 04 Jan 2026 19:09:55 GMT
       vary:
       - Origin
       warg-registry:
       - wasi.wa.dev
       x-served-by:
-      - cache-sof1510051-SOF
+      - cache-sof1510027-SOF
     status:
       code: 200
       message: ''
@@ -122,7 +178,7 @@ interactions:
       User-Agent:
       - python-requests/2.32.5
     method: GET
-    uri: https://pkg.wa.dev/blob/wasi_wa_dev/c33b1dbf050f64229ff4decbf9a3d3420e0643a86f5f0cea29f81054820020a6?exp=1767557391&sig=242c15cb0aaf90ccc46d413f5a0a907c8824855bb8971fa6d673467a7c7ce821
+    uri: https://pkg.wa.dev/blob/wasi_wa_dev/c33b1dbf050f64229ff4decbf9a3d3420e0643a86f5f0cea29f81054820020a6?exp=1767557395&sig=fd832fe04c28ddda794a7c50c6395b51ac18b29d9b67361baf4db99c37f0e288
   response:
     body:
       string: !!binary |
@@ -382,11 +438,11 @@ interactions:
       Access-Control-Allow-Origin:
       - '*'
       Age:
-      - '1090'
+      - '1095'
       CF-Cache-Status:
       - HIT
       CF-Ray:
-      - 9b8d085d99cdd0e4-SOF
+      - 9b8d08776ff4d0ce-SOF
       Cache-Control:
       - max-age=14400
       Connection:
@@ -396,13 +452,13 @@ interactions:
       Content-Type:
       - application/wasm
       Date:
-      - Sun, 04 Jan 2026 19:09:51 GMT
+      - Sun, 04 Jan 2026 19:09:55 GMT
       Last-Modified:
       - Sun, 04 Jan 2026 18:51:40 GMT
       Nel:
       - '{"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}'
       Report-To:
-      - '{"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=2fm21%2F5aHbKozZp76sfbfsYedB5lW8lonLqG4cV%2BlfQy9mTI5PIY84GcpsfZUV6t2QbQsHyVIQzkbrSfNf0bN921%2FjEnzOub"}]}'
+      - '{"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=dINxPwKLXfDdNy4wrCe0wRaEUIfmXPNS%2BZuUtWp3nX22slYT6mqUdjSuzgUuFBQXP0vV63SwSKeCzS5wDU%2BIHZQr5MIVKRSW"}]}'
       Server:
       - cloudflare
       Transfer-Encoding:

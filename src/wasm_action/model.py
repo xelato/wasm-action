@@ -1,6 +1,6 @@
 
 import enum
-from collections import namedtuple
+from dataclasses import dataclass
 
 
 class Action(enum.Enum):
@@ -19,10 +19,18 @@ class RegistryType(enum.Enum):
         return self.value
 
 
-PackageDownload = namedtuple('PackageDownload', (
-    'namespace',
-    'name',
-    'version',
-    'content',
-    'digest',
-    ))
+@dataclass
+class PackageDownload:
+    namespace: str
+    name: str
+    version: str
+    content: bytes
+    digest: str
+
+
+@dataclass
+class PackageRecord:
+    id: str
+    prev_id: str
+    proto: object
+    orig: object

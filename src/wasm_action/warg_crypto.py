@@ -34,7 +34,7 @@ class PrivateKey:
         return cls(ec.generate_private_key(curve=ec.SECP256R1()))
 
     @classmethod
-    def load(cls, text: str) -> ec.EllipticCurvePrivateKey:
+    def load(cls, text: str):
         """
         Decode a key in `<algo>:<base64>` format.
         """
@@ -60,6 +60,10 @@ class PrivateKey:
     def sign(self, data):
         """Generate signature"""
         return self.key.sign(data, signature_algorithm=ec.ECDSA(hashes.SHA256()))
+
+    def sign_canonical(self, data):
+        """Generate signature in canonical format"""
+        return "{}:{}".format('ecdsa-p256', base64.b64encode(self.sign(data)).decode('ascii'))
 
     def public_key(self):
         return PublicKey(self.key.public_key())

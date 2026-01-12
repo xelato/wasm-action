@@ -100,6 +100,41 @@ class ProveInclusion422Response(BaseModel):
         error_messages = []
         match = 0
 
+        # use oneOf discriminator to lookup the data type
+        _data_type = json.loads(json_str).get("reason")
+        if not _data_type:
+            raise ValueError("Failed to lookup data type from the field `reason` in the input.")
+
+        # check if data type is `BundleFailureError`
+        if _data_type == "failure":
+            instance.actual_instance = BundleFailureError.from_json(json_str)
+            return instance
+
+        # check if data type is `IncorrectProofError`
+        if _data_type == "incorrectProof":
+            instance.actual_instance = IncorrectProofError.from_json(json_str)
+            return instance
+
+        # check if data type is `PackageNotIncludedError`
+        if _data_type == "packageNotIncluded":
+            instance.actual_instance = PackageNotIncludedError.from_json(json_str)
+            return instance
+
+        # check if data type is `BundleFailureError`
+        if _data_type == "BundleFailureError":
+            instance.actual_instance = BundleFailureError.from_json(json_str)
+            return instance
+
+        # check if data type is `IncorrectProofError`
+        if _data_type == "IncorrectProofError":
+            instance.actual_instance = IncorrectProofError.from_json(json_str)
+            return instance
+
+        # check if data type is `PackageNotIncludedError`
+        if _data_type == "PackageNotIncludedError":
+            instance.actual_instance = PackageNotIncludedError.from_json(json_str)
+            return instance
+
         # deserialize data into PackageNotIncludedError
         try:
             instance.actual_instance = PackageNotIncludedError.from_json(json_str)
