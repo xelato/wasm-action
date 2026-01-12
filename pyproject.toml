@@ -21,7 +21,7 @@ dependencies = [
 Repository = "https://github.com/xelato/wasm-action"
 
 [project.scripts]
-wasm-action = "wasm_action.action:main"
+wasm-action = "wasm_action.cli:main"
 
 [build-system]
 requires = ["uv_build>=0.9.3,<0.10.0"]
