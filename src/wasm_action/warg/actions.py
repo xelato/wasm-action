@@ -4,13 +4,22 @@ import base64
 import time
 
 import requests
+from dataclasses import dataclass
 
-from . import warg_proto
-from .warg_client import WargClient, PackageLogs
-from .util import detect_registry_settings
-from .model import Action, RegistryType, PackageDownload
+from . import proto
+from .client import WargClient, PackageLogs
 
 import warg_openapi
+
+
+@dataclass
+class PackageDownload:
+    namespace: str
+    name: str
+    version: str
+    content: bytes
+    digest: str
+
 
 def error(text):
     return ValueError(text)
@@ -143,13 +152,13 @@ def warg_pull(registry, warg_url, namespace, name, version=None, warg_token=None
 def find_version(packages, requested_version=None):
     version, digest = None, None
     for package in packages:
-        record = warg_proto.PackageRecord()
+        record = proto.PackageRecord()
         record.ParseFromString(base64.b64decode(package['contentBytes']))
         for entry in record.entries:
 
             obj = getattr(entry, entry.WhichOneof('contents'))
 
-            if isinstance(obj, warg_proto.PackageRelease):
+            if isinstance(obj, proto.PackageRelease):
 
                 if requested_version:
                     if obj.version == requested_version:

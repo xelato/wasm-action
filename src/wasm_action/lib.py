@@ -11,13 +11,11 @@ import semver
 import validators
 import requests
 
-from . import warg_proto
-from .warg_crypto import PrivateKey
-from .warg_client import WargClient
-from .util import add_github_output, detect_registry_settings, RegistryType
-from .util import format_package, parse_package, extract_version
-from .model import Action, RegistryType
-from .warg_pull import warg_pull, warg_push
+from .registry import RegistryType, detect_registry_settings
+from .util import add_github_output, format_package, parse_package, extract_version
+from .warg.crypto import PrivateKey
+from .warg.client import WargClient
+from .warg.actions import warg_pull, warg_push
 
 
 def error(text):
@@ -92,13 +90,15 @@ def push(registry, package, path, warg_token, warg_private_key):
         add_github_output('error', message)
         raise
 
-    else:
-        add_github_output('state', record['state'])
-        add_github_output('package', format_package(namespace=record['namespace'], name=record['name'], version=record['version']))
-        add_github_output('package-namespace', record['namespace'])
-        add_github_output('package-name', record['name'])
-        add_github_output('package-version', record['version'])
-        add_github_output('package-record-id', record['record_id'])
+
+    add_github_output('state', record['state'])
+    add_github_output('package', format_package(namespace=record['namespace'], name=record['name'], version=record['version']))
+    add_github_output('package-namespace', record['namespace'])
+    add_github_output('package-name', record['name'])
+    add_github_output('package-version', record['version'])
+    add_github_output('package-record-id', record['record_id'])
+
+    return record
 
 
 def pull(registry, package, path=None, warg_token=None):
@@ -126,6 +126,7 @@ def pull(registry, package, path=None, warg_token=None):
     add_github_output('package-version', download.version)
     add_github_output('digest', download.digest)
     add_github_output('filename', filename)
+    return download
 
 
 def validate_registry(registry):

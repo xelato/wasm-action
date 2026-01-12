@@ -6,10 +6,10 @@ import urllib3
 import base64
 import leb128
 import warg_openapi as warg
+from dataclasses import dataclass
+from .crypto import PrivateKey
+from . import proto as wp
 
-from .warg_crypto import PrivateKey
-from . import warg_proto as wp
-from .model import PackageRecord
 
 class WargClient:
 
@@ -133,6 +133,14 @@ class WargClient:
     def sign(self, record_bytes):
         prefix = b'WARG-PACKAGE-RECORD-SIGNATURE-V0'
         return self.private_key.sign_canonical(prefix + b':' + record_bytes)
+
+
+@dataclass
+class PackageRecord:
+    id: str
+    prev_id: str
+    proto: object
+    orig: object
 
 
 class PackageLogs:
