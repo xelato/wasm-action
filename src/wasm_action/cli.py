@@ -45,6 +45,7 @@ def pull(registry, package, path=None, warg_token=None):
             package=package,
             path=path,
             warg_token=warg_token,
+            cli=True,
         )
 
     except Exception as e:

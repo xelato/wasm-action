@@ -101,7 +101,7 @@ def push(registry, package, path, warg_token, warg_private_key):
     return record
 
 
-def pull(registry, package, path=None, warg_token=None):
+def pull(registry, package, path=None, warg_token=None, cli=False):
     """Pull from registry"""
 
     if not package:
@@ -109,35 +109,39 @@ def pull(registry, package, path=None, warg_token=None):
 
     namespace, name, version = parse_package(package)
 
-    settings = validate_registry(registry)
+    settings = validate_registry(registry, cli=cli)
 
     if settings.get('registry-type') != RegistryType.WARG:
         raise error("Registry type not supported: {}".format(settings.get('registry-type')))
 
     download = warg_pull(registry, settings['warg-url'], namespace, name, version, warg_token=warg_token)
 
-    filename = path or "{}:{}@{}.wasm".format(namespace, name, download.version)
-    with open(filename, 'wb') as f:
-        f.write(download.content)
+    if cli:
+        filename = path or "{}:{}@{}.wasm".format(namespace, name, download.version)
+        with open(filename, 'wb') as f:
+            f.write(download.content)
 
-    add_github_output('package', format_package(namespace=namespace, name=name, version=download.version))
-    add_github_output('package-namespace', download.namespace)
-    add_github_output('package-name', download.name)
-    add_github_output('package-version', download.version)
-    add_github_output('digest', download.digest)
-    add_github_output('filename', filename)
+        add_github_output('package', format_package(namespace=namespace, name=name, version=download.version))
+        add_github_output('package-namespace', download.namespace)
+        add_github_output('package-name', download.name)
+        add_github_output('package-version', download.version)
+        add_github_output('digest', download.digest)
+        add_github_output('filename', filename)
+
     return download
 
 
-def validate_registry(registry):
+def validate_registry(registry, cli=False):
     if not registry:
         raise error('registry is required')
 
     if not validators.domain(registry, consider_tld=True):
         raise error('registry is not a valid domain name: "{}"'.format(registry))
 
-    add_github_output('registry', registry)
+    if cli:
+        add_github_output('registry', registry)
     settings = detect_registry_settings(registry)
     for key, value in settings.items():
-        add_github_output(key, str(value))
+        if cli:
+            add_github_output(key, str(value))
     return settings
