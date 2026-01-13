@@ -1,11 +1,17 @@
 import sys
 import click
+import importlib.metadata
 
 from . import lib
 
 @click.group()
 def cli():
     pass
+
+
+@cli.command(help="Print version")
+def version():
+    print(importlib.metadata.version("wasm_action"))
 
 
 @cli.command(help="Push to registry")
