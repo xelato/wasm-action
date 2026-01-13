@@ -3,10 +3,10 @@
 **Interact with WebAssembly registries.**
 
 ## Features
-* Versatile use as a GitHub [action](https://github.com/marketplace/actions/wasm-action), CLI or Python [library](https://pypi.org/project/wasm-action/).
+* Versatile use as GitHub [action](https://github.com/marketplace/actions/wasm-action), CLI or Python [library](https://pypi.org/project/wasm-action/).
 * Supported registry types: warg (wa.dev)
 * Supported artifact types: wasm
-* Supported actions: pull (public and private packages)
+* Supported actions: push, pull
 * Supports Python 3.10+ on Linux, MacOS and Windows
 
 ## Usage
@@ -95,6 +95,8 @@ The package is [published](http://pypi.org/project/wasm-action/) to the Python P
 $ pip install wasm-action
 ```
 ```
-> import wasm_action as wa
+>>> import wasm_action as wa
+>>> wa.pull('wa.dev', 'wasi:io')
+PackageDownload(namespace='wasi', name='io', version='0.2.0', content='...', digest='sha256:c33b1dbf050f64229ff4decbf9a3d3420e0643a86f5f0cea29f81054820020a6')
 ```
 However, the library interface is not yet standardised and may (and will!) change.
