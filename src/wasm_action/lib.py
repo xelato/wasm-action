@@ -22,8 +22,8 @@ def error(text):
     return ValueError(text)
 
 
-def push(registry, package, path, warg_token, warg_private_key):
-    """Push to registry"""
+def push_file(registry, package, path, warg_token, warg_private_key, cli=False):
+    """Push file to registry"""
 
     # path
     if not path:
@@ -38,20 +38,33 @@ def push(registry, package, path, warg_token, warg_private_key):
         raise error('more than one file found: {}'.format(path))
     filename = files[0]
 
+    # extract version from filename if not provided
+    namespace, name, version = parse_package(package)
+    if not version:
+        version = extract_version(filename)
+        package = format_package(namespace, name, version)
+
+    with open(filename, 'rb') as f:
+        content_bytes = f.read()
+
+    return push(registry, package, content_bytes, warg_token, warg_private_key, cli=cli)
+
+
+def push(registry, package, content_bytes, warg_token, warg_private_key, cli=False):
+    """Push to registry"""
+
     # package
     if not package:
         raise error("package is required")
 
     namespace, name, version = parse_package(package)
-
-    # extract version from filename if not provided
     if not version:
-        version = extract_version(filename)
+        raise error("version is required")
 
     # validate version as semver
     semver.Version.parse(version)
 
-    settings = validate_registry(registry)
+    settings = validate_registry(registry, cli=cli)
     if settings.get('registry-type') != RegistryType.WARG:
         raise error("Registry type not supported: {}".format(settings.get('registry-type')))
 
@@ -64,19 +77,21 @@ def push(registry, package, path, warg_token, warg_private_key):
     except:
         raise error("Error loading private key")
     else:
-        add_github_output('key-id', private_key.public_key().fingerprint())
-        add_github_output('public-key', private_key.public_key().canonical())
+        if cli:
+            add_github_output('key-id', private_key.public_key().fingerprint())
+            add_github_output('public-key', private_key.public_key().canonical())
 
     if warg_token and '/' in warg_token:
         v = warg_token.split('/', 1)[1]
-        add_github_output('token-id', "sha256:{}".format(hashlib.sha256(v.encode('utf8')).hexdigest()))
+        if cli:
+            add_github_output('token-id', "sha256:{}".format(hashlib.sha256(v.encode('utf8')).hexdigest()))
 
     # push
     try:
 
         record = warg_push(
             registry, settings['warg-url'],
-            namespace, name, version, filename,
+            namespace, name, version, content_bytes,
             warg_token, warg_private_key)
 
     except Exception as e:
@@ -87,16 +102,17 @@ def push(registry, package, path, warg_token, warg_private_key):
                 message = json.loads(e.body)['message']
             except:
                 pass
-        add_github_output('error', message)
+        if cli:
+            add_github_output('error', message)
         raise
 
-
-    add_github_output('state', record['state'])
-    add_github_output('package', format_package(namespace=record['namespace'], name=record['name'], version=record['version']))
-    add_github_output('package-namespace', record['namespace'])
-    add_github_output('package-name', record['name'])
-    add_github_output('package-version', record['version'])
-    add_github_output('package-record-id', record['record_id'])
+    if cli:
+        add_github_output('state', record['state'])
+        add_github_output('package', format_package(namespace=record['namespace'], name=record['name'], version=record['version']))
+        add_github_output('package-namespace', record['namespace'])
+        add_github_output('package-name', record['name'])
+        add_github_output('package-version', record['version'])
+        add_github_output('package-record-id', record['record_id'])
 
     return record
 
@@ -148,7 +164,7 @@ def validate_registry(registry, cli=False):
     if cli:
         add_github_output('registry', registry)
     settings = detect_registry_settings(registry)
-    for key, value in settings.items():
-        if cli:
+    if cli:
+        for key, value in settings.items():
             add_github_output(key, str(value))
     return settings

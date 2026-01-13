@@ -18,12 +18,13 @@ def push(registry, package, path, warg_token, warg_private_key):
 
     try:
 
-        lib.push(
+        lib.push_file(
             registry=registry,
             package=package,
             path=path,
             warg_token=warg_token,
             warg_private_key=warg_private_key,
+            cli=True,
         )
 
     except Exception as e:

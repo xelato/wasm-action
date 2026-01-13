@@ -25,10 +25,7 @@ def error(text):
     return ValueError(text)
 
 
-def warg_push(registry, warg_url, namespace, name, version, filename, warg_token:str, warg_private_key:str):
-
-    with open(filename, 'rb') as f:
-        content_bytes = f.read()
+def warg_push(registry, warg_url, namespace, name, version, content_bytes, warg_token:str, warg_private_key:str):
 
     client = WargClient(
         registry=registry,
