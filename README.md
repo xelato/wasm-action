@@ -46,6 +46,19 @@ To pull a private package define your [token](https://wa.dev/account/credentials
 |filename|Download location|foo-bar_1.2.3.wasm|
 |digest|File hash|sha256:2afffac0...|
 
+### Push to registry
+```
+      - uses: xelato/wasm-action
+        with:
+          action: push
+          registry: wa.dev
+          package: foo:bar@1.2.3
+          path: files/foo_bar_1.2.3.wasm
+        env:
+          WARG_TOKEN: ${{ secrets.WARG_TOKEN }}
+          WARG_PRIVATE_KEY: ${{ secrets.WARG_PRIVATE_KEY }}
+```
+
 ## CLI
 The tool can be run without installing using [uv](https://docs.astral.sh/uv/).
 ```
