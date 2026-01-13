@@ -2,7 +2,7 @@ import os
 import tempfile
 import unittest
 
-from wasm_action.action import push
+from wasm_action.cli import push
 from wasm_action.util import get_github_outputs
 
 from helpers import use_cassette

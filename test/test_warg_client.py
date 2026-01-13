@@ -1,8 +1,8 @@
 import unittest
 from helpers import use_cassette
 
-from wasm_action.warg_client import WargClient, generate_log_id
-from wasm_action.warg_pull import warg_pull
+from wasm_action.warg.client import WargClient, generate_log_id
+from wasm_action.warg.actions import warg_pull
 
 
 class TestWargClient(unittest.TestCase):

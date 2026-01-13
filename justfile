@@ -28,7 +28,7 @@ openapi-validate:
 proto:
     mkdir -p warg_proto
     protoc --python_out warg_proto proto/warg/protocol/warg.proto
-    mv warg_proto/proto/warg/protocol/warg_pb2.py src/wasm_action/warg_proto.py
+    mv warg_proto/proto/warg/protocol/warg_pb2.py src/wasm_action/warg/proto.py
     rm -rf warg_proto
 
 # test
@@ -42,3 +42,8 @@ ngrok:
         --request-header-remove X-Forwarded-For \
         --request-header-remove X-Forwarded-Host \
         --request-header-remove X-Forwarded-Proto \
+
+clean:
+    rm -rf .venv
+    rm -rf .pytest_cache
+    find . -name "__pycache__" | xargs -n1 rm -rf

@@ -1,15 +1,13 @@
 
-from urllib.parse import urlparse
-import time
 import hashlib
 import urllib3
 import base64
 import leb128
 import warg_openapi as warg
+from dataclasses import dataclass
+from .crypto import PrivateKey
+from . import proto
 
-from .warg_crypto import PrivateKey
-from . import warg_proto as wp
-from .model import PackageRecord
 
 class WargClient:
 
@@ -116,15 +114,15 @@ class WargClient:
         res = self.package_api.publish_package_record(**kwargs)
         return res.to_dict()
 
-    def create_version_record(self, version, digest) -> wp.PackageRecord:
-        release = wp.PackageRelease()
+    def create_version_record(self, version, digest) -> proto.PackageRecord:
+        release = proto.PackageRelease()
         release.version = version
         release.content_hash = "sha256:{}".format(digest)
 
-        entry = wp.PackageEntry()
+        entry = proto.PackageEntry()
         entry.release.CopyFrom(release)
 
-        record = wp.PackageRecord()
+        record = proto.PackageRecord()
         record.entries.MergeFrom([entry])
         # sets it to current time
         record.time.GetCurrentTime()
@@ -133,6 +131,14 @@ class WargClient:
     def sign(self, record_bytes):
         prefix = b'WARG-PACKAGE-RECORD-SIGNATURE-V0'
         return self.private_key.sign_canonical(prefix + b':' + record_bytes)
+
+
+@dataclass
+class PackageRecord:
+    id: str
+    prev_id: str
+    proto: object
+    orig: object
 
 
 class PackageLogs:
@@ -152,7 +158,7 @@ class PackageLogs:
         for package in self.packages:
 
             record_bytes = base64.b64decode(package['contentBytes'])
-            record = wp.PackageRecord()
+            record = proto.PackageRecord()
             record.ParseFromString(record_bytes)
 
             if prev and prev.id != record.prev:
