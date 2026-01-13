@@ -1,2 +1,2 @@
 
-from . import lib
+from .lib import push, pull
