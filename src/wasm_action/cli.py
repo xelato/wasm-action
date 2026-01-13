@@ -12,8 +12,8 @@ def cli():
 @click.option('--registry', required=True, help="registry domain name")
 @click.option('--package', required=True, help="package spec")
 @click.option('--path', required=True, help="filename")
-@click.option('--warg-token', required=False, envvar='WARG_TOKEN', help="warg token")
-@click.option('--warg-private-key', required=False, envvar='WARG_PRIVATE_KEY', help="warg private key")
+@click.option('--warg-token', required=False, envvar='WARG_TOKEN', help="warg token (or $WARG_TOKEN)")
+@click.option('--warg-private-key', required=False, envvar='WARG_PRIVATE_KEY', help="warg private key (or $WARG_PRIVATE_KEY)")
 def push(registry, package, path, warg_token, warg_private_key):
 
     try:
@@ -36,7 +36,7 @@ def push(registry, package, path, warg_token, warg_private_key):
 @click.option('--registry', required=True, help="registry domain name")
 @click.option('--package', required=True, help="package spec")
 @click.option('--path', required=False, help="filename")
-@click.option('--warg-token', required=False, envvar='WARG_TOKEN', help="warg token")
+@click.option('--warg-token', required=False, envvar='WARG_TOKEN', help="warg token (or $WARG_TOKEN)")
 def pull(registry, package, path=None, warg_token=None):
 
     try:
