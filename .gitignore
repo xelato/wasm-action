@@ -6,4 +6,3 @@ build
 dist
 .pytest_cache
 .todo
-.DS_Store
