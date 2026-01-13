@@ -1,6 +1,6 @@
 [project]
 name = "wasm-action"
-version = "0.0.2"
+version = "0.0.3"
 description = "Interact with WebAssembly registries."
 readme = "README.md"
 requires-python = ">=3.10"
