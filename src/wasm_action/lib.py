@@ -101,7 +101,7 @@ def push(registry, package, path, warg_token, warg_private_key):
     return record
 
 
-def pull(registry, package, path=None, warg_token=None, cli=False):
+def pull(registry, package, warg_token=None, cli=False):
     """Pull from registry"""
 
     if not package:
@@ -116,19 +116,26 @@ def pull(registry, package, path=None, warg_token=None, cli=False):
 
     download = warg_pull(registry, settings['warg-url'], namespace, name, version, warg_token=warg_token)
 
-    if cli:
-        filename = path or "{}:{}@{}.wasm".format(namespace, name, download.version)
-        with open(filename, 'wb') as f:
-            f.write(download.content)
+    return download
 
-        add_github_output('package', format_package(namespace=namespace, name=name, version=download.version))
+
+def pull_file(registry, package, path=None, warg_token=None, cli=False):
+    """Pull from registry, write to file"""
+
+    download = pull(registry, package, warg_token, cli=cli)
+
+    filename = path or "{}:{}@{}.wasm".format(download.namespace, download.name, download.version)
+    with open(filename, 'wb') as f:
+        f.write(download.content)
+
+    if cli:
+        add_github_output('package', format_package(
+            namespace=download.namespace, name=download.name, version=download.version))
         add_github_output('package-namespace', download.namespace)
         add_github_output('package-name', download.name)
         add_github_output('package-version', download.version)
         add_github_output('digest', download.digest)
         add_github_output('filename', filename)
-
-    return download
 
 
 def validate_registry(registry, cli=False):

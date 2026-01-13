@@ -40,7 +40,7 @@ def pull(registry, package, path=None, warg_token=None):
 
     try:
 
-        lib.pull(
+        lib.pull_file(
             registry=registry,
             package=package,
             path=path,
