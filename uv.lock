@@ -616,7 +616,7 @@ wheels = [
 
 [[package]]
 name = "wasm-action"
-version = "0.0.4"
+version = "0.0.0"
 source = { editable = "." }
 dependencies = [
     { name = "click" },
