@@ -1,11 +1,21 @@
 import sys
 import click
+import importlib.metadata
 
 from . import lib
 
 @click.group()
 def cli():
     pass
+
+
+@cli.command(help="Print version")
+def version():
+    try:
+        version = importlib.metadata.version("wasm-action")
+    except importlib.metadata.PackageNotFoundError:
+        version = "0.0.0"
+    print(version)
 
 
 @cli.command(help="Push to registry")
