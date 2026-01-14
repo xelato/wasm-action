@@ -29,7 +29,7 @@ jobs:
       - name: Build release distributions
         run: |
           pipx install uv
-          echo "Release: ${{ github.event.release.tag_name }}"
+          uv version "${{ github.event.release.tag_name }}"
           uv build
 
       - name: Upload distributions
