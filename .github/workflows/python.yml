@@ -30,5 +30,7 @@ jobs:
       run: |
         python -m pip install uv > /dev/null
         PYTHONPATH=. uv run --python ${{ matrix.python-version }} pytest
+        echo "tag1: $GITHUB_REF_NAME"
+        echo "tag2: ${{  github.ref_name }}"
         uv version `git describe --tags --abbrev=0`
         uv build --python ${{ matrix.python-version }}
