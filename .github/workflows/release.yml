@@ -29,6 +29,7 @@ jobs:
       - name: Build release distributions
         run: |
           pipx install uv
+          uv version `git describe --tags --abbrev=0`
           uv build
 
       - name: Upload distributions

@@ -11,7 +11,11 @@ def cli():
 
 @cli.command(help="Print version")
 def version():
-    print(importlib.metadata.version("wasm_action"))
+    try:
+        version = importlib.metadata.version("wasm-action")
+    except importlib.metadata.PackageNotFoundError:
+        version = "0.0.0"
+    print(version)
 
 
 @cli.command(help="Push to registry")
