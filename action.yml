@@ -74,7 +74,7 @@ runs:
       if: ${{ inputs.action == 'pull' }}
       shell: bash
       run: |
-        uv run wasm-action pull \
+        uvx wasm-action pull \
           --registry "${{ inputs.registry }}" \
           --package "${{ inputs.package }}" \
           --path "${{ inputs.path }}" \
@@ -84,7 +84,7 @@ runs:
       if: ${{ inputs.action == 'push' }}
       shell: bash
       run: |
-        uv run wasm-action push \
+        uvx wasm-action push \
           --registry "${{ inputs.registry }}" \
           --package "${{ inputs.package }}" \
           --path "${{ inputs.path }}" \
