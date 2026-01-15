@@ -27,7 +27,6 @@ jobs:
           action: pull
           registry: wa.dev
           package: component-book:adder@0.1.0
-        working-directory: "$GITHUB_WORKSPACE/.."
 
       - name: Test pull outputs
         shell: bash
