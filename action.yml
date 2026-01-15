@@ -67,7 +67,7 @@ runs:
       id: version
       shell: bash
       run: |
-        uvx wasm-action version
+        time uvx wasm-action version
 
     - name:
       id: pull
