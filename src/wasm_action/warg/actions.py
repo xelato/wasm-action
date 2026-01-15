@@ -66,7 +66,7 @@ def warg_push(registry, warg_url, namespace, name, version, content_bytes, warg_
                     if 'upload' in data:
                         for upload in data['upload']:
                             r = requests.put(upload['url'], data=content_bytes)
-                            if r not in (200, 201):
+                            if r.status_code not in (200, 201):
                                 print(r.status_code, r.content)
 
         # state: rejected -> error
