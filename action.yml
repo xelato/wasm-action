@@ -64,6 +64,12 @@ runs:
       shell: bash
 
     - name:
+      id: version
+      shell: bash
+      run: |
+        uv run wasm-action version
+
+    - name:
       id: pull
       if: ${{ inputs.action == 'pull' }}
       shell: bash
