@@ -20,6 +20,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: mktemp
+        shell: bash
+        run: |
+          # push to a folder outside the project
+          pushd `mktemp -d`
+          env
+
       - name: Test Pull
         uses: ./
         id: pull1
