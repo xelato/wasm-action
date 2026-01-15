@@ -64,5 +64,10 @@ def pull(registry, package, path=None, warg_token=None):
         sys.exit(1)
 
 
+@cli.command(help="Generate a key")
+def key():
+    lib.generate_key()
+
+
 if __name__ == "__main__":
     cli()
