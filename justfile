@@ -47,3 +47,4 @@ clean:
     rm -rf .venv
     rm -rf .pytest_cache
     find . -name "__pycache__" | xargs -n1 rm -rf
+    rm -rf dist

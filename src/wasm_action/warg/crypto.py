@@ -134,3 +134,18 @@ class PublicKey:
     def fingerprint(self):
         """Used as Key ID"""
         return "sha256:{}".format(hashlib.sha256(self.canonical().encode('ascii')).hexdigest())
+
+
+def generate_key_pair():
+    """Generate key-pair"""
+    private = PrivateKey.generate()
+    public = private.public_key()
+    return {
+        "private": private.canonical(),
+        "public": public.canonical(),
+        "id": public.fingerprint(),
+    }
+
+
+if __name__ == "__main__":
+    generate_key_pair()
