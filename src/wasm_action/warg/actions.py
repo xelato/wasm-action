@@ -60,11 +60,14 @@ def warg_push(registry, warg_url, namespace, name, version, content_bytes, warg_
 
         # state: sourcing -> upload sources
         elif state == 'sourcing':
+            time.sleep(1)
             if 'missingContent' in res:
                 for _, data in res['missingContent'].items():
                     if 'upload' in data:
                         for upload in data['upload']:
-                            requests.put(upload['url'], data=content_bytes)
+                            r = requests.put(upload['url'], data=content_bytes)
+                            if r not in (200, 201):
+                                print(r.status_code, r.content)
 
         # state: rejected -> error
         elif state == 'rejected':
