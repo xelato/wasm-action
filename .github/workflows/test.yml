@@ -20,13 +20,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: mktemp
-        shell: bash
-        run: |
-          # push to a folder outside the project
-          pushd `mktemp -d`
-          env
-
       - name: Test Pull
         uses: ./
         id: pull1
@@ -34,6 +27,7 @@ jobs:
           action: pull
           registry: wa.dev
           package: component-book:adder@0.1.0
+        working-directory: "$GITHUB_WORKSPACE/.."
 
       - name: Test pull outputs
         shell: bash
