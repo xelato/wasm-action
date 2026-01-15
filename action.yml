@@ -58,16 +58,11 @@ runs:
 
   steps:
 
-    - name: Install uv
+    - name: Install
       run: |
         python -m pip install uv > /dev/null
+        uvx wasm-action version
       shell: bash
-
-    - name:
-      id: version
-      shell: bash
-      run: |
-        time uvx wasm-action version
 
     - name:
       id: pull
