@@ -12,7 +12,7 @@
 ## Usage
 ### Pull from registry
 ```
-      - uses: xelato/wasm-action
+      - uses: xelato/wasm-action@main
         with:
           action: pull
           registry: wa.dev
@@ -48,7 +48,7 @@ To pull a private package define your [token](https://wa.dev/account/credentials
 
 ### Push to registry
 ```
-      - uses: xelato/wasm-action
+      - uses: xelato/wasm-action@main
         with:
           action: push
           registry: wa.dev
