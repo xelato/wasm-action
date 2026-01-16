@@ -19,7 +19,7 @@
           package: component-book:adder
 ```
 
-To pull a private package define your [token](https://wa.dev/account/credentials/new):
+To pull a private package, define your [token](https://wa.dev/account/credentials/new):
 ```
         env:
           WARG_TOKEN: ${{ secrets.WARG_TOKEN }}
@@ -59,8 +59,18 @@ To pull a private package define your [token](https://wa.dev/account/credentials
           WARG_PRIVATE_KEY: ${{ secrets.WARG_PRIVATE_KEY }}
 ```
 
+### Key generation
+New [token](https://wa.dev/account/credentials/new) registration and push to wa.dev require generation and configuration of a private/public key pair which can be facilitated with:
+```
+# use private key to configure in github or save it elsewhere in a secure manner
+$ uvx wasm-action key | jq .private | pbcopy
+
+# use corresponding public key for new token registration at wa.dev
+$ pbpaste | uvx wasm-action key | jq .public
+```
+
 ## CLI
-The tool can be run without installing using [uv](https://docs.astral.sh/uv/).
+The tool can be run without installing, using [uv](https://docs.astral.sh/uv/).
 ```
 $ uvx wasm-action --help
 Usage: wasm-action [OPTIONS] COMMAND [ARGS]...
