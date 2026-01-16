@@ -9,6 +9,10 @@
 * Supported actions: push, pull
 * Supports Python 3.10+ on Linux, MacOS and Windows
 
+#### Planned
+* OCI registry support (a.k.a. Docker registry)
+* Convert between formats (wit/wasm)
+
 ## Usage
 ### Pull from registry
 ```
@@ -62,6 +66,14 @@ To pull a private package, define your [token](https://wa.dev/account/credential
 ### Key generation
 New [token](https://wa.dev/account/credentials/new) registration and push to wa.dev require generation and configuration of a private/public key pair which can be facilitated with:
 ```
+$ uv run wasm-action key
+{
+    "private": "ecdsa-p256:9y5nigLvFp3KZZQtuvN9DchpGIMUB4bwGAtkIoOCla4=",
+    "public": "ecdsa-p256:AvspSQWBK65ItTou/uVCi5qC4P+HBCi4R34OIPb3ILRl",
+    "id": "sha256:c836bd8a3082f2e8d70bdfa48296e580ab847fcdeadb351f448d03f152d44093"
+}
+```
+```
 # use private key to configure in github or save it elsewhere in a secure manner
 $ uvx wasm-action key | jq .private | pbcopy
 ```
@@ -80,8 +92,10 @@ Options:
   --help  Show this message and exit.
 
 Commands:
-  pull  Pull from a WebAssembly registry
-  push  Push to a WebAssembly registry
+  key      Generate private key or read one from stdin
+  pull     Pull from registry
+  push     Push to registry
+  version  Print version
 ```
 ```
 $ uvx wasm-action pull --help
