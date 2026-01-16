@@ -5,7 +5,6 @@ import os
 import hashlib
 import base64
 import json
-import pprint
 import click
 import semver
 import validators
@@ -13,7 +12,7 @@ import requests
 
 from .registry import RegistryType, detect_registry_settings
 from .util import add_github_output, format_package, parse_package, extract_version
-from .warg.crypto import PrivateKey, generate_key_pair
+from .warg.crypto import PrivateKey
 from .warg.client import WargClient
 from .warg.actions import warg_pull, warg_push
 
@@ -168,9 +167,3 @@ def validate_registry(registry, cli=False):
         for key, value in settings.items():
             add_github_output(key, str(value))
     return settings
-
-
-def generate_key():
-    """Generate a key"""
-    data = generate_key_pair()
-    pprint.pprint(data)

@@ -10,6 +10,9 @@ class TestKeys(unittest.TestCase):
         k2 = PrivateKey.load(k1.canonical())
         self.assertEqual(k1.canonical(), k2.canonical())
 
+        k3 = PrivateKey.load('"{}"'.format(k1.canonical()))
+        self.assertEqual(k1.canonical(), k3.canonical())
+
     def test_basic(self):
         key = PrivateKey.load("ecdsa-p256:I+UlDo0HxyBBFeelhPPWmD+LnklOpqZDkrFP5VduASk=")
         self.assertEqual(key.canonical(), "ecdsa-p256:I+UlDo0HxyBBFeelhPPWmD+LnklOpqZDkrFP5VduASk=")
