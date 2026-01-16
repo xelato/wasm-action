@@ -148,4 +148,4 @@ def generate_key_pair():
 
 
 if __name__ == "__main__":
-    generate_key_pair()
+    print(generate_key_pair())

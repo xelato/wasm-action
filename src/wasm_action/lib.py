@@ -5,7 +5,6 @@ import os
 import hashlib
 import base64
 import json
-import pprint
 import click
 import semver
 import validators
@@ -173,4 +172,4 @@ def validate_registry(registry, cli=False):
 def generate_key():
     """Generate a key"""
     data = generate_key_pair()
-    pprint.pprint(data)
+    print(json.dumps(data, indent=4))
