@@ -64,7 +64,8 @@ New [token](https://wa.dev/account/credentials/new) registration and push to wa.
 ```
 # use private key to configure in github or save it elsewhere in a secure manner
 $ uvx wasm-action key | jq .private | pbcopy
-
+```
+```
 # use corresponding public key for new token registration at wa.dev
 $ pbpaste | uvx wasm-action key | jq .public
 ```
