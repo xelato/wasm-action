@@ -38,8 +38,13 @@ class PrivateKey:
         """
         Decode a key in `<algo>:<base64>` format.
         """
-        if ':' not in text:
+        text = (text or '').strip()
+        if not text or ':' not in text:
             raise ValueError('required format: <algo>:<base64>')
+
+        # better interplay with jq, pbcopy, and pbpaste
+        if len(text)>1 and text.startswith('"') and text.endswith('"'):
+            text = text[1:-1]
 
         algo, key_b64 = text.split(':', 1)
 
@@ -48,7 +53,9 @@ class PrivateKey:
             raise ValueError('algorithm not supported: {}'.format(algo))
 
         key_bytes = base64.b64decode(key_b64)
-        # todo: compare bytes length with curve key length
+        # compare bytes length with curve key size
+        if len(key_bytes) * 8 != curve.key_size:
+            raise ValueError('key size mismatch')
 
         key_int = int.from_bytes(key_bytes, byteorder='big')
         key = ec.derive_private_key(key_int, curve=curve)
@@ -136,16 +143,15 @@ class PublicKey:
         return "sha256:{}".format(hashlib.sha256(self.canonical().encode('ascii')).hexdigest())
 
 
-def generate_key_pair():
-    """Generate key-pair"""
-    private = PrivateKey.generate()
+def generate_key(private_key:str=None):
+    """Generate key-pair."""
+    if private_key:
+        private = PrivateKey.load(private_key)
+    else:
+        private = PrivateKey.generate()
     public = private.public_key()
     return {
         "private": private.canonical(),
         "public": public.canonical(),
         "id": public.fingerprint(),
     }
-
-
-if __name__ == "__main__":
-    print(generate_key_pair())

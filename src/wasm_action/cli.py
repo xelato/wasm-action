@@ -1,8 +1,11 @@
 import sys
 import click
 import importlib.metadata
+import json
 
 from . import lib
+from .warg.crypto import generate_key
+
 
 @click.group()
 def cli():
@@ -64,9 +67,22 @@ def pull(registry, package, path=None, warg_token=None):
         sys.exit(1)
 
 
-@cli.command(help="Generate a key")
+@cli.command(help="Generate private key or read one from stdin")
 def key():
-    lib.generate_key()
+    """Generate key in json format.
+
+    Either:
+     - generate a new key
+     - read a private key from standard input
+    """
+    if sys.stdin.isatty():
+        data = generate_key()
+    else:
+        # read private key from standard input
+        private_key = sys.stdin.read()
+        data = generate_key(private_key)
+        del data['private']
+    print(json.dumps(data, indent=4))
 
 
 if __name__ == "__main__":
