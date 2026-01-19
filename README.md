@@ -66,7 +66,7 @@ To pull a private package, define your [token](https://wa.dev/account/credential
 ### Key generation
 New [token](https://wa.dev/account/credentials/new) registration and push to wa.dev require generation and configuration of a private/public key pair which can be facilitated with:
 ```
-$ uv run wasm-action key
+$ uvx wasm-action key
 {
     "private": "ecdsa-p256:9y5nigLvFp3KZZQtuvN9DchpGIMUB4bwGAtkIoOCla4=",
     "public": "ecdsa-p256:AvspSQWBK65ItTou/uVCi5qC4P+HBCi4R34OIPb3ILRl",
