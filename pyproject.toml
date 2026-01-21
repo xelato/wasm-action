@@ -15,7 +15,6 @@ dependencies = [
     "semver>=3.0.4",
     "urllib3>=1.25.3",
     "validators>=0.35.0",
-    "wasmer>=1.1.0",
     "wasmtime>=40.0.0",
 ]
 

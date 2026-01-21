@@ -629,7 +629,6 @@ dependencies = [
     { name = "semver" },
     { name = "urllib3" },
     { name = "validators" },
-    { name = "wasmer" },
     { name = "wasmtime" },
 ]
 
@@ -651,7 +650,6 @@ requires-dist = [
     { name = "semver", specifier = ">=3.0.4" },
     { name = "urllib3", specifier = ">=1.25.3" },
     { name = "validators", specifier = ">=0.35.0" },
-    { name = "wasmer", specifier = ">=1.1.0" },
     { name = "wasmtime", specifier = ">=40.0.0" },
 ]
 
@@ -659,17 +657,6 @@ requires-dist = [
 dev = [
     { name = "pytest", specifier = ">=9.0.2" },
     { name = "vcrpy", specifier = ">=8.1.0" },
-]
-
-[[package]]
-name = "wasmer"
-version = "1.1.0"
-source = { registry = "https://pypi.org/simple" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/cf/0a/9e5efd92e5cf24d5c08030b4f76dcdf10cbc55c639bbf4df8aeb0c76d448/wasmer-1.1.0-cp310-cp310-macosx_10_7_x86_64.whl", hash = "sha256:c2af4b907ae2dabcac41e316e811d5937c93adf1f8b05c5d49427f8ce0f37630", size = 1465236, upload-time = "2022-01-07T23:23:52.601Z" },
-    { url = "https://files.pythonhosted.org/packages/a7/79/3f53cf611cbdd04a9b9997bf3ad18e5602350f90d404c162fbf3112684f2/wasmer-1.1.0-cp310-cp310-manylinux_2_24_x86_64.whl", hash = "sha256:ab1ae980021e5ec0bf0c6cdd3b979b1d15a5f3eb2b8a32da8dcb1156e4a1e484", size = 1603286, upload-time = "2022-01-07T23:23:54.467Z" },
-    { url = "https://files.pythonhosted.org/packages/24/70/ca7bf7a3f85d8de745eca73e40bc83cf86bb52ea494b33721fc0572889ab/wasmer-1.1.0-cp310-none-win_amd64.whl", hash = "sha256:d0d93aec6215893d33e803ef0a8d37bf948c585dd80ba0e23a83fafee820bc03", size = 1435852, upload-time = "2022-01-07T23:23:56.134Z" },
-    { url = "https://files.pythonhosted.org/packages/39/6b/30e25924cae7add377f5601e71c778e9a1e515c7a58291f52756c1bb7e87/wasmer-1.1.0-py3-none-any.whl", hash = "sha256:2caf8c67feae9cd4246421551036917811c446da4f27ad4c989521ef42751931", size = 1617, upload-time = "2022-01-07T23:24:10.046Z" },
 ]
 
 [[package]]

@@ -5,6 +5,7 @@ import json
 
 from . import lib
 from .warg.crypto import generate_key
+from .wasm import runtime
 
 
 @click.group()
@@ -22,8 +23,8 @@ def version():
 
 
 @cli.command(help="Push to registry")
-@click.option('--registry', required=True, help="registry domain name")
-@click.option('--package', required=True, help="package spec")
+@click.option('-r', '--registry', required=True, help="registry domain name")
+@click.option('-p', '--package', required=True, help="package spec")
 @click.option('--path', required=True, help="filename")
 @click.option('--warg-token', required=False, envvar='WARG_TOKEN', help="warg token (or $WARG_TOKEN)")
 @click.option('--warg-private-key', required=False, envvar='WARG_PRIVATE_KEY', help="warg private key (or $WARG_PRIVATE_KEY)")
@@ -46,8 +47,8 @@ def push(registry, package, path, warg_token, warg_private_key):
 
 
 @cli.command(help="Pull from registry")
-@click.option('--registry', required=True, help="registry domain name")
-@click.option('--package', required=True, help="package spec")
+@click.option('-r', '--registry', required=True, help="registry domain name")
+@click.option('-p', '--package', required=True, help="package spec")
 @click.option('--path', required=False, help="filename")
 @click.option('--warg-token', required=False, envvar='WARG_TOKEN', help="warg token (or $WARG_TOKEN)")
 def pull(registry, package, path=None, warg_token=None):
@@ -83,6 +84,21 @@ def key():
         data = generate_key(private_key)
         del data['private']
     print(json.dumps(data, indent=4))
+
+
+@cli.command('x', help="Run a WebAssembly file")
+@click.argument('filename', required=True)
+@click.argument('func', required=False)
+@click.argument('args', nargs=-1)
+def run(filename, func, args):
+    """Run a WebAssembly file"""
+
+    print(runtime
+        .module_file(filename)
+        .instance()
+        .function(func)
+        .call(*args)
+    )
 
 
 if __name__ == "__main__":
