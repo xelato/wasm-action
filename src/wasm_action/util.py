@@ -79,7 +79,6 @@ def parse_package(package):
     return namespace, name, version
 
 
-
 class cli_error_handler(object):
     """Decorator for CLI error handling"""
 

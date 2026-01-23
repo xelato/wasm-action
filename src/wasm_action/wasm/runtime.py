@@ -45,7 +45,7 @@ class Instance:
             self._instance = wasmtime.Instance(self._store, self._module, self._imports)
         exports = self._instance.exports(self._store)
         if name not in exports.keys():
-            print('defined functions:', tuple(exports.keys()))
+            print('defined functions:', list(exports.keys()))
             assert False, "function not found: {}".format(name)
         return Function(store=self._store, func=exports[name], name=name)
 
@@ -89,3 +89,8 @@ class Function:
             )
             raise Exception(message)
         return result
+
+    def __str__(self):
+        return "{}({})".format(self.name, ", ".join([
+            str(p) for p in self._func_type.params
+        ]))

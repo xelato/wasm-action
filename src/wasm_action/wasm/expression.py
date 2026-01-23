@@ -16,15 +16,14 @@ An expression may consist of the following constituents:
 
 Example:
 Suppose the file calculator.wasm provides the following exports:
- - add, sum, mul
+ - sum, mul
 Then the following expressions can be constructed:
-add(2, 3), sum(4, 5)     # 5, 9
+sum(2, 3)
 sum(2, mul(3, 5))
 sum(1, sum(2, sum(3, sum(4, 5))))
 (1, sum(2, 3))  -> (1, 5)
 
 Implementation takes a shortcut by using Python's ast module.
-Essentially, this allows to borrow more of Python features in the future.
 """
 
 import ast
@@ -73,11 +72,15 @@ class Evaluator:
             raise Exception("value not allowed: {}".format(node))
 
     def compute(self, node):
+        """Evaluate a single expression"""
         if isinstance(node, ast.Expr):
             return self.compute(node.value)
 
         elif isinstance(node, ast.Tuple):
             return tuple(self.compute(x) for x in node.elts)
+
+        elif isinstance(node, ast.Constant):
+            return node.value
 
         elif isinstance(node, ast.Call):
             assert isinstance(node.func, ast.Name)
@@ -86,8 +89,8 @@ class Evaluator:
             args = [self.compute(x) for x in node.args]
             return func(*args)
 
-        elif isinstance(node, ast.Constant):
-            return node.value
+        elif isinstance(node, ast.Name):
+            return getattr(self.obj, node.id)
 
         else:
             raise Exception("value not allowed: {}".format(node))
