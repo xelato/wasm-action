@@ -2,6 +2,8 @@
 import os
 import wasmtime
 
+from . import expression
+
 
 def module_file(filename):
     if not os.path.exists(filename) or not os.path.isfile(filename):
@@ -34,6 +36,10 @@ class Instance:
         self._instance = None
         self._imports = []
 
+    def __getattr__(self, name):
+        """Ususally called by the evaluator to resolve function names."""
+        return self.function(name)
+
     def function(self, name):
         if not self._instance:
             self._instance = wasmtime.Instance(self._store, self._module, self._imports)
@@ -41,7 +47,11 @@ class Instance:
         if name not in exports.keys():
             print('defined functions:', tuple(exports.keys()))
             assert False, "function not found: {}".format(name)
-        return Function(store=self._store, func=exports[name])
+        return Function(store=self._store, func=exports[name], name=name)
+
+    def evaluate(self, text):
+        """Evaluate an expression against functions exported in the instance."""
+        return expression.evaluate(text or '', obj=self)
 
 
 class Function:
@@ -53,16 +63,29 @@ class Function:
         "f64": float,
     }
 
-    def __init__(self, store, func):
+    def __init__(self, store, func, name):
         self._store = store
         self._func = func
         self._func_type = self._func.type(self._store)
+        self.name = name
 
     def call(self, *args):
+        return self(*args)
+
+    def __call__(self, *args):
         # convert to expected types before function call
         typed_args = []
         for param, arg in zip(self._func_type.params, args):
             type = self._types.get(str(param))
             arg = type(arg) if type else arg
             typed_args.append(arg)
-        return self._func(self._store, *typed_args)
+        try:
+            result = self._func(self._store, *typed_args)
+        except Exception as e:
+            message = "Error calling {}({}): {}".format(
+                self.name,
+                ", ".join([str(x) for x in typed_args]),
+                str(e),
+            )
+            raise Exception(message)
+        return result

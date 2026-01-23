@@ -76,3 +76,17 @@ def parse_package(package):
         # throws on failed validation
         semver.Version.parse(version)
     return namespace, name, version
+
+
+
+class error_handler:
+    """decorator for CLI error handling"""
+    def __init__(self, func):
+        self.func = func
+
+    def __call__(self, *args, **kwargs):
+        try:
+            return self.func(*args, **kwargs)
+        except Exception as e:
+            print(e)
+            sys.exit(1)

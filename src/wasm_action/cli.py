@@ -1,3 +1,4 @@
+import os
 import sys
 import click
 import importlib.metadata
@@ -6,6 +7,7 @@ import json
 from . import lib
 from .warg.crypto import generate_key
 from .wasm import runtime
+from .util import error_handler
 
 
 @click.group()
@@ -99,6 +101,54 @@ def run(filename, func, args):
         .function(func)
         .call(*args)
     )
+
+
+@cli.command('eval', help="""Expression evaluator
+
+Expression(s) specified in EXPRESSION or STDIN will be evaluated against the specified WebAssembly module.
+The input must conform to a subset of Python's syntax that includes literals, tuples and function calls.
+The latter are resolved to a valid function present in the exports of the WebAssembly module.
+Example:
+If calc.wasm exports `add` and `mul`, then the following is a valid expression in such context:
+"mul(2, 3), add(mul(4, 5), 3)"
+""")
+@click.argument('filename', required=True)
+@click.argument('expression', required=False)
+@error_handler
+def evaluate(filename, expression):
+    """Evaluates an expression against a wasm module instance.
+
+    Any function calls are intercepted and resolved to a valid function
+    from the exports of the wasm module.
+
+    Expression syntax follows a subset of Python syntax.
+
+    """
+    instance = (runtime
+        .module_file(filename)
+        .instance()
+    )
+
+    expression = sys.stdin.read() if not sys.stdin.isatty() else expression
+
+    if expression:
+        for result in instance.evaluate(expression):
+            print(result)
+        return
+
+    if not sys.stdin.isatty():
+        return
+
+    # repl mode
+    import readline
+    prompt = "{} >>> ".format(os.path.basename(filename))
+    while True:
+        expression = input(prompt)
+        try:
+            for result in instance.evaluate(expression):
+                print(result)
+        except Exception as e:
+            print(e)
 
 
 if __name__ == "__main__":
