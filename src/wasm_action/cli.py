@@ -7,7 +7,7 @@ import json
 from . import lib
 from .warg.crypto import generate_key
 from .wasm import runtime
-from .util import error_handler
+from .util import cli_error_handler
 
 
 @click.group()
@@ -30,22 +30,16 @@ def version():
 @click.option('--path', required=True, help="filename")
 @click.option('--warg-token', required=False, envvar='WARG_TOKEN', help="warg token (or $WARG_TOKEN)")
 @click.option('--warg-private-key', required=False, envvar='WARG_PRIVATE_KEY', help="warg private key (or $WARG_PRIVATE_KEY)")
+@cli_error_handler
 def push(registry, package, path, warg_token, warg_private_key):
-
-    try:
-
-        lib.push_file(
-            registry=registry,
-            package=package,
-            path=path,
-            warg_token=warg_token,
-            warg_private_key=warg_private_key,
-            cli=True,
-        )
-
-    except Exception as e:
-        print(e)
-        sys.exit(1)
+    lib.push_file(
+        registry=registry,
+        package=package,
+        path=path,
+        warg_token=warg_token,
+        warg_private_key=warg_private_key,
+        cli=True,
+    )
 
 
 @cli.command(help="Pull from registry")
@@ -53,24 +47,19 @@ def push(registry, package, path, warg_token, warg_private_key):
 @click.option('-p', '--package', required=True, help="package spec")
 @click.option('--path', required=False, help="filename")
 @click.option('--warg-token', required=False, envvar='WARG_TOKEN', help="warg token (or $WARG_TOKEN)")
+@cli_error_handler
 def pull(registry, package, path=None, warg_token=None):
-
-    try:
-
-        lib.pull_file(
-            registry=registry,
-            package=package,
-            path=path,
-            warg_token=warg_token,
-            cli=True,
-        )
-
-    except Exception as e:
-        print(e)
-        sys.exit(1)
+    lib.pull_file(
+        registry=registry,
+        package=package,
+        path=path,
+        warg_token=warg_token,
+        cli=True,
+    )
 
 
 @cli.command(help="Generate private key or read one from stdin")
+@cli_error_handler
 def key():
     """Generate key in json format.
 
@@ -92,6 +81,7 @@ def key():
 @click.argument('filename', required=True)
 @click.argument('func', required=False)
 @click.argument('args', nargs=-1)
+@cli_error_handler
 def run(filename, func, args):
     """Run a WebAssembly file"""
 
@@ -114,7 +104,7 @@ If calc.wasm exports `add` and `mul`, then the following is a valid expression i
 """)
 @click.argument('filename', required=True)
 @click.argument('expression', required=False)
-@error_handler
+@cli_error_handler
 def evaluate(filename, expression):
     """Evaluates an expression against a wasm module instance.
 
