@@ -18,7 +18,7 @@ class TestUtil(unittest.TestCase):
         for pattern, version in {
                 "1.2.3": "1.2.3",
                 "YYYY.MM.DD": "2006.2.6",
-                "YYYY.YY.0Y.MM.0M.WW.0W.DD.0D": '2006.6.06.2.02.6.06.6.06',
+                "YYYY.YY.MM.WW.DD": '2006.6.2.6.6',
             }.items():
 
             # eval for current date

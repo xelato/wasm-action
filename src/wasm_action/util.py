@@ -83,18 +83,14 @@ def parse_package(package):
 
 
 class CalVer:
-    """Calendar Versioning https://calver.org."""
+    """Calendar Versioning according to https://calver.org (zero-padded formats excluded)"""
 
     SPEC = {
         'YYYY': lambda d: str(d.year),
         'YY': lambda d: str(d.year % 100),
-        '0Y': lambda d: str(d.year % 100).zfill(2),
         'MM': lambda d: str(d.month),
-        '0M': lambda d: str(d.month).zfill(2),
         'WW': lambda d: str(d.isocalendar().week),
-        '0W': lambda d: str(d.isocalendar().week).zfill(2),
         'DD': lambda d: str(d.day),
-        '0D': lambda d: str(d.day).zfill(2),
     }
 
     def __init__(self, pattern):
