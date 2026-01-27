@@ -10,6 +10,8 @@ class TestUtil(unittest.TestCase):
         self.assertEqual(parse_package('wasi/io'), ('wasi', 'io', None))
         self.assertEqual(parse_package('wasi:io@0.1.0'), ('wasi', 'io', '0.1.0'))
         self.assertEqual(parse_package('wasi/io@0.1.0'), ('wasi', 'io', '0.1.0'))
+        # calendar versioning
+        parse_package('foo:bar@YY.MM.DD')
 
     def test_calver(self):
         then = datetime.datetime(year=2006, month=2, day=6)
