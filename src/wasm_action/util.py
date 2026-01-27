@@ -97,14 +97,19 @@ class CalVer:
         '0D': lambda d: str(d.day).zfill(2),
     }
 
-    def __init__(self, pattern, clock=datetime.datetime):
+    def __init__(self, pattern):
         self.pattern = pattern
-        self.clock = clock
 
-    def version(self):
-        utc_now = self.clock.now(datetime.UTC)
+    def now(self) -> datetime.datetime:
+        if not hasattr(datetime, 'UTC'):
+            # 3.10
+            return datetime.datetime.utcnow()
+        return datetime.datetime.now(datetime.UTC)
+
+    def version(self, at: datetime.datetime=None):
+        when = at or self.now()
         return ".".join([
-            self.SPEC[part.upper()](utc_now)
+            self.SPEC[part.upper()](when)
             if part.upper() in self.SPEC else part
             for part in self.pattern.split('.')
         ])
