@@ -2,6 +2,7 @@
 import os
 import re
 import sys
+import datetime
 import functools
 import requests
 import semver
@@ -74,9 +75,44 @@ def parse_package(package):
     if not re.match(r"[\w-]+", name):
         raise ValueError("invalid package name")
     if version:
+        # evaluate any calver specifiers
+        version = CalVer(version).version()
         # throws on failed validation
         semver.Version.parse(version)
     return namespace, name, version
+
+
+class CalVer:
+    """Calendar Versioning https://calver.org."""
+
+    SPEC = {
+        'YYYY': lambda d: str(d.year),
+        'YY': lambda d: str(d.year % 100),
+        '0Y': lambda d: str(d.year % 100).zfill(2),
+        'MM': lambda d: str(d.month),
+        '0M': lambda d: str(d.month).zfill(2),
+        'WW': lambda d: str(d.isocalendar().week),
+        '0W': lambda d: str(d.isocalendar().week).zfill(2),
+        'DD': lambda d: str(d.day),
+        '0D': lambda d: str(d.day).zfill(2),
+    }
+
+    def __init__(self, pattern):
+        self.pattern = pattern
+
+    def now(self) -> datetime.datetime:
+        if not hasattr(datetime, 'UTC'):
+            # 3.10
+            return datetime.datetime.utcnow()
+        return datetime.datetime.now(datetime.UTC)
+
+    def version(self, at: datetime.datetime=None):
+        when = at or self.now()
+        return ".".join([
+            self.SPEC[part.upper()](when)
+            if part.upper() in self.SPEC else part
+            for part in self.pattern.split('.')
+        ])
 
 
 class cli_error_handler(object):
@@ -90,5 +126,5 @@ class cli_error_handler(object):
         try:
             return self.func(*args, **kwargs)
         except Exception as e:
-            print(e)
-            sys.exit(1)
+            # print error and return 1
+            sys.exit(e)
