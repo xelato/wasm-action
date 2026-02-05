@@ -24,16 +24,65 @@ class Module:
         self._store = wasmtime.Store()
         self._module = wasmtime.Module(self._store.engine, module_bytes)
 
+    def wasi(self):
+        return WASI(store=self._store, module=self._module)
+
     def instance(self):
         return Instance(store=self._store, module=self._module)
 
 
-class Instance:
+class WASI:
 
     def __init__(self, store, module):
         self._store = store
         self._module = module
-        self._instance = None
+
+        self.linker = wasmtime.Linker(self._store.engine)
+        self.linker.define_wasi()
+
+        self._wasi = wasmtime.WasiConfig()
+        self._wasi.inherit_stdin()
+        self._wasi.inherit_stdout()
+        self._wasi.inherit_stderr()
+
+        self._environ = {}
+
+    def mount(self, host_path, guest_path, readonly=True):
+        """Bind mount `host_path` as `guest_path` in the WASM instance."""
+        self._wasi.preopen_dir(
+            host_path,
+            guest_path,
+            dir_perms=wasmtime.DirPerms.READ_ONLY if readonly else wasmtime.DirPerms.READ_WRITE,
+            file_perms=wasmtime.FilePerms.READ_ONLY if readonly else wasmtime.FilePerms.READ_WRITE,
+        )
+        return self
+
+    def argv(self, argv):
+        self._wasi.argv = argv
+        return self
+
+    def env(self, key, value):
+        """Configure an environment variable in the WASM instance"""
+        self._environ[key] = value
+        return self
+
+    def instance(self):
+        self._wasi.env = [
+            (k, v) for (k, v) in self._environ.items()
+        ]
+        self._store.set_wasi(self._wasi)
+        instance = self.linker.instantiate(self._store, self._module)
+        return Instance(store=self._store, module=self._module, instance=instance)
+
+
+class Instance:
+
+    def __init__(self, store, module, instance=None):
+        self._store = store
+        self._module = module
+        if instance:
+            assert isinstance(instance, wasmtime.Instance)
+        self._instance = instance
         self._imports = []
 
     def __getattr__(self, name):
