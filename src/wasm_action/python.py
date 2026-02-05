@@ -1,12 +1,14 @@
 
 """
-Run sandboxed Python through WASM/WASI.
+Python in a sandbox using WASM/WASI.
+
 uv run --python 3.14 wasm-action python
 """
 
 import os
 import sys
 import tempfile
+import shutil
 
 from . import cache
 from . import lib
@@ -17,7 +19,7 @@ PYTHON = {
     '3.14': {
         'registry': 'wa.dev',
         'package': 'xelato:python314',
-        'version': '26.0.0',
+        'version': '26.2.6',
         'sha256': '6a9e23d3db2ea0883fb74bfe9540bcb27bd167be1dab39546a5376112f4beea0',
     },
 
@@ -45,6 +47,7 @@ def run_python(args):
         print("Stored object in local cache")
 
     # Lib folder
+    # Reusing the host Python installation
     python_lib = os.path.dirname(os.__file__)
     print("Using python lib {}".format(python_lib))
 
@@ -61,7 +64,7 @@ def run_python(args):
 
         # configure python lib
         .env('PYTHONPATH', '/lib:/build')
-        .mount(python_lib, '/lib')
+        .mount(python_lib, '/lib', readonly=True)
 
         # todo: ModuleNotFoundError: No module named '_sysconfigdata__wasi_wasm32-wasi'
         #.mount('{}/github/python/cpython/builddir/wasi/build/lib.wasi-wasm32-3.14'.format(os.environ['HOME']), '/build')
@@ -69,9 +72,9 @@ def run_python(args):
         # provide a /tmp folder
         .mount(tmp, '/tmp', readonly=False)
 
-        # get access to CWD for running external code
-        # todo: change to CWD when started
-        .mount(os.getcwd(), "/cwd")
+        # Get access to CWD for running user code.
+        # note: it may be preferable to set this to a subdir of /
+        .mount(os.getcwd(), "/", readonly=True)
 
         .instance()
     )
