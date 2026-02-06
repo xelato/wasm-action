@@ -2,7 +2,7 @@
 """
 Python in a sandbox using WASM/WASI.
 
-uv run --python 3.14 wasm-action python
+uvx --python 3.14 wasm-action python
 """
 
 import os
@@ -81,10 +81,11 @@ def run_python(args):
     )
 
     # todo: exit code?
-    instance.function('_start')()
-
-    # clean-up tmp dir
-    shutil.rmtree(tmp)
+    try:
+        instance.function('_start')()
+    finally:
+        # clean-up tmp dir
+        shutil.rmtree(tmp)
 
     """
     https://github.com/python/cpython/blob/main/Modules/getpath.py
