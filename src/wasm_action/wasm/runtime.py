@@ -31,6 +31,34 @@ class Module:
         return Instance(store=self._store, module=self._module)
 
 
+class Instance:
+
+    def __init__(self, store, module, instance=None):
+        self._store = store
+        self._module = module
+        if instance:
+            assert isinstance(instance, wasmtime.Instance)
+        self._instance = instance
+        self._imports = []
+
+    def __getattr__(self, name):
+        """Ususally called by the evaluator to resolve function names."""
+        return self.function(name)
+
+    def function(self, name):
+        if not self._instance:
+            self._instance = wasmtime.Instance(self._store, self._module, self._imports)
+        exports = self._instance.exports(self._store)
+        if name not in exports.keys():
+            print('defined functions:', list(exports.keys()))
+            assert False, "function not found: {}".format(name)
+        return Function(store=self._store, func=exports[name], name=name)
+
+    def evaluate(self, text):
+        """Evaluate an expression against functions exported in the instance."""
+        return expression.evaluate(text or '', obj=self)
+
+
 class WASI:
 
     def __init__(self, store, module):
@@ -73,34 +101,6 @@ class WASI:
         self._store.set_wasi(self._wasi)
         instance = self.linker.instantiate(self._store, self._module)
         return Instance(store=self._store, module=self._module, instance=instance)
-
-
-class Instance:
-
-    def __init__(self, store, module, instance=None):
-        self._store = store
-        self._module = module
-        if instance:
-            assert isinstance(instance, wasmtime.Instance)
-        self._instance = instance
-        self._imports = []
-
-    def __getattr__(self, name):
-        """Ususally called by the evaluator to resolve function names."""
-        return self.function(name)
-
-    def function(self, name):
-        if not self._instance:
-            self._instance = wasmtime.Instance(self._store, self._module, self._imports)
-        exports = self._instance.exports(self._store)
-        if name not in exports.keys():
-            print('defined functions:', list(exports.keys()))
-            assert False, "function not found: {}".format(name)
-        return Function(store=self._store, func=exports[name], name=name)
-
-    def evaluate(self, text):
-        """Evaluate an expression against functions exported in the instance."""
-        return expression.evaluate(text or '', obj=self)
 
 
 class Function:
