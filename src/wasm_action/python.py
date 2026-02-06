@@ -45,6 +45,7 @@ def run_python(args):
 
         cache.store(download.content)
         print("Stored object in local cache")
+        content = download.content
 
     # Lib folder
     # Reusing the host Python installation
