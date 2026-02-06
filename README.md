@@ -86,30 +86,20 @@ $ pbpaste | uvx wasm-action key | jq .public
 ## CLI
 The tool can be run without installing, using [uv](https://docs.astral.sh/uv/).
 ```
-$ uvx wasm-action --help
+$ uvx wasm-action --help          
 Usage: wasm-action [OPTIONS] COMMAND [ARGS]...
 
 Options:
   --help  Show this message and exit.
 
 Commands:
+  eval     Expression evaluator
   key      Generate private key or read one from stdin
   pull     Pull from registry
   push     Push to registry
+  python   Python in a sandbox
   version  Print version
-```
-```
-$ uvx wasm-action pull --help
-Usage: wasm-action pull [OPTIONS]
-
-  Pull from a WebAssembly registry
-
-Options:
-  --registry TEXT    registry domain name  [required]
-  --package TEXT     package spec  [required]
-  --path TEXT        filename
-  --warg-token TEXT  warg token
-  --help             Show this message and exit.
+  x        Run a WebAssembly file
 ```
 ```
 $ uvx wasm-action pull --registry wa.dev --package wasi:io
