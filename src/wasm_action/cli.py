@@ -5,6 +5,7 @@ import importlib.metadata
 import json
 
 from . import lib
+from . import python
 from .warg.crypto import generate_key
 from .wasm import runtime
 from .util import cli_error_handler
@@ -139,6 +140,16 @@ def evaluate(filename, expression):
                 print(result)
         except Exception as e:
             print(e)
+
+
+@cli.command('python', help="Python in a sandbox", add_help_option=False, context_settings=dict(
+    ignore_unknown_options=True,
+))
+@click.argument('args', nargs=-1, type=click.UNPROCESSED)
+@cli_error_handler
+def run_python(args):
+    """Run a WASI-compiled wasm build of cpython"""
+    python.run_python(args)
 
 
 if __name__ == "__main__":
