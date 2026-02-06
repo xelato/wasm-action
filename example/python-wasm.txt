@@ -1,0 +1,90 @@
+
+============================================================
+  SYSTEM AND PYTHON INFORMATION REPORT
+  Generated: 2026-02-06 11:06:34
+============================================================
+
+============================================================
+  PYTHON INTERPRETER INFORMATION
+============================================================
+Python Version: 3.14.2+ (heads/3.14-dirty:4f4c20412b7, Jan 26 2026, 11:00:46) [Clang 21.1.4-wasi-sdk (https://github.com/llvm/llvm-project 222fc11f2b8f25f6a0f
+Python Version Info: sys.version_info(major=3, minor=14, micro=2, releaselevel='final', serial=0)
+Python Implementation: CPython
+Python Compiler: Clang 21.1.4-wasi-sdk (https://github.com/llvm/llvm-project 222fc11f2b8f25f6a0f
+Python Build: ('heads/3.14-dirty:4f4c20412b7', 'Jan 26 2026 11:00:46')
+Python Branch: heads/3.14-dirty
+Python Revision: 4f4c20412b7
+
+============================================================
+  PLATFORM INFORMATION
+============================================================
+System: wasi
+Release: 0.0.0
+Version: 0.0.0
+Machine: wasm32
+Processor: 
+Architecture: ('32bit', '')
+Platform: wasi-0.0.0-wasm32-32bit
+Node (hostname): (none)
+
+============================================================
+  PATH INFORMATION
+============================================================
+Python Executable: 
+Python Prefix: /usr/local
+Python Exec Prefix: /usr/local
+Base Prefix: /usr/local
+Base Exec Prefix: /usr/local
+
+Site Packages:
+  - /opt/homebrew/lib/python3.14/site-packages
+  - /usr/local/lib/python3.14/site-packages
+
+User Site Packages: None
+
+Python Path (sys.path):
+  1. /example
+  2. /lib
+  3. /build
+  4. /usr/local/lib/python314.zip
+  5. /usr/local/lib/python3.14
+  6. /usr/local/lib/python3.14/lib-dynload
+  7. /opt/homebrew/lib/python3.14/site-packages
+
+============================================================
+  ENVIRONMENT VARIABLES
+============================================================
+PATH: Not set
+PYTHONPATH: /lib:/build
+PYTHONHOME: Not set
+HOME: Not set
+USER: Not set
+SHELL: Not set
+LANG: Not set
+LC_ALL: Not set
+VIRTUAL_ENV: Not set
+
+============================================================
+  SYSTEM INFORMATION
+============================================================
+Current Working Directory: /
+User: Unknown
+Process ID: 42
+File System Encoding: utf-8
+Default Encoding: utf-8
+CPU Count: 1
+Load Average: Not available on this platform
+
+============================================================
+  RUNTIME INFORMATION
+============================================================
+Max Integer Size: 2147483647
+Max Unicode: 1114111
+Recursion Limit: 1000
+Byte Order: little
+Float Info: sys.float_info(max=1.7976931348623157e+308, max_exp=1024, max_10_exp=308, min=2.2250738585072014e-308, min_exp=-1021, min_10_exp=-307, dig=15, mant_dig=53, epsilon=2.220446049250313e-16, radix=2, rounds=1)
+Int Info: sys.int_info(bits_per_digit=30, sizeof_digit=4, default_max_str_digits=4300, str_digits_check_threshold=640)
+
+============================================================
+  END OF REPORT
+============================================================
