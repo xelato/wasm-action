@@ -8,6 +8,7 @@
 * Supported artifact types: wasm
 * Supported actions: push, pull
 * Supports Python 3.10+ on Linux, MacOS and Windows
+* Python sandbox using wasm build of cpython 3.14
 
 #### Planned
 * OCI registry support (a.k.a. Docker registry)
