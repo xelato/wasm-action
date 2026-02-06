@@ -142,7 +142,7 @@ def evaluate(filename, expression):
             print(e)
 
 
-@cli.command('python', help="Run sandboxed Python", context_settings=dict(
+@cli.command('python', help="Run sandboxed Python", add_help_option=False, context_settings=dict(
     ignore_unknown_options=True,
 ))
 @click.argument('args', nargs=-1, type=click.UNPROCESSED)
