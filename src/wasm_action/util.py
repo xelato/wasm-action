@@ -121,5 +121,5 @@ class cli_error_handler(object):
         try:
             return self.func(*args, **kwargs)
         except Exception as e:
-            # print error and return 1
-            sys.exit(e)
+            sys.stderr.write("{}\n".format(str(e)))
+            sys.exit(1)
