@@ -1,4 +1,3 @@
-import os
 import hashlib
 import base64
 import time
@@ -9,7 +8,6 @@ from dataclasses import dataclass
 from . import proto
 from .client import WargClient, PackageLogs
 
-import warg_openapi
 
 
 @dataclass

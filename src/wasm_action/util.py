@@ -4,7 +4,6 @@ import re
 import sys
 import datetime
 import functools
-import requests
 import semver
 
 
