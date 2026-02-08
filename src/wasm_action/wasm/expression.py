@@ -46,7 +46,9 @@ def parse(value: str) -> ast.AST:
             # ignored
             continue
         if x.__class__ not in ALLOWED_SYNTAX:
-            raise SyntaxError("{} not allowed in expression".format(x.__class__.__name__))
+            raise SyntaxError(
+                "{} not allowed in expression".format(x.__class__.__name__)
+            )
     return node
 
 
@@ -56,9 +58,8 @@ def evaluate(expression, obj):
 
 
 class Evaluator:
-
     def __init__(self, obj):
-        self.obj= obj
+        self.obj = obj
 
     def evaluate(self, node: ast.AST) -> object:
         if isinstance(node, ast.Module):

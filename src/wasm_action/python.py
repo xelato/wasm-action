@@ -1,4 +1,3 @@
-
 """
 Python in a sandbox using WASM/WASI.
 
@@ -15,33 +14,31 @@ from . import lib
 from .wasm import runtime
 
 PYTHON = {
-
-    '3.14': {
-        'registry': 'wa.dev',
-        'package': 'xelato:python314',
-        'version': '26.2.6',
-        'sha256': '6a9e23d3db2ea0883fb74bfe9540bcb27bd167be1dab39546a5376112f4beea0',
+    "3.14": {
+        "registry": "wa.dev",
+        "package": "xelato:python314",
+        "version": "26.2.6",
+        "sha256": "6a9e23d3db2ea0883fb74bfe9540bcb27bd167be1dab39546a5376112f4beea0",
     },
-
 }
 
 
 def run_python(args):
     v = sys.version_info
     version = "{}.{}".format(v.major, v.minor)
-    python = PYTHON.get(version) or PYTHON['3.14']
+    python = PYTHON.get(version) or PYTHON["3.14"]
 
-    if cache.exists(python['sha256']):
+    if cache.exists(python["sha256"]):
         print("Found object in cache")
-        content = cache.fetch(python['sha256'])
+        content = cache.fetch(python["sha256"])
     else:
         print("Downloading python build")
         download = lib.pull(
-            registry=python['registry'],
-            package="{}@{}".format(python['package'], python['version'])
+            registry=python["registry"],
+            package="{}@{}".format(python["package"], python["version"]),
         )
-        if download.digest != "sha256:{}".format(python['sha256']):
-            raise ValueError('unexpected digest while downloading build')
+        if download.digest != "sha256:{}".format(python["sha256"]):
+            raise ValueError("unexpected digest while downloading build")
 
         cache.store(download.content)
         print("Stored object in local cache")
@@ -52,37 +49,32 @@ def run_python(args):
     python_lib = os.path.dirname(os.__file__)
     print("Using python lib {}".format(python_lib))
 
-    argv = ['python']
+    argv = ["python"]
     argv.extend(args)
 
-    tmp = tempfile.mkdtemp('py')
+    tmp = tempfile.mkdtemp("py")
 
-    instance = (runtime
-        .module(content)
+    instance = (
+        runtime.module(content)
         .wasi()
         # pass all cli arguments to the wasm "process"
         .argv(argv)
-
         # configure python lib
-        .env('PYTHONPATH', '/lib:/build')
-        .mount(python_lib, '/lib', readonly=True)
-
+        .env("PYTHONPATH", "/lib:/build")
+        .mount(python_lib, "/lib", readonly=True)
         # todo: ModuleNotFoundError: No module named '_sysconfigdata__wasi_wasm32-wasi'
-        #.mount('{}/github/python/cpython/builddir/wasi/build/lib.wasi-wasm32-3.14'.format(os.environ['HOME']), '/build')
-
+        # .mount('{}/github/python/cpython/builddir/wasi/build/lib.wasi-wasm32-3.14'.format(os.environ['HOME']), '/build')
         # provide a /tmp folder
-        .mount(tmp, '/tmp', readonly=False)
-
+        .mount(tmp, "/tmp", readonly=False)
         # Get access to CWD for running user code.
         # note: it may be preferable to set this to a subdir of /
         .mount(os.getcwd(), "/", readonly=True)
-
         .instance()
     )
 
     # todo: exit code?
     try:
-        instance.function('_start')()
+        instance.function("_start")()
     finally:
         # clean-up tmp dir
         shutil.rmtree(tmp)
