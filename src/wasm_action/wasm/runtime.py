@@ -1,4 +1,3 @@
-
 import os
 import wasmtime
 
@@ -7,9 +6,9 @@ from . import expression
 
 def module_file(filename):
     if not os.path.exists(filename) or not os.path.isfile(filename):
-        raise Exception('file not found: {}'.format(filename))
+        raise Exception("file not found: {}".format(filename))
 
-    with open(filename, 'rb') as f:
+    with open(filename, "rb") as f:
         module_bytes = f.read()
     return module(module_bytes)
 
@@ -19,7 +18,6 @@ def module(module_bytes):
 
 
 class Module:
-
     def __init__(self, module_bytes):
         self._store = wasmtime.Store()
         self._module = wasmtime.Module(self._store.engine, module_bytes)
@@ -32,7 +30,6 @@ class Module:
 
 
 class Instance:
-
     def __init__(self, store, module, instance=None):
         self._store = store
         self._module = module
@@ -50,17 +47,16 @@ class Instance:
             self._instance = wasmtime.Instance(self._store, self._module, self._imports)
         exports = self._instance.exports(self._store)
         if name not in exports.keys():
-            print('defined functions:', list(exports.keys()))
+            print("defined functions:", list(exports.keys()))
             assert False, "function not found: {}".format(name)
         return Function(store=self._store, func=exports[name], name=name)
 
     def evaluate(self, text):
         """Evaluate an expression against functions exported in the instance."""
-        return expression.evaluate(text or '', obj=self)
+        return expression.evaluate(text or "", obj=self)
 
 
 class WASI:
-
     def __init__(self, store, module):
         self._store = store
         self._module = module
@@ -80,8 +76,12 @@ class WASI:
         self._wasi.preopen_dir(
             host_path,
             guest_path,
-            dir_perms=wasmtime.DirPerms.READ_ONLY if readonly else wasmtime.DirPerms.READ_WRITE,
-            file_perms=wasmtime.FilePerms.READ_ONLY if readonly else wasmtime.FilePerms.READ_WRITE,
+            dir_perms=wasmtime.DirPerms.READ_ONLY
+            if readonly
+            else wasmtime.DirPerms.READ_WRITE,
+            file_perms=wasmtime.FilePerms.READ_ONLY
+            if readonly
+            else wasmtime.FilePerms.READ_WRITE,
         )
         return self
 
@@ -95,16 +95,13 @@ class WASI:
         return self
 
     def instance(self):
-        self._wasi.env = [
-            (k, v) for (k, v) in self._environ.items()
-        ]
+        self._wasi.env = [(k, v) for (k, v) in self._environ.items()]
         self._store.set_wasi(self._wasi)
         instance = self.linker.instantiate(self._store, self._module)
         return Instance(store=self._store, module=self._module, instance=instance)
 
 
 class Function:
-
     _types = {
         "i32": int,
         "i64": int,
@@ -140,6 +137,6 @@ class Function:
         return result
 
     def __str__(self):
-        return "{}({})".format(self.name, ", ".join([
-            str(p) for p in self._func_type.params
-        ]))
+        return "{}({})".format(
+            self.name, ", ".join([str(p) for p in self._func_type.params])
+        )

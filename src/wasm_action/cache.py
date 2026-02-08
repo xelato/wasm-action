@@ -1,8 +1,7 @@
-
 import os
 import hashlib
 
-CACHE = os.path.join(os.environ['HOME'], '.cache', 'wasm-action')
+CACHE = os.path.join(os.environ["HOME"], ".cache", "wasm-action")
 
 
 def fetch(content_hash: str) -> bytes:
@@ -14,12 +13,12 @@ def fetch(content_hash: str) -> bytes:
     if not os.path.exists(filename):
         return None
 
-    with open(filename, 'rb') as f:
+    with open(filename, "rb") as f:
         content = f.read()
 
     computed_hash = hashlib.sha256(content).hexdigest()
     if computed_hash != content_hash:
-        raise ValueError('content with hash has been tempered: {}'.format(content_hash))
+        raise ValueError("content with hash has been tempered: {}".format(content_hash))
     return content
 
 
@@ -30,7 +29,7 @@ def store(content: bytes):
 
     content_hash = hashlib.sha256(content).hexdigest()
     filename = os.path.join(CACHE, content_hash)
-    with open(filename, 'wb') as f:
+    with open(filename, "wb") as f:
         f.write(content)
 
 

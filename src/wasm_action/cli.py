@@ -26,11 +26,21 @@ def version():
 
 
 @cli.command(help="Push to registry")
-@click.option('-r', '--registry', required=True, help="registry domain name")
-@click.option('-p', '--package', required=True, help="package spec")
-@click.option('--path', required=True, help="filename")
-@click.option('--warg-token', required=False, envvar='WARG_TOKEN', help="warg token (or $WARG_TOKEN)")
-@click.option('--warg-private-key', required=False, envvar='WARG_PRIVATE_KEY', help="warg private key (or $WARG_PRIVATE_KEY)")
+@click.option("-r", "--registry", required=True, help="registry domain name")
+@click.option("-p", "--package", required=True, help="package spec")
+@click.option("--path", required=True, help="filename")
+@click.option(
+    "--warg-token",
+    required=False,
+    envvar="WARG_TOKEN",
+    help="warg token (or $WARG_TOKEN)",
+)
+@click.option(
+    "--warg-private-key",
+    required=False,
+    envvar="WARG_PRIVATE_KEY",
+    help="warg private key (or $WARG_PRIVATE_KEY)",
+)
 @cli_error_handler
 def push(registry, package, path, warg_token, warg_private_key):
     lib.push_file(
@@ -44,10 +54,15 @@ def push(registry, package, path, warg_token, warg_private_key):
 
 
 @cli.command(help="Pull from registry")
-@click.option('-r', '--registry', required=True, help="registry domain name")
-@click.option('-p', '--package', required=True, help="package spec")
-@click.option('--path', required=False, help="filename")
-@click.option('--warg-token', required=False, envvar='WARG_TOKEN', help="warg token (or $WARG_TOKEN)")
+@click.option("-r", "--registry", required=True, help="registry domain name")
+@click.option("-p", "--package", required=True, help="package spec")
+@click.option("--path", required=False, help="filename")
+@click.option(
+    "--warg-token",
+    required=False,
+    envvar="WARG_TOKEN",
+    help="warg token (or $WARG_TOKEN)",
+)
 @cli_error_handler
 def pull(registry, package, path=None, warg_token=None):
     lib.pull_file(
@@ -74,27 +89,24 @@ def key():
         # read private key from standard input
         private_key = sys.stdin.read()
         data = generate_key(private_key)
-        del data['private']
+        del data["private"]
     print(json.dumps(data, indent=4))
 
 
-@cli.command('x', help="Run a WebAssembly file")
-@click.argument('filename', required=True)
-@click.argument('func', required=False)
-@click.argument('args', nargs=-1)
+@cli.command("x", help="Run a WebAssembly file")
+@click.argument("filename", required=True)
+@click.argument("func", required=False)
+@click.argument("args", nargs=-1)
 @cli_error_handler
 def run(filename, func, args):
     """Run a WebAssembly file"""
 
-    print(runtime
-        .module_file(filename)
-        .instance()
-        .function(func)
-        .call(*args)
-    )
+    print(runtime.module_file(filename).instance().function(func).call(*args))
 
 
-@cli.command('eval', help="""Expression evaluator
+@cli.command(
+    "eval",
+    help="""Expression evaluator
 
 Expression(s) specified in EXPRESSION or STDIN will be evaluated against the specified WebAssembly module.
 The input must conform to a subset of Python's syntax that includes literals, tuples and function calls.
@@ -102,9 +114,10 @@ The latter are resolved to a valid function present in the exports of the WebAss
 Example:
 If calc.wasm exports `add` and `mul`, then the following is a valid expression in such context:
 "mul(2, 3), add(mul(4, 5), 3)"
-""")
-@click.argument('filename', required=True)
-@click.argument('expression', required=False)
+""",
+)
+@click.argument("filename", required=True)
+@click.argument("expression", required=False)
 @cli_error_handler
 def evaluate(filename, expression):
     """Evaluates an expression against a wasm module instance.
@@ -115,10 +128,7 @@ def evaluate(filename, expression):
     Expression syntax follows a subset of Python syntax.
 
     """
-    instance = (runtime
-        .module_file(filename)
-        .instance()
-    )
+    instance = runtime.module_file(filename).instance()
 
     expression = sys.stdin.read() if not sys.stdin.isatty() else expression
 
@@ -131,7 +141,8 @@ def evaluate(filename, expression):
         return
 
     # repl mode
-    import readline #noqa
+    import readline  # noqa
+
     prompt = "{} >>> ".format(os.path.basename(filename))
     while True:
         expression = input(prompt)
@@ -142,10 +153,15 @@ def evaluate(filename, expression):
             print(e)
 
 
-@cli.command('python', help="Python in a sandbox", add_help_option=False, context_settings=dict(
-    ignore_unknown_options=True,
-))
-@click.argument('args', nargs=-1, type=click.UNPROCESSED)
+@cli.command(
+    "python",
+    help="Python in a sandbox",
+    add_help_option=False,
+    context_settings=dict(
+        ignore_unknown_options=True,
+    ),
+)
+@click.argument("args", nargs=-1, type=click.UNPROCESSED)
 @cli_error_handler
 def run_python(args):
     """Run a WASI-compiled wasm build of cpython"""
