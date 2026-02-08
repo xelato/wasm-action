@@ -30,7 +30,7 @@ class TestWargPush(unittest.TestCase):
             assert False, "did not exit"
 
     @use_cassette('test/vcr/action-push-warg-same-source.yaml')
-    def test_warg_push_already_released(self):
+    def test_warg_push_already_released_same_source(self):
         os.environ['GITHUB_OUTPUT'] = tempfile.mktemp()
         os.environ['WARG_PRIVATE_KEY'] = DUMMY_PRIVATE_KEY
         try:

@@ -1,6 +1,6 @@
 import unittest
 
-from wasm_action.warg.crypto import PrivateKey, PublicKey
+from wasm_action.warg.crypto import PrivateKey
 
 
 class TestKeys(unittest.TestCase):

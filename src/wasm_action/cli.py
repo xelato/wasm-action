@@ -131,7 +131,7 @@ def evaluate(filename, expression):
         return
 
     # repl mode
-    import readline
+    import readline #noqa
     prompt = "{} >>> ".format(os.path.basename(filename))
     while True:
         expression = input(prompt)

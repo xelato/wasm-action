@@ -34,5 +34,14 @@ module-name = ["wasm_action", "warg_openapi"]
 [dependency-groups]
 dev = [
     "pytest>=9.0.2",
+    "ruff>=0.15.0",
     "vcrpy>=8.1.0",
+]
+
+
+[tool.ruff]
+exclude = [
+    "example/",
+    "src/warg_openapi",
+    "src/wasm_action/warg/proto.py",
 ]

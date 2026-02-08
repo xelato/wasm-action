@@ -1,19 +1,12 @@
-import sys
-import enum
 import glob
-import os
 import hashlib
-import base64
 import json
-import click
 import semver
 import validators
-import requests
 
 from .registry import RegistryType, detect_registry_settings
 from .util import add_github_output, format_package, parse_package, extract_version
 from .warg.crypto import PrivateKey
-from .warg.client import WargClient
 from .warg.actions import warg_pull, warg_push
 
 
@@ -73,7 +66,7 @@ def push(registry, package, content_bytes, warg_token, warg_private_key, cli=Fal
 
     try:
         private_key = PrivateKey.load(warg_private_key)
-    except:
+    except Exception:
         raise error("Error loading private key")
     else:
         if cli:
@@ -99,7 +92,7 @@ def push(registry, package, content_bytes, warg_token, warg_private_key, cli=Fal
             message = str(e.body)
             try:
                 message = json.loads(e.body)['message']
-            except:
+            except Exception:
                 pass
         if cli:
             add_github_output('error', message)
