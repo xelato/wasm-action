@@ -31,7 +31,11 @@ def run_python(args):
     if cache.exists(python["sha256"]):
         content = cache.fetch(python["sha256"])
     else:
-        print("Downloading {} with version {}".format(python["package"], python["version"]))
+        print(
+            "Downloading {} with version {}".format(
+                python["package"], python["version"]
+            )
+        )
         download = lib.pull(
             registry=python["registry"],
             package="{}@{}".format(python["package"], python["version"]),
