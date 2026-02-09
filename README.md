@@ -156,3 +156,23 @@ $ pip install wasm-action
 PackageDownload(namespace='wasi', name='io', version='0.2.0', content='...', digest='sha256:c33b1dbf050f64229ff4decbf9a3d3420e0643a86f5f0cea29f81054820020a6')
 ```
 However, the library interface is not yet standardised and may (and will!) change.
+
+## Python Sandbox
+Experimental support for running a [WASI](https://github.com/WebAssembly/WASI) build of python/cpython@3.14.
+
+```
+$ uvx --python 3.14 wasm-action python --version
+Python 3.14.2+
+```
+
+### Host Python
+The Python interpreter used to run `wasm-action`. It orchestrates and mediates the guest Python execution under a supported WebAssembly Runtime ([wasmtime](https://wasmtime.dev)).
+
+### Guest Python
+The CPython interpreter that was compiled to WebAssembly. Guest Python runs in a restricted "sandbox" environment. In addition to the .wasm module file, it also requires the Python standard library folder, currently being reused from the host Python installation.
+
+#### Layout
+
+#### Environment variables
+
+#### Limitations
