@@ -29,10 +29,9 @@ def run_python(args):
     python = PYTHON.get(version) or PYTHON["3.14"]
 
     if cache.exists(python["sha256"]):
-        print("Found object in cache")
         content = cache.fetch(python["sha256"])
     else:
-        print("Downloading python build")
+        print("Downloading {} with version {}".format(python["package"], python["version"]))
         download = lib.pull(
             registry=python["registry"],
             package="{}@{}".format(python["package"], python["version"]),
@@ -41,7 +40,6 @@ def run_python(args):
             raise ValueError("unexpected digest while downloading build")
 
         cache.store(download.content)
-        print("Stored object in local cache")
         content = download.content
 
     # Lib folder
