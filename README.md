@@ -108,6 +108,9 @@ Commands:
   version  Print version
   x        Run a WebAssembly file
 ```
+<details>
+<summary><b>Pull from registry</b></summary>
+
 ```
 $ uvx wasm-action pull --registry wa.dev --package wasi:io
 registry=wa.dev
@@ -124,6 +127,19 @@ filename=wasi:io@0.2.0.wasm
 $ file wasi:io@0.2.0.wasm 
 wasi:io@0.2.0.wasm: WebAssembly (wasm) binary module version 0x1000d
 ```
+
+</details>
+
+<details>
+<summary><b>Push to registry</b></summary>
+
+```
+$ export WARG_TOKEN="..."
+$ export WARG_PRIVATE_KEY="..."
+$ uvx wasm-action push -r wa.dev -p foo:bar@1.2.3 --path foo_bar_1.2.3.wasm
+```
+      
+</details>
 
 ## Use as Library
 The package is [published](http://pypi.org/project/wasm-action/) to the Python Package Index and can be installed/depended-on under the name `wasm-action` on all [supported](https://devguide.python.org/versions/#versions) Python versions.
