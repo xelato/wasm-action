@@ -30,7 +30,8 @@ To pull a private package, define your [token](https://wa.dev/account/credential
           WARG_TOKEN: ${{ secrets.WARG_TOKEN }}
 ```
 
-#### Inputs
+<details>
+<summary>Inputs</summary>
 
 | Name | Description | Required | Example |
 |------|-------------|----------|---------|
@@ -39,7 +40,11 @@ To pull a private package, define your [token](https://wa.dev/account/credential
 |package|Package specification|yes|namespace:name@version<br>namespace:name<br>namespace/name<br>namespace/name@version|
 |path|Target path to save the download|no|file.wasm|
 
-#### Outputs:
+</details>
+
+<details>
+<summary>Outputs</summary>
+
 | Name | Description | Example |
 |------|-------------|---------|
 |registry|Registry domain name|wa.dev|
@@ -50,6 +55,8 @@ To pull a private package, define your [token](https://wa.dev/account/credential
 |package-version|Package version|1.2.3|
 |filename|Download location|foo-bar_1.2.3.wasm|
 |digest|File hash|sha256:2afffac0...|
+
+</details>
 
 ### Push to registry
 ```
@@ -84,7 +91,7 @@ $ pbpaste | uvx wasm-action key | jq .public
 ```
 
 ## CLI
-The tool can be run without installing, using [uv](https://docs.astral.sh/uv/).
+The tool can be run without installing, using [uv/uvx](https://docs.astral.sh/uv/).
 ```
 $ uvx wasm-action --help          
 Usage: wasm-action [OPTIONS] COMMAND [ARGS]...
