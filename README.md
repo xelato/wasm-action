@@ -1,6 +1,6 @@
 # wasm-action
 
-**Interact with WebAssembly registries.**
+**Wasm-action facilitates the creation, distribution and generic utilization of non-browser based WebAssembly workloads through a local-first approach with a focus on privacy and security. Written primarily in Python, it also explores the Python ecosystem's maturity for WebAssembly and beyond.**
 
 ## Features
 * Versatile use as GitHub [action](https://github.com/marketplace/actions/wasm-action), CLI or Python [library](https://pypi.org/project/wasm-action/).
