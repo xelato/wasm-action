@@ -46,12 +46,11 @@ ngrok:
 clean:
     rm -rf .venv
     rm -rf .pytest_cache
+    rm -rf .ruff_cache
     find . -name "__pycache__" | xargs -n1 rm -rf
     rm -rf dist
 
 
 check:
-    uvx ruff check
-
-format:
     uvx ruff format
+    uvx ruff check
