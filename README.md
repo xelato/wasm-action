@@ -71,25 +71,6 @@ To pull a private package, define your [token](https://wa.dev/account/credential
           WARG_PRIVATE_KEY: ${{ secrets.WARG_PRIVATE_KEY }}
 ```
 
-### Key generation
-New [token](https://wa.dev/account/credentials/new) registration and push to wa.dev require generation and configuration of a private/public key pair which can be facilitated with:
-```
-$ uvx wasm-action key
-{
-    "private": "ecdsa-p256:9y5nigLvFp3KZZQtuvN9DchpGIMUB4bwGAtkIoOCla4=",
-    "public": "ecdsa-p256:AvspSQWBK65ItTou/uVCi5qC4P+HBCi4R34OIPb3ILRl",
-    "id": "sha256:c836bd8a3082f2e8d70bdfa48296e580ab847fcdeadb351f448d03f152d44093"
-}
-```
-```
-# use private key to configure in github or save it elsewhere in a secure manner
-$ uvx wasm-action key | jq .private | pbcopy
-```
-```
-# use corresponding public key for new token registration at wa.dev
-$ pbpaste | uvx wasm-action key | jq .public
-```
-
 ## CLI
 The tool can be run without installing, using [uv/uvx](https://docs.astral.sh/uv/).
 ```
@@ -139,6 +120,29 @@ $ export WARG_PRIVATE_KEY="..."
 $ uvx wasm-action push -r wa.dev -p foo:bar@1.2.3 --path foo_bar_1.2.3.wasm
 ```
       
+</details>
+
+<details open>
+<summary><b>Key generation</b></summary>
+
+New [token](https://wa.dev/account/credentials/new) registration and push to wa.dev require generation and configuration of a private/public key pair which can be facilitated with:
+```
+$ uvx wasm-action key
+{
+    "private": "ecdsa-p256:9y5nigLvFp3KZZQtuvN9DchpGIMUB4bwGAtkIoOCla4=",
+    "public": "ecdsa-p256:AvspSQWBK65ItTou/uVCi5qC4P+HBCi4R34OIPb3ILRl",
+    "id": "sha256:c836bd8a3082f2e8d70bdfa48296e580ab847fcdeadb351f448d03f152d44093"
+}
+```
+```
+# use private key to configure in github or save it elsewhere in a secure manner
+$ uvx wasm-action key | jq .private | pbcopy
+```
+```
+# use corresponding public key for new token registration at wa.dev
+$ pbpaste | uvx wasm-action key | jq .public
+```
+
 </details>
 
 ## Use as Library
