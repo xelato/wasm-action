@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 """
+Write a Python program that continuously monitors a specific test file for changes (use polling) and when changed adds an emoji character to a matching word.
+
 File Monitor - Continuously monitors a file and adds emojis to matching words
 Includes a comprehensive emoji dictionary for automatic matching
 """
