@@ -46,31 +46,42 @@ def run_python(args):
         cache.store(download.content)
         content = download.content
 
-    # Lib folder
-    # Reusing the host Python installation
-    python_lib = os.path.dirname(os.__file__)
-    print("Using python lib {}".format(python_lib))
-
-    argv = ["python"]
-    argv.extend(args)
+    # stdlib: reuse host Python install
+    stdlib = os.path.dirname(os.__file__)
+    # sys.stdout.write("Using python stdlib {}\n".format(stdlib))
+    guest_stdlib = "/usr/local/lib/python{}".format(version)
 
     tmp = tempfile.mkdtemp("py")
+
+    # sysconfig data
+    sysdata = """build_time_vars = {}\n""".format(
+        repr(
+            {
+                # list only relevant build vars
+                "exec_prefix": "/usr/local",
+                "prefix": "/usr/local",
+            }
+        )
+    )
+    build = tempfile.mkdtemp("py")
+    with open(os.path.join(build, "_sysconfigdata__wasi_wasm32-wasi.py"), "w") as f:
+        f.write(sysdata)
 
     instance = (
         runtime.module(content)
         .wasi()
         # pass all cli arguments to the wasm "process"
-        .argv(argv)
+        .argv(["python"] + [x for x in args])
         # configure python lib
-        .env("PYTHONPATH", "/lib:/build")
-        .mount(python_lib, "/lib", readonly=True)
-        # todo: ModuleNotFoundError: No module named '_sysconfigdata__wasi_wasm32-wasi'
-        # .mount('{}/github/python/cpython/builddir/wasi/build/lib.wasi-wasm32-3.14'.format(os.environ['HOME']), '/build')
-        # provide a /tmp folder
+        .env("PYTHONPATH", ":".join([guest_stdlib, "/build"]))
+        # RO: stdlib
+        .mount(stdlib, guest_stdlib, readonly=True)
+        # RO: sysconfig data
+        .mount(build, "/build", readonly=True)
+        # RW: /tmp folder
         .mount(tmp, "/tmp", readonly=False)
-        # Get access to CWD for running user code.
-        # note: it may be preferable to set this to a subdir of /
-        .mount(os.getcwd(), "/", readonly=True)
+        # RW: CWD for running user code.
+        .mount(os.getcwd(), "/", readonly=False)
         .instance()
     )
 
@@ -78,25 +89,6 @@ def run_python(args):
     try:
         instance.function("_start")()
     finally:
-        # clean-up tmp dir
+        # clean-up
         shutil.rmtree(tmp)
-
-    """
-    https://github.com/python/cpython/blob/main/Modules/getpath.py
-    Could not find platform independent libraries <prefix>
-    Could not find platform dependent libraries <exec_prefix>
-    """
-
-    # 3.14
-    """
-    Installations of Python now contain a new file, :file:`build-details.json`.
-    This is a static JSON document containing build details for CPython,
-    to allow for introspection without needing to run code.
-    This is helpful for use-cases such as Python launchers, cross-compilation,
-    and so on.
-
-    :file:`build-details.json` must be installed in the platform-independent
-    standard library directory. This corresponds to the :ref:`'stdlib'
-    <installation_paths>` :mod:`sysconfig` installation path,
-    which can be found by running ``sysconfig.get_path('stdlib')``.
-    """
+        shutil.rmtree(build)
