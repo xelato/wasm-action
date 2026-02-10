@@ -172,30 +172,17 @@ The Python interpreter used to run `wasm-action`. It orchestrates and mediates t
 The CPython interpreter that was compiled to WebAssembly. Guest Python runs in a restricted "sandbox" environment. In addition to the .wasm module file, it also requires the Python standard library folder, currently being reused from the host Python installation.
 
 #### Layout
-Guest code has access to the following directories:
+Guest code has access to the following paths:
 
-* host's current working directory on / in guest (read only)
-* host Python's library folder on /lib (read only)
-* a temporary folder on /tmp (read-write) - itself a temporary folder under host's temp dir
-
-<details open>
-<summary>/</summary>
-
-<details>
-<summary>↳ /tmp</summary>
-</details>
-
-<details>
-<summary>↳ /lib</summary>
-</details>
-
-</details>
+* / - host's current working directory (read/write)
+* /usr/local/lib/python3.14 - host Python's stdlib (read only)
+* /tmp (read/write)
 
 #### Environment variables
 Code running in the guest environment only has access to the environment variables explicitly defined:
 ```
 >>> import os
 >>> os.environ
-environ({'PYTHONPATH': '/lib:/build'})
+environ({'PYTHONPATH': '/usr/local/lib/python3.14:/build'})
 ```
 #### Limitations
