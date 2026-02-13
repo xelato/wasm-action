@@ -1,3 +1,8 @@
+<div align="center">
+  <a href="https://pypi.python.org/pypi/wasm-action"><img src="https://img.shields.io/pypi/v/wasm-action.svg" alt="PyPI"></a>
+  <a href="https://github.com/xelato/wasm-action/blob/main/LICENSE"><img src="https://img.shields.io/github/license/xelato/wasm-action.svg?v=2" alt="license"></a>
+</div>
+
 # wasm-action
 
 **Wasm-action facilitates the creation, distribution and generic utilization of non-browser based WebAssembly workloads through a local-first approach with a focus on privacy and security. Written primarily in Python, it also explores the Python ecosystem's maturity for WebAssembly and beyond.**
