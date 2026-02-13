@@ -6,7 +6,7 @@ readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
     "click>=8.2.1",
-    "cryptography>=45.0.6",
+    "cryptography>=46.0.5",
     "leb128>=1.0.8",
     "protobuf>=6.33.5",
     "pydantic>=1.10.26,<2",
