@@ -31,9 +31,9 @@ PYTHON = {
 }
 
 
-def run_python(args):
+def run_python(args, kind=None):
     v = sys.version_info
-    version = "{}.{}".format(v.major, v.minor)
+    version = kind or "{}.{}".format(v.major, v.minor)
     python = PYTHON.get(version) or PYTHON["3.14"]
 
     if cache.exists(python["sha256"]):

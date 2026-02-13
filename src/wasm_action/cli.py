@@ -156,16 +156,17 @@ def evaluate(filename, expression):
 @cli.command(
     "python",
     help="Python in a sandbox",
-    add_help_option=False,
     context_settings=dict(
         ignore_unknown_options=True,
     ),
 )
+@click.option("--cpython", is_flag=True, help="Use python/cpython (default)")
+@click.option("--monty", is_flag=True, help="Use pydantic/monty")
 @click.argument("args", nargs=-1, type=click.UNPROCESSED)
 @cli_error_handler
-def run_python(args):
+def run_python(cpython, monty, args):
     """Run a WASI-compiled wasm build of cpython"""
-    python.run_python(args)
+    python.run_python(args, kind="monty" if monty else None)
 
 
 if __name__ == "__main__":
