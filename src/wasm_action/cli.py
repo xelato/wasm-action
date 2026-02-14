@@ -156,16 +156,21 @@ def evaluate(filename, expression):
 @cli.command(
     "python",
     help="Python in a sandbox",
-    add_help_option=False,
     context_settings=dict(
         ignore_unknown_options=True,
     ),
 )
+@click.option(
+    "--interpreter",
+    type=python.Interpreter,
+    default=python.Interpreter.CPYTHON,
+    help="choice of Python interpreter",
+)
 @click.argument("args", nargs=-1, type=click.UNPROCESSED)
 @cli_error_handler
-def run_python(args):
+def run_python(interpreter, args):
     """Run a WASI-compiled wasm build of cpython"""
-    python.run_python(args)
+    python.run_python(args, interpreter=interpreter)
 
 
 if __name__ == "__main__":

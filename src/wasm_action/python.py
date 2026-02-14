@@ -8,10 +8,17 @@ import os
 import sys
 import tempfile
 import shutil
+import enum
 
 from . import cache
 from . import lib
 from .wasm import runtime
+
+
+class Interpreter(enum.Enum):
+    CPYTHON = "cpython"
+    MONTY = "monty"
+
 
 PYTHON = {
     "3.14": {
@@ -19,13 +26,27 @@ PYTHON = {
         "package": "xelato:python314",
         "version": "26.2.6",
         "sha256": "6a9e23d3db2ea0883fb74bfe9540bcb27bd167be1dab39546a5376112f4beea0",
+        "main": "_start",
+    },
+    "monty": {
+        "registry": "wa.dev",
+        "package": "xelato:monty",
+        "version": "26.2.13",
+        "sha256": "d611d5d22fd4cc475689b032e5c293f70428f59a48bd36b9006a8eaacfea5e59",
+        "main": "_start",
     },
 }
 
 
-def run_python(args):
-    v = sys.version_info
-    version = "{}.{}".format(v.major, v.minor)
+def run_python(args, interpreter: Interpreter = Interpreter.CPYTHON):
+    if interpreter == Interpreter.MONTY:
+        version = "monty"
+    elif interpreter == Interpreter.CPYTHON:
+        v = sys.version_info
+        version = "{}.{}".format(v.major, v.minor)
+    else:
+        raise ValueError(f"unknown interpreter {interpreter}")
+
     python = PYTHON.get(version) or PYTHON["3.14"]
 
     if cache.exists(python["sha256"]):
@@ -87,7 +108,7 @@ def run_python(args):
 
     # todo: exit code?
     try:
-        instance.function("_start")()
+        instance.function(python["main"])()
     finally:
         # clean-up
         shutil.rmtree(tmp)
