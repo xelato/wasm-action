@@ -8,10 +8,17 @@ import os
 import sys
 import tempfile
 import shutil
+import enum
 
 from . import cache
 from . import lib
 from .wasm import runtime
+
+
+class Interpreter(enum.Enum):
+    CPYTHON = "cpython"
+    MONTY = "monty"
+
 
 PYTHON = {
     "3.14": {
@@ -31,9 +38,15 @@ PYTHON = {
 }
 
 
-def run_python(args, kind=None):
-    v = sys.version_info
-    version = kind or "{}.{}".format(v.major, v.minor)
+def run_python(args, interpreter: Interpreter = Interpreter.CPYTHON):
+    if interpreter == Interpreter.MONTY:
+        version = "monty"
+    elif interpreter == Interpreter.CPYTHON:
+        v = sys.version_info
+        version = "{}.{}".format(v.major, v.minor)
+    else:
+        raise ValueError(f"unknown interpreter {interpreter}")
+
     python = PYTHON.get(version) or PYTHON["3.14"]
 
     if cache.exists(python["sha256"]):

@@ -160,13 +160,17 @@ def evaluate(filename, expression):
         ignore_unknown_options=True,
     ),
 )
-@click.option("--cpython", is_flag=True, help="Use python/cpython (default)")
-@click.option("--monty", is_flag=True, help="Use pydantic/monty")
+@click.option(
+    "--interpreter",
+    type=python.Interpreter,
+    default=python.Interpreter.CPYTHON,
+    help="choice of Python interpreter",
+)
 @click.argument("args", nargs=-1, type=click.UNPROCESSED)
 @cli_error_handler
-def run_python(cpython, monty, args):
+def run_python(interpreter, args):
     """Run a WASI-compiled wasm build of cpython"""
-    python.run_python(args, kind="monty" if monty else None)
+    python.run_python(args, interpreter=interpreter)
 
 
 if __name__ == "__main__":
