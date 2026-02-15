@@ -38,7 +38,7 @@ PYTHON = {
 }
 
 
-def run_python(args, interpreter: Interpreter = Interpreter.CPYTHON):
+def run_python(args, envvars=tuple(), interpreter: Interpreter = Interpreter.CPYTHON):
     if interpreter == Interpreter.MONTY:
         version = "monty"
     elif interpreter == Interpreter.CPYTHON:
@@ -88,23 +88,26 @@ def run_python(args, interpreter: Interpreter = Interpreter.CPYTHON):
     with open(os.path.join(build, "_sysconfigdata__wasi_wasm32-wasi.py"), "w") as f:
         f.write(sysdata)
 
-    instance = (
-        runtime.module(content)
-        .wasi()
-        # pass all cli arguments to the wasm "process"
-        .argv(["python"] + [x for x in args])
-        # configure python lib
-        .env("PYTHONPATH", ":".join([guest_stdlib, "/build"]))
-        # RO: stdlib
-        .mount(stdlib, guest_stdlib, readonly=True)
-        # RO: sysconfig data
-        .mount(build, "/build", readonly=True)
-        # RW: /tmp folder
-        .mount(tmp, "/tmp", readonly=False)
-        # RW: CWD for running user code.
-        .mount(os.getcwd(), "/", readonly=False)
-        .instance()
-    )
+    wasi = runtime.module(content).wasi()
+
+    # pass all cli arguments to the wasm "process"
+    wasi.argv(["python"] + [x for x in args])
+    # configure python lib
+    wasi.env("PYTHONPATH", ":".join([guest_stdlib, "/build"]))
+    # RO: stdlib
+    wasi.mount(stdlib, guest_stdlib, readonly=True)
+    # RO: sysconfig data
+    wasi.mount(build, "/build", readonly=True)
+    # RW: /tmp folder
+    wasi.mount(tmp, "/tmp", readonly=False)
+    # RW: CWD for running user code.
+    wasi.mount(os.getcwd(), "/", readonly=False)
+
+    # user-defined environment variables:
+    for key, value in envvars:
+        wasi.env(key, value)
+
+    instance = wasi.instance()
 
     # todo: exit code?
     try:
