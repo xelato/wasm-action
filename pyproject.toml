@@ -6,7 +6,7 @@ readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
     "click>=8.2.1",
-    "cryptography>=45.0.6",
+    "cryptography>=46.0.5",
     "leb128>=1.0.8",
     "protobuf>=6.33.5",
     "pydantic>=1.10.26,<2",
@@ -16,6 +16,15 @@ dependencies = [
     "urllib3>=2.6.3",
     "validators>=0.35.0",
     "wasmtime>=40.0.0",
+]
+
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
 ]
 
 [project.urls]
@@ -37,7 +46,6 @@ dev = [
     "ruff>=0.15.0",
     "vcrpy>=8.1.0",
 ]
-
 
 [tool.ruff]
 exclude = [
