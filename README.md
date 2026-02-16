@@ -1,5 +1,6 @@
 <div align="center">
   <a href="https://pypi.python.org/pypi/wasm-action"><img src="https://img.shields.io/pypi/v/wasm-action.svg" alt="PyPI"></a>
+  <a href="https://github.com/xelato/wasm-action"><img src="https://img.shields.io/pypi/pyversions/wasm-action.svg" alt="versions"></a>
   <a href="https://github.com/xelato/wasm-action/blob/main/LICENSE"><img src="https://img.shields.io/github/license/xelato/wasm-action.svg?v=2" alt="license"></a>
 </div>
 
