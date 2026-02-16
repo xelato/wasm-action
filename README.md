@@ -10,15 +10,14 @@
 
 ## Features
 * Versatile use as GitHub [action](https://github.com/marketplace/actions/wasm-action), CLI or Python [library](https://pypi.org/project/wasm-action/).
-* Supported registry types: warg (wa.dev)
+* Supported registries: wa.dev
 * Supported artifact types: wasm
 * Supported actions: push, pull
 * Supports Python 3.10+ on Linux, MacOS and Windows
-* Python sandbox using wasm build of cpython 3.14
+* Python sandbox for running untrusted code
 
 #### Planned
 * OCI registry support (a.k.a. Docker registry)
-* Convert between formats (wit/wasm)
 
 ## Usage
 ### Pull from registry
