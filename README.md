@@ -170,11 +170,20 @@ $ uvx --python 3.14 wasm-action python --version
 Python 3.14.2+
 ```
 
+The characters `--` can be used to separate host from guest options in cases where there's ambiguity:
+```
+# get guest interpreter help
+$ uvx --python 3.14 wasm-action python -- --help
+```
+
 ### Host Python
 The Python interpreter used to run `wasm-action`. It orchestrates and mediates the guest Python execution under a supported WebAssembly Runtime ([wasmtime](https://wasmtime.dev)).
 
 ### Guest Python
-The CPython interpreter that was compiled to WebAssembly. Guest Python runs in a restricted "sandbox" environment. In addition to the .wasm module file, it also requires the Python standard library folder, currently being reused from the host Python installation.
+The Python interpreter that was compiled to WebAssembly. Guest Python runs in a restricted "sandbox" environment. In addition to the .wasm module file, it also requires the Python standard library folder, currently being reused from the host Python installation.
+
+#### Interpreter
+Currently there is a choice between `--interpreter cpython` (default) and `--interpreter monty`.
 
 #### Layout
 Guest code has access to the following paths:
@@ -190,6 +199,9 @@ Code running in the guest environment only has access to the environment variabl
 >>> os.environ
 environ({'PYTHONPATH': '/usr/local/lib/python3.14:/build'})
 ```
+Additional variables can be defined with the `-e/--env` option.
+
+#### Packages
 #### Limitations
 
 ### Application
