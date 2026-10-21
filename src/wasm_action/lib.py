@@ -1,13 +1,14 @@
 import glob
 import hashlib
 import json
+
 import semver
 import validators
 
 from .registry import RegistryType, detect_registry_settings
-from .util import add_github_output, format_package, parse_package, extract_version
-from .warg.crypto import PrivateKey
+from .util import add_github_output, extract_version, format_package, parse_package
 from .warg.actions import warg_pull, warg_push
+from .warg.crypto import PrivateKey
 
 
 def error(text):
@@ -25,9 +26,9 @@ def push_file(registry, package, path, warg_token, warg_private_key, cli=False):
     # expand path pattern into filename, ensure only a single file
     files = glob.glob(path)
     if not files:
-        raise error("file not found: {}".format(path))
+        raise error(f"file not found: {path}")
     if len(files) > 1:
-        raise error("more than one file found: {}".format(path))
+        raise error(f"more than one file found: {path}")
     filename = files[0]
 
     # extract version from filename if not provided
@@ -153,9 +154,7 @@ def pull_file(registry, package, path=None, warg_token=None, cli=False):
 
     download = pull(registry, package, warg_token, cli=cli)
 
-    filename = path or "{}:{}@{}.wasm".format(
-        download.namespace, download.name, download.version
-    )
+    filename = path or f"{download.namespace}:{download.name}@{download.version}.wasm"
     with open(filename, "wb") as f:
         f.write(download.content)
 
@@ -180,7 +179,7 @@ def validate_registry(registry, cli=False):
         raise error("registry is required")
 
     if not validators.domain(registry, consider_tld=True):
-        raise error('registry is not a valid domain name: "{}"'.format(registry))
+        raise error(f'registry is not a valid domain name: "{registry}"')
 
     if cli:
         add_github_output("registry", registry)

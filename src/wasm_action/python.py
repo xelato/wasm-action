@@ -4,14 +4,13 @@ Python in a sandbox using WASM/WASI.
 uvx --python 3.14 wasm-action python
 """
 
+import enum
 import os
+import shutil
 import sys
 import tempfile
-import shutil
-import enum
 
-from . import cache
-from . import lib
+from . import cache, lib
 from .wasm import runtime
 
 
@@ -38,12 +37,12 @@ PYTHON = {
 }
 
 
-def run_python(args, envvars=tuple(), interpreter: Interpreter = Interpreter.CPYTHON):
+def run_python(args, envvars=(), interpreter: Interpreter = Interpreter.CPYTHON):
     if interpreter == Interpreter.MONTY:
         version = "monty"
     elif interpreter == Interpreter.CPYTHON:
         v = sys.version_info
-        version = "{}.{}".format(v.major, v.minor)
+        version = f"{v.major}.{v.minor}"
     else:
         raise ValueError(f"unknown interpreter {interpreter}")
 
@@ -70,7 +69,7 @@ def run_python(args, envvars=tuple(), interpreter: Interpreter = Interpreter.CPY
     # stdlib: reuse host Python install
     stdlib = os.path.dirname(os.__file__)
     # sys.stdout.write("Using python stdlib {}\n".format(stdlib))
-    guest_stdlib = "/usr/local/lib/python{}".format(version)
+    guest_stdlib = f"/usr/local/lib/python{version}"
 
     tmp = tempfile.mkdtemp("py")
 
@@ -93,7 +92,7 @@ def run_python(args, envvars=tuple(), interpreter: Interpreter = Interpreter.CPY
     # pass all cli arguments to the wasm "process"
     wasi.argv(["python"] + [x for x in args])
     # configure python lib
-    wasi.env("PYTHONPATH", ":".join([guest_stdlib, "/build"]))
+    wasi.env("PYTHONPATH", f"{guest_stdlib}:/build")
     # RO: stdlib
     wasi.mount(stdlib, guest_stdlib, readonly=True)
     # RO: sysconfig data

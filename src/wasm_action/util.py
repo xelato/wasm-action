@@ -1,14 +1,15 @@
+import datetime
+import functools
 import os
 import re
 import sys
-import datetime
-import functools
+
 import semver
 
 
 def add_github_output(key, value):
     """Add a github job output to the file pointed by the GITHUB_OUTPUT variable"""
-    line = "{key}={value}\n".format(key=key, value=value)
+    line = f"{key}={value}\n"
     if "GITHUB_OUTPUT" in os.environ:
         with open(os.environ["GITHUB_OUTPUT"], "a") as f:
             f.write(line)
@@ -39,9 +40,9 @@ def extract_version(filename):
 def format_package(namespace, name, version):
     """Canonical package representation in namespace:name@version format"""
     if version:
-        return "{}:{}@{}".format(namespace, name, version)
+        return f"{namespace}:{name}@{version}"
     else:
-        return "{}:{}".format(namespace, name)
+        return f"{namespace}:{name}"
 
 
 def parse_package(package):
@@ -102,7 +103,7 @@ class CalVer:
             return datetime.datetime.utcnow()
         return datetime.datetime.now(datetime.UTC)
 
-    def version(self, at: datetime.datetime = None):
+    def version(self, at: datetime.datetime | None = None):
         when = at or self.now()
         return ".".join(
             [
@@ -112,7 +113,7 @@ class CalVer:
         )
 
 
-class cli_error_handler(object):
+class cli_error_handler:
     """Decorator for CLI error handling"""
 
     def __init__(self, func):
@@ -123,5 +124,5 @@ class cli_error_handler(object):
         try:
             return self.func(*args, **kwargs)
         except Exception as e:
-            sys.stderr.write("{}\n".format(str(e)))
+            sys.stderr.write(f"{e!s}\n")
             sys.exit(1)

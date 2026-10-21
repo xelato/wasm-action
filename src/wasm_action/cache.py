@@ -1,5 +1,5 @@
-import os
 import hashlib
+import os
 
 CACHE = os.path.join(os.environ["HOME"], ".cache", "wasm-action")
 
@@ -18,7 +18,7 @@ def fetch(content_hash: str) -> bytes:
 
     computed_hash = hashlib.sha256(content).hexdigest()
     if computed_hash != content_hash:
-        raise ValueError("content with hash has been tempered: {}".format(content_hash))
+        raise ValueError(f"content with hash has been tempered: {content_hash}")
     return content
 
 

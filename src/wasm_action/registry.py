@@ -1,4 +1,5 @@
 import enum
+
 import requests
 
 
@@ -12,7 +13,7 @@ class RegistryType(enum.Enum):
 
 def detect_registry_settings(registry):
     """Discovery based on .well-known domain config"""
-    url = "https://{domain}/.well-known/wasm-pkg/registry.json".format(domain=registry)
+    url = f"https://{registry}/.well-known/wasm-pkg/registry.json"
     r = requests.get(url, timeout=10)
     if not r.ok:
         return {}
@@ -23,9 +24,8 @@ def detect_registry_settings(registry):
     if "preferredProtocol" in data:
         if data["preferredProtocol"] == "warg":
             result["registry-type"] = RegistryType.WARG
-            if "warg" in data:
-                if "url" in data["warg"]:
-                    result["warg-url"] = data["warg"]["url"]
+            if "warg" in data and "url" in data["warg"]:
+                result["warg-url"] = data["warg"]["url"]
 
         elif data["preferredProtocol"] == "oci":
             result["registry-type"] = RegistryType.OCI

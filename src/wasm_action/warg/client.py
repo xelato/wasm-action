@@ -1,11 +1,14 @@
-import hashlib
-import urllib3
 import base64
-import leb128
-import warg_openapi as warg
+import hashlib
 from dataclasses import dataclass
-from .crypto import PrivateKey
+
+import leb128
+import urllib3
+
+import warg_openapi as warg
+
 from . import proto
+from .crypto import PrivateKey
 
 
 class WargClient:
@@ -28,7 +31,7 @@ class WargClient:
 
         # private packages
         if warg_token:
-            client.default_headers["Authorization"] = "Bearer {}".format(warg_token)
+            client.default_headers["Authorization"] = f"Bearer {warg_token}"
 
         if stealth:
             client.default_headers["User-Agent"] = urllib3.util.SKIP_HEADER
@@ -42,7 +45,7 @@ class WargClient:
         )
 
     def get_warg_registry(self, namespace):
-        return "{}.{}".format(namespace, self.registry)
+        return f"{namespace}.{self.registry}"
 
     def get_checkpoint(self, namespace):
         return self.fetch_api.get_checkpoint(
@@ -98,7 +101,7 @@ class WargClient:
         record_bytes = record.SerializeToString()
 
         record_request = warg.PublishPackageRecordRequest(
-            package_name="{}:{}".format(namespace, name),
+            package_name=f"{namespace}:{name}",
             # signed record bytes
             record=warg.EnvelopeBody(
                 key_id=self.private_key.public_key().fingerprint(),
@@ -119,7 +122,7 @@ class WargClient:
     def create_version_record(self, version, digest) -> proto.PackageRecord:
         release = proto.PackageRelease()
         release.version = version
-        release.content_hash = "sha256:{}".format(digest)
+        release.content_hash = f"sha256:{digest}"
 
         entry = proto.PackageEntry()
         entry.release.CopyFrom(release)
@@ -184,13 +187,13 @@ class PackageLogs:
 
 def generate_log_id(namespace, name):
     """Derive logId from package name"""
-    package_name = "{}:{}".format(namespace, name)
+    package_name = f"{namespace}:{name}"
     s = hashlib.sha256()
     s.update(b"WARG-PACKAGE-LOG-ID-V0:")
     s.update(b"WARG-PACKAGE-ID-V0")
     s.update(leb128.u.encode(len(package_name)))
     s.update(package_name.encode("utf8"))
-    return "sha256:{}".format(s.hexdigest())
+    return f"sha256:{s.hexdigest()}"
 
 
 def generate_record_id(record_bytes):
@@ -198,4 +201,4 @@ def generate_record_id(record_bytes):
     s = hashlib.sha256()
     s.update(b"WARG-PACKAGE-LOG-RECORD-V0:")
     s.update(record_bytes)
-    return "sha256:{}".format(s.hexdigest())
+    return f"sha256:{s.hexdigest()}"

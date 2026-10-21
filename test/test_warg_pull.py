@@ -2,10 +2,10 @@ import os
 import tempfile
 import unittest
 
+from helpers import use_cassette
+
 from wasm_action.cli import pull
 from wasm_action.util import get_github_outputs
-
-from helpers import use_cassette
 
 
 class TestWargPull(unittest.TestCase):

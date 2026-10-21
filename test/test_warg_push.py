@@ -2,10 +2,10 @@ import os
 import tempfile
 import unittest
 
+from helpers import use_cassette
+
 from wasm_action.cli import push
 from wasm_action.util import get_github_outputs
-
-from helpers import use_cassette
 
 DUMMY_PRIVATE_KEY = "ecdsa-p256:I+UlDo0HxyBBFeelhPPWmD+LnklOpqZDkrFP5VduASk="
 
