@@ -1,12 +1,12 @@
-import hashlib
 import base64
+import hashlib
 import time
-
-import requests
 from dataclasses import dataclass
 
+import requests
+
 from . import proto
-from .client import WargClient, PackageLogs
+from .client import PackageLogs, WargClient
 
 
 @dataclass
@@ -70,7 +70,7 @@ def warg_push(
         elif state == "sourcing":
             time.sleep(1)
             if "missingContent" in res:
-                for _, data in res["missingContent"].items():
+                for data in res["missingContent"].values():
                     if "upload" in data:
                         for upload in data["upload"]:
                             r = requests.put(upload["url"], data=content_bytes)
@@ -78,11 +78,7 @@ def warg_push(
                                 print(r.status_code, r.content)
 
         # state: rejected -> error
-        elif state == "rejected":
-            break
-
-        # state: published -> complete
-        elif state == "published":
+        elif state == "rejected" or state == "published":
             break
 
         # get updated published record
@@ -118,7 +114,7 @@ def warg_pull(
     if not res.packages:
         raise error("failed to fetch logs")
 
-    log_id, packages = res.packages.popitem()
+    _log_id, packages = res.packages.popitem()
 
     if not packages:
         raise error("failed to fetch logs")
@@ -129,7 +125,7 @@ def warg_pull(
         raise error(
             "no package version found"
             if not version
-            else "requested version {} not found".format(version)
+            else f"requested version {version} not found"
         )
 
     # get content sources
@@ -149,7 +145,7 @@ def warg_pull(
 
     # Fetch content from url with digest expected
     res = requests.get(url)
-    content_digest = "sha256:{}".format(hashlib.sha256(res.content).hexdigest())
+    content_digest = f"sha256:{hashlib.sha256(res.content).hexdigest()}"
     if digest != content_digest:
         raise error("unexpected content digest")
 

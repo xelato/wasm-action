@@ -1,4 +1,5 @@
 import os
+
 import wasmtime
 
 from . import expression
@@ -6,7 +7,7 @@ from . import expression
 
 def module_file(filename):
     if not os.path.exists(filename) or not os.path.isfile(filename):
-        raise Exception("file not found: {}".format(filename))
+        raise Exception(f"file not found: {filename}")
 
     with open(filename, "rb") as f:
         module_bytes = f.read()
@@ -46,9 +47,9 @@ class Instance:
         if not self._instance:
             self._instance = wasmtime.Instance(self._store, self._module, self._imports)
         exports = self._instance.exports(self._store)
-        if name not in exports.keys():
+        if name not in exports:
             print("defined functions:", list(exports.keys()))
-            assert False, "function not found: {}".format(name)
+            assert False, f"function not found: {name}"
         return Function(store=self._store, func=exports[name], name=name)
 
     def evaluate(self, text):

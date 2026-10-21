@@ -48,7 +48,7 @@ class PrivateKey:
 
         curve = cls.CURVES.get(algo)
         if not curve:
-            raise ValueError("algorithm not supported: {}".format(algo))
+            raise ValueError(f"algorithm not supported: {algo}")
 
         key_bytes = base64.b64decode(key_b64)
         # compare bytes length with curve key size
@@ -152,7 +152,7 @@ class PublicKey:
         )
 
 
-def generate_key(private_key: str = None):
+def generate_key(private_key: str | None = None):
     """Generate key-pair."""
     if private_key:
         private = PrivateKey.load(private_key)

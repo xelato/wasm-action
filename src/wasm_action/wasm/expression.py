@@ -47,7 +47,7 @@ def parse(value: str) -> ast.AST:
             continue
         if x.__class__ not in ALLOWED_SYNTAX:
             raise SyntaxError(
-                "{} not allowed in expression".format(x.__class__.__name__)
+                f"{x.__class__.__name__} not allowed in expression"
             )
     return node
 
@@ -70,7 +70,7 @@ class Evaluator:
             yield self.compute(node)
 
         else:
-            raise Exception("value not allowed: {}".format(node))
+            raise Exception(f"value not allowed: {node}")
 
     def compute(self, node):
         """Evaluate a single expression"""
@@ -94,4 +94,4 @@ class Evaluator:
             return getattr(self.obj, node.id)
 
         else:
-            raise Exception("value not allowed: {}".format(node))
+            raise Exception(f"value not allowed: {node}")

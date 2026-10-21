@@ -13,7 +13,7 @@
 * Supported registries: wa.dev
 * Supported artifact types: wasm
 * Supported actions: push, pull
-* Supports Python 3.10+ on Linux, MacOS and Windows
+* Supports Python 3.11+ on Linux, MacOS and Windows
 * Python sandbox for running untrusted code
 
 #### Planned

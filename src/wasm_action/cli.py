@@ -1,14 +1,14 @@
-import os
-import sys
-import click
 import importlib.metadata
 import json
+import os
+import sys
 
-from . import lib
-from . import python
+import click
+
+from . import lib, python
+from .util import cli_error_handler
 from .warg.crypto import generate_key
 from .wasm import runtime
-from .util import cli_error_handler
 
 
 @click.group()
@@ -143,7 +143,7 @@ def evaluate(filename, expression):
     # repl mode
     import readline  # noqa
 
-    prompt = "{} >>> ".format(os.path.basename(filename))
+    prompt = f"{os.path.basename(filename)} >>> "
     while True:
         expression = input(prompt)
         try:
@@ -156,9 +156,9 @@ def evaluate(filename, expression):
 @cli.command(
     "python",
     help="Python in a sandbox",
-    context_settings=dict(
-        ignore_unknown_options=True,
-    ),
+    context_settings={
+        "ignore_unknown_options": True,
+    },
 )
 @click.option(
     "--interpreter",

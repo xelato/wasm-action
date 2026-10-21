@@ -1,6 +1,7 @@
-import unittest
 import datetime
-from wasm_action.util import parse_package, CalVer
+import unittest
+
+from wasm_action.util import CalVer, parse_package
 
 
 class TestUtil(unittest.TestCase):
